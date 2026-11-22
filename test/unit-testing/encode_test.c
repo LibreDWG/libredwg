@@ -1413,6 +1413,466 @@ encode_r2007_test (void)
     ok ("encode_r2007: the r2007 container is read back");
 }
 
+/* The r2004 container (r2004 and r2010+) as AutoCAD writes it. The rules
+   are checked on AutoCAD's files of test-data and on the encoder's output of
+   the same drawings, which is also read back. The file is read byte by byte,
+   so the checks do not depend on the host's endianness. */
+
+static uint32_t
+le32_at (const unsigned char *p)
+{
+  return (uint32_t)p[0] | ((uint32_t)p[1] << 8) | ((uint32_t)p[2] << 16)
+         | ((uint32_t)p[3] << 24);
+}
+
+static unsigned
+be16_at (const unsigned char *p)
+{
+  return ((unsigned)p[0] << 8) | p[1];
+}
+
+/* The magic sequence of the r2004 file header (ODA 4.1). */
+static void
+r2004_magic (unsigned char *magic)
+{
+  uint32_t rseed = 1;
+  unsigned k;
+  for (k = 0; k < 0x100; k++)
+    {
+      rseed = rseed * 0x343fd + 0x269ec3;
+      magic[k] = (unsigned char)(rseed >> 16);
+    }
+}
+
+/* A test-data file as it is. */
+static int
+read_test_data (const char *name, Bit_Chain *file)
+{
+  const char *srcdir = getenv ("top_srcdir");
+  char path[1024];
+  FILE *fp;
+  long len;
+  memset (file, 0, sizeof (Bit_Chain));
+  if (!srcdir)
+    srcdir = "../..";
+  if (snprintf (path, sizeof (path), "%s/test/test-data/%s", srcdir, name)
+      >= (int)sizeof (path))
+    return 1;
+  fp = fopen (path, "rb");
+  if (!fp)
+    return 1;
+  if (fseek (fp, 0, SEEK_END) || (len = ftell (fp)) <= 0x100
+      || fseek (fp, 0, SEEK_SET))
+    {
+      fclose (fp);
+      return 1;
+    }
+  file->chain = (unsigned char *)malloc ((size_t)len);
+  if (!file->chain || fread (file->chain, 1, (size_t)len, fp) != (size_t)len)
+    {
+      fclose (fp);
+      free (file->chain);
+      file->chain = NULL;
+      return 1;
+    }
+  fclose (fp);
+  file->size = (size_t)len;
+  return 0;
+}
+
+/* The section of the given type, its pages decompressed at their offsets,
+   as read_2004_compressed_section reads it. NULL if it has no pages. */
+static unsigned char *
+r2004_section (const Dwg_Data *dwg, const Bit_Chain *file,
+               const Dwg_Section_Type type, size_t *sizep)
+{
+  const Dwg_Section_Info *info = NULL;
+  unsigned char *buf;
+  size_t alloc;
+  BITCODE_BL i;
+  for (i = 0; i < dwg->header.section_infohdr.num_desc; i++)
+    if (dwg->header.section_info[i].fixedtype == type)
+      {
+        info = &dwg->header.section_info[i];
+        break;
+      }
+  if (!info || !info->num_sections || !info->sections || info->size <= 0)
+    return NULL;
+  alloc = (size_t)info->num_sections * info->max_decomp_size;
+  if (alloc < (size_t)info->size + info->max_decomp_size)
+    alloc = (size_t)info->size + info->max_decomp_size;
+  buf = (unsigned char *)calloc (alloc, 1);
+  for (i = 0; buf && i < info->num_sections; i++)
+    {
+      const Dwg_Section *page = info->sections[i];
+      uint32_t w[8];
+      uint32_t mask;
+      unsigned k;
+      if (!page)
+        continue;
+      if (page->address + 32 > file->size)
+        break;
+      /* the page header, encrypted with its address (ODA 4.6) */
+      mask = 0x4164536b ^ (uint32_t)page->address;
+      for (k = 0; k < 8; k++)
+        w[k] = le32_at (&file->chain[page->address + 4 * k]) ^ mask;
+      if (w[0] != 0x4163043b || w[4] >= alloc)
+        break;
+      if (info->compressed == 2)
+        {
+          Bit_Chain src = { 0 }, dec = { 0 };
+          src.chain = file->chain;
+          src.byte = (size_t)page->address + 32;
+          src.size = MIN (src.byte + w[2], file->size);
+          dec.chain = buf;
+          dec.size = alloc;
+          dec.byte = w[4];
+          if (decompress_R2004_section (&src, &dec) >= DWG_ERR_CRITICAL)
+            {
+              buf = dec.chain;
+              break;
+            }
+          buf = dec.chain; // may be realloced
+          alloc = MAX (alloc, dec.size);
+        }
+      else
+        {
+          if (w[4] + (size_t)w[3] > alloc
+              || page->address + 32 + w[3] > file->size)
+            break;
+          memcpy (&buf[w[4]], &file->chain[page->address + 32], w[3]);
+        }
+    }
+  if (!buf || i < info->num_sections)
+    {
+      free (buf);
+      return NULL;
+    }
+  *sizep = (size_t)info->size;
+  return buf;
+}
+
+/* Checks the container of one r2004+ file. The encoder's output (ours) has
+   no gaps, so also no gap tree. Returns the number of problems, listed in
+   msg. */
+static int
+r2004_container_check (const Bit_Chain *file, const int ours, char *msg,
+                       const size_t msgsize)
+{
+  const unsigned level = loglevel;
+  Dwg_Data dwg = { 0 };
+  Bit_Chain dat = { 0 };
+  unsigned char magic[0x100], hdr[0x6c];
+  unsigned char *sec;
+  size_t secsize, k;
+  int bad = 0, error;
+
+#define R2004_BAD(...)                                                        \
+  do                                                                          \
+    {                                                                         \
+      const size_t len = strlen (msg);                                        \
+      if (bad++ && len + 2 < msgsize)                                         \
+        snprintf (&msg[len], msgsize - len, "; ");                            \
+      if (strlen (msg) < msgsize)                                             \
+        snprintf (&msg[strlen (msg)], msgsize - strlen (msg), __VA_ARGS__);   \
+    }                                                                         \
+  while (0)
+
+  msg[0] = '\0';
+  r2004_magic (magic);
+  /* 0xEC..0xFF: the magic sequence as it is, not encrypted (ODA 4.1) */
+  if (memcmp (&file->chain[0xEC], &magic[0xEC], 0x14))
+    R2004_BAD ("bytes 0xEC..0xFF are not the magic sequence");
+  for (k = 0; k < sizeof (hdr); k++)
+    hdr[k] = file->chain[0x80 + k] ^ magic[k];
+  if (memcmp (hdr, "AcFssFcAJMB", 12))
+    R2004_BAD ("no AcFssFcAJMB header");
+  /* the gap tree (root, lowermost left, right), numgaps, gap_array_size */
+  if (ours
+      && (le32_at (&hdr[0x18]) || le32_at (&hdr[0x1C]) || le32_at (&hdr[0x20])
+          || le32_at (&hdr[0x3C]) || le32_at (&hdr[0x64])))
+    R2004_BAD ("gaps: tree %d/%d/%d, %u gaps, gap array %u",
+               (int)le32_at (&hdr[0x18]), (int)le32_at (&hdr[0x1C]),
+               (int)le32_at (&hdr[0x20]), (unsigned)le32_at (&hdr[0x3C]),
+               (unsigned)le32_at (&hdr[0x64]));
+
+  dat.chain = (unsigned char *)malloc (file->size);
+  if (!dat.chain)
+    return 1;
+  memcpy (dat.chain, file->chain, file->size);
+  dat.size = file->size;
+  loglevel = 0; // a whole drawing
+  error = dwg_decode (&dat, &dwg);
+  loglevel = level;
+  if (error >= DWG_ERR_CRITICAL || !dwg.header.section_infohdr.num_desc)
+    {
+      R2004_BAD ("not read: error 0x%x", error);
+      dwg_free (&dwg);
+      free (dat.chain);
+      return bad;
+    }
+
+  /* the empty section 0, first in the section map */
+  if (dwg.header.section_info[0].name[0]
+      || dwg.header.section_info[0].num_sections
+      || dwg.header.section_info[0].size)
+    R2004_BAD ("section map starts with %s, not the empty section",
+               dwg.header.section_info[0].name);
+
+  /* AcDb:Classes: the size counts the bytes after the size words, the
+     r2010+ high size word holds the high 32 bits of the bit size, then the
+     CRC, the end sentinel and 8 zero bytes */
+  sec = r2004_section (&dwg, file, SECTION_CLASSES, &secsize);
+  if (!sec)
+    R2004_BAD ("no AcDb:Classes");
+  else
+    {
+      const int hsize
+          = (dwg.header.version >= R_2010 && dwg.header.maint_version > 3)
+            || dwg.header.version >= R_2018;
+      const size_t crc_pos
+          = secsize < 24 ? 0 : (hsize ? 24 : 20) + (size_t)le32_at (&sec[16]);
+      if (secsize < 24
+          || memcmp (sec, dwg_sentinel (DWG_SENTINEL_CLASS_BEGIN), 16))
+        R2004_BAD ("AcDb:Classes: no start sentinel");
+      else
+        {
+          if (hsize && le32_at (&sec[20]))
+            R2004_BAD ("AcDb:Classes: high size word %u",
+                       (unsigned)le32_at (&sec[20]));
+          if (crc_pos + 2 + 16 > secsize)
+            R2004_BAD ("AcDb:Classes: size %u in a section of %u",
+                       (unsigned)le32_at (&sec[16]), (unsigned)secsize);
+          else if ((sec[crc_pos] | (sec[crc_pos + 1] << 8))
+                       != bit_calc_CRC (0xC0C1, &sec[16], crc_pos - 16)
+                   || memcmp (&sec[crc_pos + 2],
+                              dwg_sentinel (DWG_SENTINEL_CLASS_END), 16))
+            R2004_BAD ("AcDb:Classes: no CRC and end sentinel at the size");
+          else if (crc_pos + 18 + 8 > secsize)
+            R2004_BAD ("AcDb:Classes: no 8 zero bytes at the end");
+          else
+            for (k = crc_pos + 18; k < crc_pos + 26; k++)
+              if (sec[k])
+                {
+                  R2004_BAD ("AcDb:Classes: no 8 zero bytes at the end");
+                  break;
+                }
+        }
+      free (sec);
+    }
+
+  /* AcDb:AcDbObjects starts with RL 0x0dca (ODA 20) */
+  sec = r2004_section (&dwg, file, SECTION_OBJECTS, &secsize);
+  if (!sec || secsize < 4 || le32_at (sec) != 0x0dca)
+    R2004_BAD ("AcDb:AcDbObjects does not start with 0x0dca");
+  free (sec);
+
+  /* AcDb:Handles: pages of at most 2032 bytes (0x7F0) with the size, each
+     followed by its CRC, then an empty page */
+  sec = r2004_section (&dwg, file, SECTION_HANDLES, &secsize);
+  if (!sec)
+    R2004_BAD ("no AcDb:Handles");
+  else
+    {
+      size_t pos = 0;
+      unsigned n = 0, pages = 0;
+      while (pos + 2 <= secsize && (n = be16_at (&sec[pos])) > 2)
+        {
+          if (n > 0x7F0 || pos + n + 2 > secsize)
+            {
+              R2004_BAD ("AcDb:Handles: page %u of %u bytes", pages, n);
+              break;
+            }
+          if (be16_at (&sec[pos + n]) != bit_calc_CRC (0xC0C1, &sec[pos], n))
+            {
+              R2004_BAD ("AcDb:Handles: page %u CRC", pages);
+              break;
+            }
+          pos += n + 2;
+          pages++;
+        }
+      if (n != 2 && !bad)
+        R2004_BAD ("AcDb:Handles: no empty last page");
+      free (sec);
+    }
+#undef R2004_BAD
+  dwg_free (&dwg);
+  free (dat.chain);
+  return bad;
+}
+
+/* The encoder's output of a test-data drawing, at the given version. */
+static int
+r2004_encode (const Bit_Chain *file, const Dwg_Version_Type version,
+              Bit_Chain *out, BITCODE_BL *num_objects)
+{
+  const unsigned level = loglevel;
+  Dwg_Data dwg = { 0 };
+  Bit_Chain dat = { 0 };
+  int error;
+  dat.chain = (unsigned char *)malloc (file->size);
+  if (!dat.chain)
+    return DWG_ERR_OUTOFMEM;
+  memcpy (dat.chain, file->chain, file->size);
+  dat.size = file->size;
+  loglevel = 0; // a whole drawing
+  error = dwg_decode (&dat, &dwg);
+  free (dat.chain);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      dwg_free (&dwg);
+      loglevel = level;
+      return error;
+    }
+  memset (out, 0, sizeof (Bit_Chain));
+  dwg.header.version = version;
+  out->version = version;
+  out->from_version = dwg.header.from_version;
+  out->codepage = dwg.header.codepage;
+  out->opts = dwg.opts;
+  error = dwg_encode (&dwg, out);
+  *num_objects = dwg.num_objects; // a downconversion may add some
+  out->size = out->byte;
+  out->byte = out->bit = 0;
+  dwg_free (&dwg);
+  loglevel = level;
+  return error;
+}
+
+static void
+r2004_container_test (void)
+{
+  /* AutoCAD's files: AutoCAD 2018's saves as r2004-r2018, and AutoCAD
+     2013's 2013/Arc.dwg, which has gaps and a gap tree. */
+  static const char *const acad[]
+      = { "example_2004.dwg", "example_2010.dwg", "example_2013.dwg",
+          "example_2018.dwg", "2013/Arc.dwg" };
+  /* the encoder's output: the same version, and r2018 saved to an older
+     release */
+  static const struct
+  {
+    const char *name;
+    Dwg_Version_Type version;
+  } enc[] = { { "example_2004.dwg", R_2004 }, { "example_2010.dwg", R_2010 },
+              { "example_2013.dwg", R_2013 }, { "example_2018.dwg", R_2018 },
+              { "2013/Arc.dwg", R_2013 },     { "example_2018.dwg", R_2004 },
+              { "example_2018.dwg", R_2010 } };
+  char msg[600];
+  unsigned i;
+
+  loglevel = is_make_silent () ? 0 : 3; // dwg_encode resets it
+  for (i = 0; i < ARRAY_SIZE (acad); i++)
+    {
+      Bit_Chain file;
+      if (read_test_data (acad[i], &file))
+        {
+          fail ("r2004 container: %s not found", acad[i]);
+          continue;
+        }
+      if (r2004_container_check (&file, 0, msg, sizeof (msg)))
+        fail ("r2004 container of AutoCAD's %s: %s", acad[i], msg);
+      else
+        ok ("r2004 container of AutoCAD's %s", acad[i]);
+      free (file.chain);
+    }
+
+  for (i = 0; i < ARRAY_SIZE (enc); i++)
+    {
+      Bit_Chain file, out;
+      BITCODE_BL num_objects = 0;
+      Dwg_Data back = { 0 };
+      int error;
+      if (read_test_data (enc[i].name, &file))
+        {
+          fail ("r2004 container: %s not found", enc[i].name);
+          continue;
+        }
+      error = r2004_encode (&file, enc[i].version, &out, &num_objects);
+      free (file.chain);
+      if (error >= DWG_ERR_CRITICAL || !out.chain)
+        {
+          fail ("r2004 container: %s as %s: encode error 0x%x", enc[i].name,
+                dwg_version_type (enc[i].version), error);
+          free (out.chain);
+          continue;
+        }
+      if (r2004_container_check (&out, 1, msg, sizeof (msg)))
+        fail ("r2004 container: %s as %s: %s", enc[i].name,
+              dwg_version_type (enc[i].version), msg);
+      else
+        {
+          /* read back: the object map offsets count from the start of
+             AcDb:AcDbObjects, after the 0x0dca */
+          loglevel = 0; // a whole drawing
+          error = dwg_decode (&out, &back);
+          loglevel = is_make_silent () ? 0 : 3;
+          if (error >= DWG_ERR_CRITICAL || back.num_objects != num_objects)
+            fail ("r2004 container: %s as %s: read back %u of %u objects "
+                  "(error 0x%x)",
+                  enc[i].name, dwg_version_type (enc[i].version),
+                  (unsigned)back.num_objects, (unsigned)num_objects, error);
+          else
+            ok ("r2004 container: %s as %s, %u objects read back", enc[i].name,
+                dwg_version_type (enc[i].version), (unsigned)num_objects);
+          dwg_free (&back);
+        }
+      free (out.chain);
+    }
+}
+
+/* maint_version (0x12) and app_maint_version (0x17): 0xff in AutoCAD LT
+   2027's save to an older release (its r2007 fixture), and in the encoder's
+   r2004-r2013 output of an r2018 drawing, but not in its r2018 output. */
+static void
+r2004_maint_version_test (void)
+{
+  static const Dwg_Version_Type older[] = { R_2004, R_2010, R_2013 };
+  Bit_Chain file, out;
+  BITCODE_BL num_objects;
+  unsigned i;
+  int error;
+
+  loglevel = is_make_silent () ? 0 : 3; // dwg_encode resets it
+  if (read_test_data ("2007/block_acad2027.dwg", &file))
+    fail ("maint_version: 2007/block_acad2027.dwg not found");
+  else
+    {
+      if (file.chain[0x12] == 0xff && file.chain[0x17] == 0xff)
+        ok ("maint_version: AutoCAD LT 2027's r2007 save has 0xff");
+      else
+        fail ("maint_version: AutoCAD LT 2027's r2007 save has %u, %u",
+              file.chain[0x12], file.chain[0x17]);
+      free (file.chain);
+    }
+  if (read_test_data ("example_2018.dwg", &file))
+    {
+      fail ("maint_version: example_2018.dwg not found");
+      return;
+    }
+  for (i = 0; i < ARRAY_SIZE (older); i++)
+    {
+      error = r2004_encode (&file, older[i], &out, &num_objects);
+      if (error >= DWG_ERR_CRITICAL || out.size < 0x18)
+        fail ("maint_version: r2018 as %s: encode error 0x%x",
+              dwg_version_type (older[i]), error);
+      else if (out.chain[0x12] != 0xff || out.chain[0x17] != 0xff)
+        fail ("maint_version: r2018 as %s: %u, %u",
+              dwg_version_type (older[i]), out.chain[0x12], out.chain[0x17]);
+      else
+        ok ("maint_version: r2018 as %s: 0xff", dwg_version_type (older[i]));
+      free (out.chain);
+    }
+  error = r2004_encode (&file, R_2018, &out, &num_objects);
+  if (error >= DWG_ERR_CRITICAL || out.size < 0x18)
+    fail ("maint_version: r2018 as r2018: encode error 0x%x", error);
+  else if (out.chain[0x12] == 0xff || out.chain[0x17] == 0xff)
+    fail ("maint_version: r2018 as r2018: 0xff");
+  else
+    ok ("maint_version: r2018 as r2018: %u, not 0xff", out.chain[0x12]);
+  free (out.chain);
+  free (file.chain);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -1442,5 +1902,7 @@ main (int argc, char const *argv[])
   large_class_strings_test ();
   compress_r2007_tests ();
   encode_r2007_test ();
+  r2004_container_test ();
+  r2004_maint_version_test ();
   return failed;
 }
