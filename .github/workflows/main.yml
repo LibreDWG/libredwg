@@ -112,6 +112,11 @@ jobs:
     - if: contains(matrix.CONFIGURE_ARGS, '--enable-release')
       timeout-minutes: 65
       name: Run make distcheck if --enable-release
+      env:
+        # distcheck compiles in other dirs, with the same sources
+        CCACHE_BASEDIR: ${{ github.workspace }}
+        CCACHE_NOHASHDIR: "1"
+        CCACHE_MAXSIZE: 1G
       run: |
         make regen-dynapi
         make distcheck
@@ -258,6 +263,7 @@ jobs:
           gperf
           mingw-w64-x86_64-perl
           mingw-w64-x86_64-pcre2
+          mingw-w64-x86_64-ccache
           python-lxml
     - run: reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1
     - name: checkout
@@ -265,13 +271,29 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
+    - name: ccache dir
+      id: ccache-dir
+      shell: msys2 {0}
+      run: |
+        mkdir -p ~/.ccache
+        echo "dir=$(cygpath -w ~/.ccache)" >> "$GITHUB_OUTPUT"
+    - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ steps.ccache-dir.outputs.dir }}
+        key: ccache-mingw-${{ github.sha }}
+        restore-keys: ccache-mingw-
     - shell: msys2 {0}
       run: sh ./autogen.sh
       continue-on-error: true
     - shell: msys2 {0}
-      run: ./configure --disable-dependency-tracking --enable-check-less
+      run: |
+        export CCACHE_DIR=~/.ccache CCACHE_BASEDIR="$PWD" CCACHE_MAXSIZE=500M
+        CC="ccache gcc" ./configure --disable-dependency-tracking --enable-check-less
     - shell: msys2 {0}
-      run: make -j
+      run: |
+        export CCACHE_DIR=~/.ccache CCACHE_BASEDIR="$PWD" CCACHE_MAXSIZE=500M
+        make -j
+        ccache -s
     - if: failure()
       shell: msys2 {0}
       run: make -C src dwg_api.i; tar cfz mingw-failure.tgz src/dwg_api.i src/config.h
