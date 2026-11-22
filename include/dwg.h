@@ -11804,6 +11804,8 @@ EXPORT BITCODE_BL dwg_get_object_num_objects (const Dwg_Data *restrict dwg);
 EXPORT int dwg_class_is_entity (const Dwg_Class *restrict klass);
 
 EXPORT int dwg_obj_is_control (const Dwg_Object *restrict obj);
+EXPORT char *dwg_style_font_file (const Dwg_Object_STYLE *restrict style,
+                                  BITCODE_RL *restrict ttf_flags);
 EXPORT int dwg_obj_is_table (const Dwg_Object *restrict obj);
 EXPORT int dwg_obj_is_subentity (const Dwg_Object *restrict obj);
 EXPORT int dwg_obj_has_subentity (const Dwg_Object *restrict obj);

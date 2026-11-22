@@ -2241,6 +2241,77 @@ dwg_class_is_entity (const Dwg_Class *restrict klass)
   return (klass != NULL && (int)klass->item_class_id == 0x1f2) ? 1 : 0;
 }
 
+/* The font of a STYLE as a new UTF-8 string, to be freed by the caller.
+   This is the font_file, e.g. "arial.ttf", or if that is empty, as with
+   TrueType fonts with a non-ASCII name, the typeface from the ACAD EED, e.g.
+   "SimHei". If ttf_flags is given it is set to the EED flags (pitch,
+   charset, italic, bold; 0x8631 for SimHei), or 0 without EED.
+   Returns NULL if there is no font at all. GH #312 */
+EXPORT char *
+dwg_style_font_file (const Dwg_Object_STYLE *restrict style,
+                     BITCODE_RL *restrict ttf_flags)
+{
+  const Dwg_Object_Object *restrict parent;
+  const Dwg_Data *restrict dwg;
+  Bit_Chain dat = { 0 };
+  char *typeface = NULL;
+  int in_acad = 0;
+
+  if (ttf_flags)
+    *ttf_flags = 0;
+  if (!style || !(parent = style->parent) || !(dwg = parent->dwg))
+    return NULL;
+  dat.version = dwg->header.version;
+  dat.from_version = dwg->header.from_version;
+  dat.opts = dwg->opts;
+  for (BITCODE_BL i = 0; i < parent->num_eed; i++)
+    {
+      const Dwg_Eed *eed = &parent->eed[i];
+      const Dwg_Eed_Data *data = eed->data;
+      if (eed->size) // starts the data of an APPID
+        {
+          const Dwg_Object *appid
+              = dwg_resolve_handle (dwg, eed->handle.value);
+          in_acad
+              = appid && appid->fixedtype == DWG_TYPE_APPID
+                && appid->tio.object && appid->tio.object->tio.APPID
+                && bit_eq_T (&dat, appid->tio.object->tio.APPID->name, "ACAD");
+          if (!in_acad && typeface)
+            break;
+        }
+      if (!in_acad || !data)
+        continue;
+      if (data->code == 0 && !typeface)
+        {
+          if (data->u.eed_0.is_tu)
+            typeface = bit_convert_TU ((BITCODE_TU)data->u.eed_0_r2007.string);
+          else
+            typeface = bit_TV_to_utf8 (data->u.eed_0.string,
+                                       data->u.eed_0.codepage);
+        }
+      else if (data->code == 71 && ttf_flags)
+        *ttf_flags = data->u.eed_71.rl;
+    }
+
+  if (style->font_file && *style->font_file)
+    {
+      char *font_file;
+      if (IS_FROM_TU_DWG (dwg))
+        font_file = bit_convert_TU ((BITCODE_TU)style->font_file);
+      else if (dwg->opts & DWG_OPTS_IN) // DXF, JSON: already utf-8
+        font_file = strdup (style->font_file);
+      else
+        font_file = bit_TV_to_utf8 (style->font_file, dwg->header.codepage);
+      if (font_file && *font_file)
+        {
+          free (typeface);
+          return font_file;
+        }
+      free (font_file);
+    }
+  return typeface;
+}
+
 EXPORT int
 dwg_obj_is_control (const Dwg_Object *obj)
 {

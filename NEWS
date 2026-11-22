@@ -319,6 +319,9 @@ Minor bugfixes / fuzzing fixes:
     FeatureCollection, WGS 84 (urn:ogc:def:crs:OGC:1.3:CRS84) by default, as
     the RFC 7946 requires without any "crs", or the EPSG code of a GEODATA
     coordinate system definition.  GH #1197.
+  * New dwg_style_font_file() returns the font of a STYLE: the font_file,
+    or the typeface and the ttf flags of the ACAD EED, for non-ASCII
+    TrueType font names (SimHei) with an empty font_file.  GH #312.
 
 LibreDWG version 0.14 - 2026-06-27 - beta:
 
