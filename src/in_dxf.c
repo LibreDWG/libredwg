@@ -4495,11 +4495,19 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 #  undef CHK_deflines
 #  undef CHK_seeds
 
+/* The AnnotContext of the MULTILEADER and of the MLEADEROBJECTCONTEXTDATA */
+static Dwg_MLEADER_AnnotContext *
+mleader_ctx (const Dwg_Object *restrict obj)
+{
+  if (obj->fixedtype == DWG_TYPE_MLEADEROBJECTCONTEXTDATA)
+    return &obj->tio.object->tio.MLEADEROBJECTCONTEXTDATA->ctx;
+  return &obj->tio.entity->tio.MULTILEADER->ctx;
+}
+
 static Dxf_Pair *
 add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                        Dxf_Pair *restrict pair, Dwg_LEADER_Node *lnode)
 {
-  Dwg_Entity_MULTILEADER *o = obj->tio.entity->tio.MULTILEADER;
   if (!lnode)
     {
       LOG_ERROR ("MULTILEADER_lines");
@@ -4744,12 +4752,11 @@ static Dxf_Pair *
 add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          Dxf_Pair *restrict pair)
 {
-  Dwg_Entity_MULTILEADER *o = obj->tio.entity->tio.MULTILEADER;
   if (pair != NULL && pair->code == 302
       && strEQc (pair->value.s.ptr, "LEADER{"))
     {
       int i, j = -1;
-      Dwg_MLEADER_AnnotContext *ctx = &o->ctx;
+      Dwg_MLEADER_AnnotContext *ctx = mleader_ctx (obj);
       i = (int)ctx->num_leaders - 1;
       while (pair != NULL && pair->code != 303 && pair->code != 0)
         {
@@ -4918,14 +4925,15 @@ static Dxf_Pair *
 add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                  Dxf_Pair *restrict pair)
 {
-  Dwg_Entity_MULTILEADER *o = obj->tio.entity->tio.MULTILEADER;
   int i = -1, j = -1;
 
-  if (pair->code == 300 && strEQc (pair->value.s.ptr, "CONTEXT_DATA{"))
+  // the MLEADEROBJECTCONTEXTDATA has no CONTEXT_DATA{ wrapper
+  if ((pair->code == 300 && strEQc (pair->value.s.ptr, "CONTEXT_DATA{"))
+      || obj->fixedtype == DWG_TYPE_MLEADEROBJECTCONTEXTDATA)
     {
       // const Dwg_DYNAPI_field *fields
       // = dwg_dynapi_subclass_fields ("MLEADER_AnnotContext");
-      Dwg_MLEADER_AnnotContext *ctx = &o->ctx;
+      Dwg_MLEADER_AnnotContext *ctx = mleader_ctx (obj);
       while (pair != NULL && pair->code != 301 && pair->code != 0)
         {
           switch (pair->code)
@@ -5256,19 +5264,20 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 341:
               if (!ctx->has_content_blk)
                 goto unknown_mleader;
-              ctx->content.blk.block_table
-                  = dwg_add_handleref (obj->parent, 4, pair->value.u, obj);
+              // absolute, as in the DWG of the object
+              ctx->content.blk.block_table = dwg_add_handleref (
+                  obj->parent, 4, pair->value.u,
+                  obj->fixedtype == DWG_TYPE_MLEADEROBJECTCONTEXTDATA ? NULL
+                                                                      : obj);
               LOG_TRACE ("%s.ctx.content.blk.block_table = " FORMAT_REF
                          " [%d H]\n",
                          obj->name, ARGS_REF (ctx->content.blk.block_table),
                          pair->code);
               break;
-            case 15: // has_block
+            case 15:
               if (!ctx->has_content_blk)
                 goto unknown_mleader;
-              ctx->content.blk.normal.x = pair->value.d;
-              LOG_TRACE ("%s.ctx.content.blk.normal.x = %f [3BD %d]\n",
-                         obj->name, pair->value.d, pair->code);
+              ctx->content.blk.location.x = pair->value.d;
               break;
             case 25:
               if (!ctx->has_content_blk)
@@ -13032,6 +13041,30 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                     goto next_pair;
                   else
                     goto start_loop; /* failure */
+                }
+              else if (obj->fixedtype == DWG_TYPE_MLEADEROBJECTCONTEXTDATA
+                       && strEQc (subclass, "AcDbAnnotScaleObjectContextData"))
+                {
+                  // the subclass marker. Then the scale 340 and the
+                  // AnnotContext of the MULTILEADER, without the CONTEXT_DATA{
+                  Dwg_Object_MLEADEROBJECTCONTEXTDATA *_o
+                      = obj->tio.object->tio.MLEADEROBJECTCONTEXTDATA;
+                  dxf_free_pair (pair);
+                  pair = dxf_read_pair (dat);
+                  if (pair && pair->code == 340)
+                    {
+                      _o->scale
+                          = dwg_add_handleref (dwg, 5, pair->value.u, NULL);
+                      LOG_TRACE ("%s.scale = " FORMAT_REF " [H 340]\n", name,
+                                 ARGS_REF (_o->scale));
+                      dxf_free_pair (pair);
+                      pair = dxf_read_pair (dat);
+                    }
+                  if (!pair)
+                    goto fail;
+                  // returns with the next object (0)
+                  pair = add_MULTILEADER (obj, dat, pair);
+                  goto start_loop;
                 }
               else if (obj->fixedtype == DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY
                        && strEQc (subclass, "AcDbAssocActionBody"))

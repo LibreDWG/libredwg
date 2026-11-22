@@ -52921,6 +52921,14 @@ static int test_MLEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
     mleaderobjectcontextdata->class_version--;
   }
   {
+    Dwg_MLEADER_AnnotContext ctx;
+    if (dwg_dynapi_entity_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "ctx", &ctx, NULL)
+        && !memcmp (&ctx, &mleaderobjectcontextdata->ctx, sizeof (Dwg_MLEADER_AnnotContext)))
+        pass ();
+    else
+        fail ("MLEADEROBJECTCONTEXTDATA.ctx [Dwg_MLEADER_AnnotContext]");
+  }
+  {
     BITCODE_B is_default;
     if (dwg_dynapi_entity_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "is_default", &is_default, NULL)
         && is_default == mleaderobjectcontextdata->is_default)

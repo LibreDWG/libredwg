@@ -1481,7 +1481,7 @@ in_word_set (const char *str, size_t len)
 #line 255 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str653,               "BLOCKUSERPARAMETER",                DWG_TYPE_BLOCKUSERPARAMETER,	0,	UNSTABLE},
 #line 312 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str654,         "ACDB_MLEADEROBJECTCONTEXTDATA_CLASS",  DWG_TYPE_MLEADEROBJECTCONTEXTDATA,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str654,         "ACDB_MLEADEROBJECTCONTEXTDATA_CLASS",  DWG_TYPE_MLEADEROBJECTCONTEXTDATA,	0,	UNSTABLE},
       {-1}, {-1}, {-1},
 #line 327 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str658,                    "ACDBPOINTCLOUDDEF",                 DWG_TYPE_POINTCLOUDDEF,	0,	UNSTABLE},

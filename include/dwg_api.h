@@ -808,6 +808,7 @@ extern "C"
   typedef struct _dwg_object_IMAGE_BACKGROUND		dwg_obj_image_background;
   typedef struct _dwg_object_LIGHTLIST		dwg_obj_lightlist;
   typedef struct _dwg_object_MENTALRAYRENDERSETTINGS		dwg_obj_mentalrayrendersettings;
+  typedef struct _dwg_object_MLEADEROBJECTCONTEXTDATA		dwg_obj_mleaderobjectcontextdata;
   typedef struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA		dwg_obj_mtextattributeobjectcontextdata;
   typedef struct _dwg_object_OBJECT_PTR		dwg_obj_object_ptr;
   typedef struct _dwg_object_PARTIAL_VIEWING_INDEX		dwg_obj_partial_viewing_index;
@@ -857,7 +858,6 @@ extern "C"
   typedef struct _dwg_object_DMDIMOBJECTCONTEXTDATA		dwg_obj_dmdimobjectcontextdata;
   typedef struct _dwg_object_DYNAMICBLOCKPROXYNODE		dwg_obj_dynamicblockproxynode;
   typedef struct _dwg_object_GEOMAPIMAGE		dwg_obj_geomapimage;
-  typedef struct _dwg_object_MLEADEROBJECTCONTEXTDATA		dwg_obj_mleaderobjectcontextdata;
   typedef struct _dwg_object_MOTIONPATH		dwg_obj_motionpath;
   typedef struct _dwg_object_NAVISWORKSMODELDEF		dwg_obj_navisworksmodeldef;
   typedef struct _dwg_object_ORDDIMOBJECTCONTEXTDATA		dwg_obj_orddimobjectcontextdata;
@@ -1934,6 +1934,7 @@ extern "C"
   dwg_get_OBJECT_DECL (obj_image_background, IMAGE_BACKGROUND);
   dwg_get_OBJECT_DECL (obj_lightlist, LIGHTLIST);
   dwg_get_OBJECT_DECL (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS);
+  dwg_get_OBJECT_DECL (obj_mleaderobjectcontextdata, MLEADEROBJECTCONTEXTDATA);
   dwg_get_OBJECT_DECL (obj_mtextattributeobjectcontextdata, MTEXTATTRIBUTEOBJECTCONTEXTDATA);
   dwg_get_OBJECT_DECL (obj_object_ptr, OBJECT_PTR);
   dwg_get_OBJECT_DECL (obj_partial_viewing_index, PARTIAL_VIEWING_INDEX);
@@ -1983,7 +1984,6 @@ extern "C"
     dwg_get_OBJECT_DECL (obj_dmdimobjectcontextdata, DMDIMOBJECTCONTEXTDATA);
     dwg_get_OBJECT_DECL (obj_dynamicblockproxynode, DYNAMICBLOCKPROXYNODE);
     dwg_get_OBJECT_DECL (obj_geomapimage, GEOMAPIMAGE);
-    dwg_get_OBJECT_DECL (obj_mleaderobjectcontextdata, MLEADEROBJECTCONTEXTDATA);
     dwg_get_OBJECT_DECL (obj_motionpath, MOTIONPATH);
     dwg_get_OBJECT_DECL (obj_navisworksmodeldef, NAVISWORKSMODELDEF);
     dwg_get_OBJECT_DECL (obj_orddimobjectcontextdata, ORDDIMOBJECTCONTEXTDATA);
@@ -3079,6 +3079,7 @@ extern "C"
   DWG_GETALL_OBJECT_DECL (IMAGE_BACKGROUND);
   DWG_GETALL_OBJECT_DECL (LIGHTLIST);
   DWG_GETALL_OBJECT_DECL (MENTALRAYRENDERSETTINGS);
+  DWG_GETALL_OBJECT_DECL (MLEADEROBJECTCONTEXTDATA);
   DWG_GETALL_OBJECT_DECL (MTEXTATTRIBUTEOBJECTCONTEXTDATA);
   DWG_GETALL_OBJECT_DECL (OBJECT_PTR);
   DWG_GETALL_OBJECT_DECL (PARTIAL_VIEWING_INDEX);
@@ -3128,7 +3129,6 @@ extern "C"
     DWG_GETALL_OBJECT_DECL (DMDIMOBJECTCONTEXTDATA);
     DWG_GETALL_OBJECT_DECL (DYNAMICBLOCKPROXYNODE);
     DWG_GETALL_OBJECT_DECL (GEOMAPIMAGE);
-    DWG_GETALL_OBJECT_DECL (MLEADEROBJECTCONTEXTDATA);
     DWG_GETALL_OBJECT_DECL (MOTIONPATH);
     DWG_GETALL_OBJECT_DECL (NAVISWORKSMODELDEF);
     DWG_GETALL_OBJECT_DECL (ORDDIMOBJECTCONTEXTDATA);
@@ -4230,6 +4230,7 @@ extern "C"
   CAST_DWG_OBJECT_TO_OBJECT_DECL (IMAGE_BACKGROUND);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (LIGHTLIST);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (MENTALRAYRENDERSETTINGS);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (MLEADEROBJECTCONTEXTDATA);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (MTEXTATTRIBUTEOBJECTCONTEXTDATA);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (OBJECT_PTR);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (PARTIAL_VIEWING_INDEX);
@@ -4279,7 +4280,6 @@ extern "C"
     CAST_DWG_OBJECT_TO_OBJECT_DECL (DMDIMOBJECTCONTEXTDATA);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (DYNAMICBLOCKPROXYNODE);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (GEOMAPIMAGE);
-    CAST_DWG_OBJECT_TO_OBJECT_DECL (MLEADEROBJECTCONTEXTDATA);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (MOTIONPATH);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (NAVISWORKSMODELDEF);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (ORDDIMOBJECTCONTEXTDATA);
