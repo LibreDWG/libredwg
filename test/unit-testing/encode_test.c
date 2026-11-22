@@ -1365,6 +1365,12 @@ encode_r2007_test (void)
       if (dwg_add_class (&dwg, name, name, name, false) < 0)
         error = 1;
     }
+  if (!error)
+    {
+      /* BL in r2007, as in AutoCAD's files: a BS cannot hold these */
+      dwg.dwg_class[0].dwg_version = 0x10021;
+      dwg.dwg_class[0].maint_version = 427;
+    }
   if (error)
     snprintf (msg, sizeof msg, "cannot construct the document");
   else
@@ -1391,6 +1397,12 @@ encode_r2007_test (void)
         snprintf (msg, sizeof msg,
                   "not read back: error 0x%x, %u classes, %u objects", error,
                   (unsigned)back.num_classes, (unsigned)back.num_objects);
+      else if (back.dwg_class[0].dwg_version != 0x10021
+               || back.dwg_class[0].maint_version != 427)
+        snprintf (msg, sizeof msg,
+                  "class versions not read back: %u, %u",
+                  (unsigned)back.dwg_class[0].dwg_version,
+                  (unsigned)back.dwg_class[0].maint_version);
     }
   dwg_free (&dwg);
   dwg_free (&back);

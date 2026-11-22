@@ -178,6 +178,7 @@ TESTDATA = \
     test-data/2007/Text.dwg \
     test-data/2007/Text.jpg \
     test-data/2007/Text.txt \
+    test-data/2007/block_acad2027.dwg \
     test-data/2007/circle.dwg \
     test-data/2007/circle.jpg \
     test-data/2007/circle.txt \

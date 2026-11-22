@@ -2319,8 +2319,10 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               klass->maint_version = (BITCODE_BL)dwg->header.maint_version;
             }
           bit_write_BL (dat, klass->num_instances);
-          bit_write_BS (dat, klass->dwg_version);
-          bit_write_BS (dat, klass->maint_version);
+          // BL in all r2004+ files, r2007 too (AutoCAD's r2007 files have
+          // MLEADERSTYLE maint 427, which only fits as BL).
+          bit_write_BL (dat, klass->dwg_version);
+          bit_write_BL (dat, klass->maint_version);
           bit_write_BL (dat, klass->unknown_1);
           bit_write_BL (dat, klass->unknown_2);
           LOG_TRACE (" %d %d\n", (int)klass->num_instances,
@@ -2381,8 +2383,10 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               klass->maint_version = (BITCODE_BL)dwg->header.maint_version;
             }
           bit_write_BL (dat, klass->num_instances);
-          bit_write_BS (dat, klass->dwg_version);
-          bit_write_BS (dat, klass->maint_version);
+          // BL in all r2004+ files, r2007 too (AutoCAD's r2007 files have
+          // MLEADERSTYLE maint 427, which only fits as BL).
+          bit_write_BL (dat, klass->dwg_version);
+          bit_write_BL (dat, klass->maint_version);
           bit_write_BL (dat, klass->unknown_1);
           bit_write_BL (dat, klass->unknown_2);
           LOG_TRACE (" %d %d\n", (int)klass->num_instances,
