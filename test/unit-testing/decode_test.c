@@ -537,6 +537,64 @@ r2007_rs_correction_tests (void)
   dwg_free (&dwg);
 }
 
+/* The classes of r2007 DWGs store dwg_version and maint_version as BL, as
+   in r2004 and r2010+. 2007/block_acad2027.dwg is AutoCAD LT 2027's r2007
+   save of r2.10/block.dxf: its MLEADERSTYLE class has maint_version 427,
+   which a BS reads with the wrong size, and all the classes after it go
+   wrong with it. */
+static void
+r2007_class_versions_test (void)
+{
+  const char *srcdir = getenv ("top_srcdir");
+  static const struct
+  {
+    const char *dxfname;
+    unsigned dwg_version, maint_version, num_instances;
+  } want[] = { { "MLEADERSTYLE", 33, 427, 1 },
+               { "ACDBSECTIONVIEWSTYLE", 27, 50, 1 },
+               { "ACDBDETAILVIEWSTYLE", 33, 427, 1 },
+               { "CELLSTYLEMAP", 27, 1, 10 } };
+  char path[1024];
+  Dwg_Data dwg = { 0 };
+  int error, good = 0;
+  unsigned i, k;
+
+  if (!srcdir)
+    srcdir = "../..";
+  if (snprintf (path, sizeof (path),
+                "%s/test/test-data/2007/block_acad2027.dwg", srcdir)
+      >= (int)sizeof (path))
+    {
+      fail ("r2007 classes: fixture path too long");
+      return;
+    }
+  error = dwg_read_file (path, &dwg);
+  loglevel = test_loglevel; // dwg_read_file sets it from dwg.opts
+  if (error >= DWG_ERR_CRITICAL || dwg.num_classes != 10 || !dwg.dwg_class)
+    {
+      fail ("r2007 classes: %s: error 0x%x, %u classes", path, error,
+            (unsigned)dwg.num_classes);
+      dwg_free (&dwg);
+      return;
+    }
+  for (k = 0; k < sizeof (want) / sizeof (want[0]); k++)
+    for (i = 0; i < dwg.num_classes; i++)
+      {
+        const Dwg_Class *c = &dwg.dwg_class[i];
+        if (c->dxfname && !strcmp (c->dxfname, want[k].dxfname)
+            && c->dwg_version == want[k].dwg_version
+            && c->maint_version == want[k].maint_version
+            && c->num_instances == want[k].num_instances)
+          good++;
+      }
+  if (good == (int)(sizeof (want) / sizeof (want[0])))
+    ok ("r2007 classes: BL dwg_version and maint_version (maint 427)");
+  else
+    fail ("r2007 classes: %d of %u classes read as AutoCAD wrote them", good,
+          (unsigned)(sizeof (want) / sizeof (want[0])));
+  dwg_free (&dwg);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -552,6 +610,7 @@ main (int argc, char const *argv[])
   decode_3dsolid_tests ();
   class_object_stream_tests ();
   r2007_rs_correction_tests ();
+  r2007_class_versions_test ();
 
   return numfailed () ? 1 : 0;
 }
