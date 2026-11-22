@@ -3358,7 +3358,8 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         for (BITCODE_BL n = 0; o != last_vertex && n < obj->parent->num_objects; \
              n++)                                                             \
           {                                                                   \
-            const Dwg_Object_Entity *ent = o->tio.entity;                     \
+            const Dwg_Object_Entity *ent                                      \
+                = o->supertype == DWG_SUPERTYPE_ENTITY ? o->tio.entity : NULL; \
             Dwg_Object *next = NULL;                                          \
             if (ent && !ent->nolinks && ent->next_entity                      \
                 && ent->next_entity->absolute_ref)                            \
@@ -3451,7 +3452,8 @@ decl_dxf_process_VERTEX (PFACE)
         for (BITCODE_BL n = 0; o != last_attrib && n < obj->parent->num_objects; \
              n++)                                                             \
           {                                                                   \
-            const Dwg_Object_Entity *ent = o->tio.entity;                     \
+            const Dwg_Object_Entity *ent                                      \
+                = o->supertype == DWG_SUPERTYPE_ENTITY ? o->tio.entity : NULL; \
             Dwg_Object *next = NULL;                                          \
             if (ent && !ent->nolinks && ent->next_entity                      \
                 && ent->next_entity->absolute_ref)                            \
