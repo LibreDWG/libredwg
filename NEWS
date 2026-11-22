@@ -315,6 +315,10 @@ Minor bugfixes / fuzzing fixes:
     "Object improperly read".  The DXF roundtrips of 2018/Surface.dwg and
     2004/Surface.dwg pass ODA now.  The cached wireframe of the surfaces
     and solids is still not in the DXF (it is not in ODA's DXF either).
+  * GeoJSON: write the coordinate reference system as the "crs" member of the
+    FeatureCollection, WGS 84 (urn:ogc:def:crs:OGC:1.3:CRS84) by default, as
+    the RFC 7946 requires without any "crs", or the EPSG code of a GEODATA
+    coordinate system definition.  GH #1197.
 
 LibreDWG version 0.14 - 2026-06-27 - beta:
 

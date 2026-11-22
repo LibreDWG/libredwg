@@ -2034,11 +2034,38 @@ geojson_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+/* The coordinate reference system of the GeoJSON "crs" member (the GeoJSON
+   2008 spec; the RFC 7946 has none and fixes it to WGS 84 longitude,
+   latitude). The default is WGS 84, as CRS84. A GEODATA with an EPSG code in
+   its coordinate system definition overrides it. buf must have 64 bytes. */
+static const char *
+geojson_crs (const Dwg_Data *restrict dwg, char *restrict buf)
+{
+  BITCODE_BL i;
+  for (i = 0; i < dwg->num_objects; i++)
+    {
+      const Dwg_Object *obj = &dwg->object[i];
+      const char *def, *p;
+      if (obj->fixedtype != DWG_TYPE_GEODATA || !obj->tio.object
+          || !obj->tio.object->tio.GEODATA)
+        continue;
+      def = obj->tio.object->tio.GEODATA->coord_system_def;
+      if (!def || !(p = strstr (def, "EPSG:"))
+          || !(p[5] >= '0' && p[5] <= '9'))
+        continue;
+      snprintf (buf, 64, "urn:ogc:def:crs:EPSG::%lu",
+                strtoul (p + 5, NULL, 10));
+      return buf;
+    }
+  return "urn:ogc:def:crs:OGC:1.3:CRS84"; // WGS 84
+}
+
 EXPORT int
 dwg_write_geojson_dat (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   // const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
   char date[12] = "YYYY-MM-DD";
+  char crsbuf[64];
   time_t rawtime;
 
   if (!dwg->num_objects || !dat->fh)
@@ -2048,6 +2075,14 @@ dwg_write_geojson_dat (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   HASH;
   PAIR_Sc (type, "FeatureCollection");
+  KEY (crs);
+  HASH;
+  PAIR_Sc (type, "name");
+  KEY (properties);
+  HASH;
+  LASTPAIR_Sc (name, geojson_crs (dwg, crsbuf));
+  LASTENDHASH;
+  ENDHASH;
 
   // array of features
   if (geojson_entities_write (dat, dwg))
