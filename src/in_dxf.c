@@ -12311,25 +12311,33 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
       else
         {
           // clang-format off
-          // ADD_ENTITY by name
-          // check all objects
+          // ADD_ENTITY by name: look up the type via the gperf hash,
+          // not by comparing with all names
+          Dwg_Object_Type otype = DWG_TYPE_UNUSED;
+          if (!dwg_object_name (name, NULL, &otype, NULL, NULL))
+            otype = DWG_TYPE_UNUSED;
           #undef DWG_ENTITY
+          #undef DWG_OBJECT
           #define DWG_ENTITY(token)             \
-          if (strEQc (name, #token))            \
+          case DWG_TYPE_##token:                \
             {                                   \
               ADD_ENTITY (token);               \
-              goto found_ent;                   \
             }                                   \
-          else
+            break;
+          #define DWG_OBJECT(token)
 
-          #include "objects.inc"
-          //final else
-          LOG_WARN ("Unknown object %s", name);
+          switch (otype)
+            {
+            #include "objects.inc"
+            default:
+              LOG_WARN ("Unknown object %s", name);
+              break;
+            }
 
           #undef DWG_ENTITY
+          #undef DWG_OBJECT
           #define DWG_ENTITY(token)
           // clang-format on
-        found_ent:;
         }
     }
   else
@@ -12340,25 +12348,30 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
       if (!ctrl_id) // no table
         {
           // clang-format off
-          // ADD_OBJECT by name
-          // check all objects
+          // ADD_OBJECT by name via the gperf hash type
+          Dwg_Object_Type otype = DWG_TYPE_UNUSED;
+          if (!dwg_object_name (name, NULL, &otype, NULL, NULL))
+            otype = DWG_TYPE_UNUSED;
           #undef DWG_OBJECT
           #define DWG_OBJECT(token)                \
-              if (strEQc (name, #token))           \
-                {                                  \
-                  GCC14_DIAG_IGNORE (-Walloc-size) \
-                  ADD_OBJECT (token);              \
-                  GCC14_DIAG_RESTORE               \
-                  goto found_obj;                  \
-                }
+          case DWG_TYPE_##token:                   \
+            {                                      \
+              GCC14_DIAG_IGNORE (-Walloc-size)     \
+              ADD_OBJECT (token);                  \
+              GCC14_DIAG_RESTORE                   \
+            }                                      \
+            break;
 
-          #include "objects.inc"
+          switch (otype)
+            {
+            #include "objects.inc"
+            default:
+              break;
+            }
 
           #undef DWG_OBJECT
           #define DWG_OBJECT(token)
 
-        found_obj:
-          ;
           if (obj->fixedtype == DWG_TYPE_MATERIAL)
             dxf_material_defaults (obj->tio.object->tio.MATERIAL);
           // clang-format on
