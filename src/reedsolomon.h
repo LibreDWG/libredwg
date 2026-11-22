@@ -3,6 +3,9 @@
  * system and data pages. See reedsolomon.c for the code parameters.
  */
 
+#ifndef REEDSOLOMON_H
+#define REEDSOLOMON_H
+
 /*
  * Decode a 255-byte block in place: 239 data bytes and 16 parity bytes.
  * Returns the number of corrected errors (at most 8) if fix is set, 0 if
@@ -22,3 +25,5 @@ void rs_encode_block (unsigned char *parity, unsigned char *src, int count);
 int rs_decode_data_block (unsigned char *blk, int fix);
 void rs_encode_data_block (unsigned char *parity, unsigned char *src,
                            int count);
+
+#endif /* REEDSOLOMON_H */
