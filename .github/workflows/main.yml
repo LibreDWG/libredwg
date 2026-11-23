@@ -76,7 +76,7 @@ jobs:
         build-aux/install-pslib
         build-aux/install-relaxng-svg11
         sudo npm i -g geojson-validation
-    - uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
+    - uses: hendrikmuhs/ccache-action@e91f31892a1d1b8c44424b1a94c0b7f52d337168 # v1.2.26
       with:
         create-symlink: true
         key: ${{ github.job }}-${{ matrix.CONFIGURE_ARGS }}
@@ -126,7 +126,7 @@ jobs:
     - if: contains(matrix.CONFIGURE_ARGS, '--enable-release') && startsWith(github.ref, 'refs/tags/')
       name: Release
       continue-on-error: true
-      uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3.0.2
+      uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3 # v3.0.4
       with:
         body_path: dist.sha256
         files: |
@@ -141,7 +141,7 @@ jobs:
         fetch-depth: 1
         submodules: recursive
     - run: sudo apt-get -y update && sudo apt-get -y install gcc-powerpc64-linux-gnu libc6-ppc64-cross qemu-system-ppc binfmt-support qemu-user qemu-user-binfmt
-    - uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
+    - uses: hendrikmuhs/ccache-action@e91f31892a1d1b8c44424b1a94c0b7f52d337168 # v1.2.26
       with:
         key: ${{ github.job }}
     - run: sh autogen.sh
@@ -161,7 +161,7 @@ jobs:
         fetch-depth: 1
         submodules: recursive
     - run: sudo apt-get -y update && sudo apt-get -y install gcc-s390x-linux-gnu libc6-s390x-cross qemu-user binfmt-support qemu-user-binfmt
-    - uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
+    - uses: hendrikmuhs/ccache-action@e91f31892a1d1b8c44424b1a94c0b7f52d337168 # v1.2.26
       with:
         key: ${{ github.job }}
     - run: sh autogen.sh
@@ -180,7 +180,7 @@ jobs:
     #      - "-DLIBREDWG_DISABLE_WRITE=On"
     steps:
     - name: setup-python
-      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
       with:
         python-version: 3.12
     - name: checkout
@@ -188,7 +188,7 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
-    - uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
+    - uses: hendrikmuhs/ccache-action@e91f31892a1d1b8c44424b1a94c0b7f52d337168 # v1.2.26
       with:
         create-symlink: true
         key: ${{ github.job }}
@@ -198,7 +198,7 @@ jobs:
     - if: failure()
       run: tar cfz cmake-failure.tgz Testing/Temporary/LastTest.log src/config.h
     - if: failure()
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       with:
         name: cmake-failure.tgz
         path: cmake-failure.tgz
@@ -211,7 +211,7 @@ jobs:
     - name: link texinfo
       run: brew link texinfo --force
     - name: setup-python
-      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
       with:
         python-version: 3.12
     - name: checkout
@@ -219,7 +219,7 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
-    - uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
+    - uses: hendrikmuhs/ccache-action@e91f31892a1d1b8c44424b1a94c0b7f52d337168 # v1.2.26
       with:
         create-symlink: true
         key: ${{ github.job }}
@@ -241,7 +241,7 @@ jobs:
     steps:
       # see https://github.com/msys2/setup-msys2
     - name: setup-msys2
-      uses: msys2/setup-msys2@66cd2cce69caa17b53920067426061ca1de3a884 # v2.32.0
+      uses: msys2/setup-msys2@3c51bf698df1e37b2261f53cb67797b97761185c # v2.34.0
       with:
         path-type: minimal
         update: true
@@ -298,7 +298,7 @@ jobs:
       shell: msys2 {0}
       run: make -C src dwg_api.i; tar cfz mingw-failure.tgz src/dwg_api.i src/config.h
     - if: failure()
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       with:
         name: mingw-failure.tgz
         path: mingw-failure.tgz
@@ -309,7 +309,7 @@ jobs:
     timeout-minutes: 20
     steps:
     - name: setup-msys2
-      uses: msys2/setup-msys2@66cd2cce69caa17b53920067426061ca1de3a884 # v2.32.0
+      uses: msys2/setup-msys2@3c51bf698df1e37b2261f53cb67797b97761185c # v2.34.0
       with:
         path-type: minimal
     - name: checkout
@@ -317,7 +317,7 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
-    - uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
+    - uses: hendrikmuhs/ccache-action@e91f31892a1d1b8c44424b1a94c0b7f52d337168 # v1.2.26
       with:
         key: ${{ github.job }}
     - run: cmake -G "MinGW Makefiles" -DDISABLE_WERROR=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache .
@@ -325,7 +325,7 @@ jobs:
     - if: failure()
       run: tar cfz msys-failure.tgz make.log src/config.h
     - if: failure()
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       with:
         name: msys-failure.tgz
         path: msys-failure.tgz
@@ -345,7 +345,7 @@ jobs:
     - if: failure()
       run: tar cfz msvc-failure.tgz Testing/Temporary/LastTest.log src/config.h
     - if: failure()
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       with:
         name: msvc-failure.tgz
         path: msvc-failure.tgz
