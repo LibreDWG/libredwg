@@ -330,15 +330,17 @@ if(NOT LIBREDWG_LIBONLY)
   add_executable(dwg2SVG programs/dwg2SVG.c
                          programs/escape.c ${getopt_c})
 
-  # the examples of examples/Makefile.am
-  add_executable(dwgadd examples/dwgadd.c ${getopt_c})
-  add_executable(dwg2svg2 examples/dwg2svg2.c ${getopt_c})
-  add_executable(load_dwg examples/load_dwg.c ${getopt_c})
-  add_executable(dwgfuzz examples/dwgfuzz.c ${getopt_c})
-  target_include_directories(load_dwg PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_BINARY_DIR}/src)
-  target_include_directories(dwgfuzz PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_BINARY_DIR}/src)
+  # the examples of examples/Makefile.am. They need POSIX unistd.h and getopt.h
+  if (NOT MSVC)
+    add_executable(dwgadd examples/dwgadd.c ${getopt_c})
+    add_executable(dwg2svg2 examples/dwg2svg2.c ${getopt_c})
+    add_executable(load_dwg examples/load_dwg.c ${getopt_c})
+    add_executable(dwgfuzz examples/dwgfuzz.c ${getopt_c})
+    target_include_directories(load_dwg PRIVATE
+      ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_BINARY_DIR}/src)
+    target_include_directories(dwgfuzz PRIVATE
+      ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_BINARY_DIR}/src)
+  endif()
 
   if (PLOT_INCLUDE_DIR AND PLOT_LIBRARY)
     add_executable(dwgplot programs/dwgplot.c programs/escape.c ${getopt_c})
