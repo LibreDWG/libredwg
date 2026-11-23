@@ -22,7 +22,7 @@ api_process (dwg_object *obj)
   dwg_obj_pointcloudcolormap *_obj = dwg_object_to_POINTCLOUDCOLORMAP (obj);
 
   CHK_ENTITY_TYPE (_obj, POINTCLOUDCOLORMAP, class_version, BS);
-  CHK_ENTITY_MAX (_obj, POINTCLOUDCOLORMAP, class_version, BS, 3);
+  CHK_ENTITY_MAX (_obj, POINTCLOUDCOLORMAP, class_version, BS, 4);
   CHK_ENTITY_UTF8TEXT (_obj, POINTCLOUDCOLORMAP, def_intensity_colorscheme);
   CHK_ENTITY_UTF8TEXT (_obj, POINTCLOUDCOLORMAP, def_elevation_colorscheme);
   CHK_ENTITY_UTF8TEXT (_obj, POINTCLOUDCOLORMAP,
@@ -38,6 +38,9 @@ api_process (dwg_object *obj)
                            class_version, BS);
         CHK_SUBCLASS_TYPE (colorramps[i], POINTCLOUDCOLORMAP_Ramp, num_ramps,
                            BL);
+        if (class_version == 4
+            && (!colorramps[i].guid || !colorramps[i].name))
+          fail ("Missing POINTCLOUDCOLORMAP_Ramp GUID or name");
         if (!dwg_dynapi_subclass_value (&colorramps[i],
                                         "POINTCLOUDCOLORMAP_Ramp", "ramps",
                                         &ramps, NULL))
@@ -45,9 +48,17 @@ api_process (dwg_object *obj)
         else
           for (unsigned j = 0; j < colorramps[i].num_ramps; j++)
             {
-              CHK_SUBCLASS_UTF8TEXT (ramps[j], ColorRamp, colorscheme);
-              CHK_SUBCLASS_TYPE (ramps[j], ColorRamp, unknown_bl, BL);
-              CHK_SUBCLASS_TYPE (ramps[j], ColorRamp, unknown_b, B);
+              if (ramps[j].parent != &colorramps[i])
+                fail ("Incorrect ColorRamp parent");
+              if (class_version < 4)
+                {
+                  CHK_SUBCLASS_UTF8TEXT (ramps[j], ColorRamp, colorscheme);
+                }
+              else
+                {
+                  CHK_SUBCLASS_TYPE (ramps[j], ColorRamp, unknown_bl, BL);
+                  CHK_SUBCLASS_TYPE (ramps[j], ColorRamp, unknown_b, B);
+                }
             }
       }
 
@@ -64,6 +75,10 @@ api_process (dwg_object *obj)
                            POINTCLOUDCOLORMAP_Ramp, class_version, BS);
         CHK_SUBCLASS_TYPE (classification_colorramps[i],
                            POINTCLOUDCOLORMAP_Ramp, num_ramps, BL);
+        if (class_version == 4
+            && (!classification_colorramps[i].guid
+                || !classification_colorramps[i].name))
+          fail ("Missing POINTCLOUDCOLORMAP_Ramp GUID or name");
         if (!dwg_dynapi_subclass_value (&classification_colorramps[i],
                                         "POINTCLOUDCOLORMAP_Ramp", "ramps",
                                         &ramps, NULL))
@@ -71,9 +86,17 @@ api_process (dwg_object *obj)
         else
           for (unsigned j = 0; j < classification_colorramps[i].num_ramps; j++)
             {
-              CHK_SUBCLASS_UTF8TEXT (ramps[j], ColorRamp, colorscheme);
-              CHK_SUBCLASS_TYPE (ramps[j], ColorRamp, unknown_bl, BL);
-              CHK_SUBCLASS_TYPE (ramps[j], ColorRamp, unknown_b, B);
+              if (ramps[j].parent != &classification_colorramps[i])
+                fail ("Incorrect ColorRamp parent");
+              if (class_version < 4)
+                {
+                  CHK_SUBCLASS_UTF8TEXT (ramps[j], ColorRamp, colorscheme);
+                }
+              else
+                {
+                  CHK_SUBCLASS_TYPE (ramps[j], ColorRamp, unknown_bl, BL);
+                  CHK_SUBCLASS_TYPE (ramps[j], ColorRamp, unknown_b, B);
+                }
             }
       }
   // #endif
