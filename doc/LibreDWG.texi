@@ -1625,7 +1625,11 @@ Note that the graphical representation for PS and SVG output is severely lacking
 Convert a DWG with GNU plotutils @code{libplot} to one of its formats:
 png, pnm, gif (bitmaps), svg, ps, ai, cgm, fig, pcl, hpgl, regis, tek, or the
 default @code{meta}, the plot(5) format for @code{plot} and @code{graph}.
-The entities are those of dwg2SVG, but with all blocks (INSERT) transformed.
+The entities are all 2D ones, blocks (INSERT, MINSERT with their attributes)
+transformed, the dimensions via their generated blocks, HATCH boundaries,
+solid ones filled, leaders, tables, and the wireframe of 3D solids, regions
+and surfaces projected to XY. Not drawn are SHAPE, which needs its shx font,
+hatch patterns, and the contents of viewports.
 It replaces dwg2SVG and dwg2ps. Requires GNU plotutils with @file{plot.h}.
 
 With @code{-T FORMAT} sets the output format, with @code{-o FILE} the output

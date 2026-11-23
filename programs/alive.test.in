@@ -339,6 +339,10 @@ esac
 # dwgplot needs libplot, and is not built without
 if test -f "./dwgplot${EXEEXT}"; then
     test -z "$TESTPROG" && TESTPROG="@LTEXEC@"
+    # libplot leaks its parameters
+    if test -n "$TESTPROG" -a -n "@HAVE_ASAN@"; then
+        TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
+    fi
     for fmt in ps svg png; do
         out="dwgplot-example_2000.$fmt"
         rm -f "$out"
