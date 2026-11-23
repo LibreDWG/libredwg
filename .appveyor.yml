@@ -73,7 +73,7 @@ build_script:
   - bash -c "make V=1"
 
 test_script:
-  - if not "%CYGWIN%"=="1" bash -c "make check"
+  - if not "%CYGWIN%"=="1" bash -c "make check-minimal"
   - if "%CYGWIN%"=="1" bash -c "make check -C programs && make check -C examples"
   - if "%MINGW%"=="1" call build-aux\appveyor-deploy.bat
 

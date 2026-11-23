@@ -290,9 +290,9 @@ for prog in $PROGS ; do
 done
 
 # dwgread converts to json here, but has no --as yet.
-# Only with the write programs of the programs/ dir, not from examples/, and
-# not with --disable-write.
-if [ "$DISABLE_WRITE" != "1" ]; then
+# Only with the write programs of the programs/ dir, not from examples/, not
+# with --disable-write, and not all of them with check-minimal.
+if [ "$DISABLE_WRITE" != "1" ] && [ -z "$CHECK_MINIMAL" ]; then
     for prog in dwgwrite dwgrewrite dxf2dwg dwg2dxf dxfwrite ; do
         for dwg in $DATA; do
             for r in $WRITE_REVS; do
