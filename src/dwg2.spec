@@ -1026,6 +1026,9 @@ DWG_ENTITY_END
   Border_fields (rs, left_border, 3);                                         \
   Border_fields (rs, vert_border, 4);                                         \
   Border_fields (rs, right_border, 5);                                        \
+  /* the encoder may allocate it for a r2007+ target from an older source, */ \
+  /* so free it regardless of from_version */                                \
+  FREE { FIELD_TU (rs.format_string, 1); }                                    \
   SINCE (R_2007a)                                                             \
   {                                                                           \
     FIELD_BL (rs.data_type, 90);                                              \

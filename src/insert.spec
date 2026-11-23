@@ -25,6 +25,8 @@
       FIELD_HANDLE_NAME (block_header, 2, BLOCK_HEADER);
     }
 #endif
+  // the encoder allocates it when downconverting from a later version
+  FREE { FIELD_TV (block_name, 2); }
   PRE (R_2_0b) {
     FIELD_TV (block_name, 2);
     FIELD_2RD (ins_pt, 10);

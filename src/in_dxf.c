@@ -14014,6 +14014,18 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
               pair = add_proxy_entity_data (obj, dat, pair);
               goto start_loop;
             }
+          // the DXF <= r2002 has a 2nd 90 for the light_color.rgb, the first 90
+          // is the class_version. Else it overwrote class_version with a huge
+          // value, and free skipped the rest of the LIGHT, leaking its name.
+          else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_LIGHT
+                   && obj->tio.entity->tio.LIGHT->class_version)
+            {
+              Dwg_Entity_LIGHT *o = obj->tio.entity->tio.LIGHT;
+              o->light_color.rgb = (BITCODE_BL)pair->value.u;
+              LOG_TRACE ("LIGHT.light_color.rgb = 0x%x [BL 90]\n",
+                         o->light_color.rgb);
+              goto next_pair;
+            }
           else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_OLE2FRAME)
             {
               Dwg_Entity_OLE2FRAME *o = obj->tio.entity->tio.OLE2FRAME;
