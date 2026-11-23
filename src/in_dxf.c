@@ -9170,7 +9170,8 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       dxf_free_pair (pair);
       return dxf_read_pair (dat);
     }
-  if (ent->preview_size >= MAX_SIZE_BUF || ent->preview_size > 0x1000000)
+  // 16MB is below any MAX_SIZE_BUF, which also fails -Wtype-limits on 32bit
+  if (ent->preview_size > 0x1000000)
     {
       LOG_ERROR ("Invalid %s.preview_size", obj->name);
       // reset the size it rejects, instead of keeping it with the old
@@ -9251,7 +9252,7 @@ add_proxy_entity_data (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   BITCODE_BL numbits = 0;
   bool has_numbits = false;
 
-  if (!gsize || gsize >= MAX_SIZE_BUF || gsize > 0x1000000)
+  if (!gsize || gsize > 0x1000000)
     {
       LOG_ERROR ("Invalid %s.proxy_graphics_size %" PRIuSIZE, obj->name,
                  gsize);
