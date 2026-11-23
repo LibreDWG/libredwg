@@ -23,14 +23,15 @@ concurrency:
 jobs:
   linux:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    # --enable-release also runs distcheck, which builds twice
+    timeout-minutes: ${{ contains(matrix.CONFIGURE_ARGS, '--enable-release') && 90 || 50 }}
     strategy:
       fail-fast: true
       matrix:
         CONFIGURE_ARGS:
           - CFLAGS="-O1 -fno-omit-frame-pointer -fsanitize=address -fno-var-tracking" --disable-bindings --disable-docs
           - CC="clang"
-          - --enable-release
+          - --enable-release --enable-check-less
           - --enable-gcov --disable-bindings --disable-docs CFLAGS="-O0 -g"
           - --disable-write --disable-docs
           - --host=i686-linux-gnu --disable-bindings --disable-docs
