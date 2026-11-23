@@ -1204,7 +1204,7 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   Dwg_Object_DIMSTYLE *_obj;
   Dwg_Object_Object *oo;
   Dwg_Object_APPID *appid;
-  BITCODE_RLL eedhdl1, eedhdl2, eedhdl3;
+  BITCODE_RLL eedhdl1;
   BITCODE_BL oindex;
   BITCODE_H hdl;
   unsigned int idx;
@@ -1231,30 +1231,6 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       appid = dwg_add_APPID (dwg, "AcadAnnotative");
       eedhdl1 = dwg_obj_generic_handlevalue (appid);
       LOG_TRACE ("Added APPID.AcadAnnotative (" FORMAT_HV ")\n", eedhdl1);
-    }
-  hdl = dwg_find_tablehandle_silent (dwg, "ACAD_DSTYLE_DIMJAG", "APPID");
-  if (hdl)
-    {
-      eedhdl2 = hdl->handleref.value;
-      LOG_TRACE ("Use APPID.ACAD_DSTYLE_DIMJAG (" FORMAT_HV ")\n", eedhdl2);
-    }
-  else
-    {
-      appid = dwg_add_APPID (dwg, "ACAD_DSTYLE_DIMJAG");
-      eedhdl2 = dwg_obj_generic_handlevalue (appid);
-      LOG_TRACE ("Added APPID.ACAD_DSTYLE_DIMJAG (" FORMAT_HV ")\n", eedhdl2);
-    }
-  hdl = dwg_find_tablehandle_silent (dwg, "ACAD_DSTYLE_DIMTALN", "APPID");
-  if (hdl)
-    {
-      eedhdl3 = hdl->handleref.value;
-      LOG_TRACE ("Use APPID.ACAD_DSTYLE_DIMTALN (" FORMAT_HV ")\n", eedhdl3);
-    }
-  else
-    {
-      appid = dwg_add_APPID (dwg, "ACAD_DSTYLE_DIMTALN");
-      eedhdl3 = dwg_obj_generic_handlevalue (appid);
-      LOG_TRACE ("Added APPID.ACAD_DSTYLE_DIMTALN (" FORMAT_HV ")\n", eedhdl3);
     }
   // obj may have moved, but dirty_refs is 0 (a dirty_objs is useless)
   obj = &dwg->object[oindex];
@@ -1308,65 +1284,6 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       oo->eed[idx].data = (Dwg_Eed_Data *)calloc (EED_SZ (2), 1);
       oo->eed[idx].data->code = 2;
       oo->eed[idx].data->u.eed_2.close = 1;
-      idx++;
-      oo->eed[idx].size = 0;
-      oo->eed[idx].data = NULL;
-      oo->eed[idx].raw = NULL;
-    }
-
-  if (!dwg_has_eed_appid (oo, eedhdl2))
-    {
-      LOG_TRACE ("Add EED for ACAD_DSTYLE_DIMJAG to " FORMAT_HV "\n",
-                 obj->handle.value);
-      oo->num_eed += 2;
-      if (idx)
-        oo->eed = (Dwg_Eed *)realloc (oo->eed,
-                                      (oo->num_eed + 1) * sizeof (Dwg_Eed));
-      else
-        oo->eed = (Dwg_Eed *)calloc (3, sizeof (Dwg_Eed));
-      // DIMJAG
-      dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl2, NULL);
-      oo->eed[idx].size = 12;
-      oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (EED_SZ (3), 1);
-      oo->eed[idx].data->code = 70;
-      //_obj = oo->tio.DIMSTYLE;
-      oo->eed[idx].data->u.eed_70.rs = 388; // FIXME Which value?
-      idx++;
-      oo->eed[idx].size = 0;
-      oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (EED_SZ (9), 1);
-      oo->eed[idx].data->code = 40;
-      oo->eed[idx].data->u.eed_40.real = 1.5; // FIXME Which value?
-      idx++;
-      oo->eed[idx].size = 0;
-      oo->eed[idx].data = NULL;
-      oo->eed[idx].raw = NULL;
-    }
-  if (!dwg_has_eed_appid (oo, eedhdl3))
-    {
-      LOG_TRACE ("Add EED for ACAD_DSTYLE_DIMTALN to " FORMAT_HV "\n",
-                 obj->handle.value);
-      oo->num_eed += 2;
-      if (idx)
-        oo->eed = (Dwg_Eed *)realloc (oo->eed,
-                                      (oo->num_eed + 1) * sizeof (Dwg_Eed));
-      else
-        oo->eed = (Dwg_Eed *)calloc (3, sizeof (Dwg_Eed));
-      // DIMTALN
-      dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl2, NULL);
-      oo->eed[idx].size = 6;
-      oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (EED_SZ (3), 1);
-      oo->eed[idx].data->code = 70;
-      //_obj = oo->tio.DIMSTYLE;
-      oo->eed[idx].data->u.eed_70.rs = 392; // FIXME Which value?
-      idx++;
-      oo->eed[idx].size = 0;
-      oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (EED_SZ (3), 1);
-      oo->eed[idx].data->code = 70;
-      oo->eed[idx].data->u.eed_70.rs = 0; // FIXME Which value?
       idx++;
       oo->eed[idx].size = 0;
       oo->eed[idx].data = NULL;
