@@ -1669,6 +1669,12 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               if (strEQc (key, "size"))
                 {
                   size = json_long (dat, tokens);
+                  if (size > 0xFFFF) // eed.size is a BS
+                    {
+                      LOG_ERROR ("Invalid eed[%u].size %u", i, size);
+                      size = 0;
+                      break;
+                    }
                   isize = (int)i;
                   // see below: if does_cross_unicode_datversion (dat) we need
                   // to recalc
@@ -3640,6 +3646,23 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   return error;
 }
 
+// Free an object which is still missing its type or handle. The destructor is
+// selected by fixedtype, which is only set by the type key, so derive it from
+// the object name. Else its payload, eed and strings leak.
+static void
+json_free_partial_object (Dwg_Object *restrict obj)
+{
+  if (obj->fixedtype == DWG_TYPE_UNUSED && obj->name)
+    {
+      const char *dxfname;
+      int isent;
+      Dwg_Object_Type fixedtype = DWG_TYPE_UNUSED;
+      if (dwg_object_name (obj->name, &dxfname, &fixedtype, &isent, NULL))
+        obj->fixedtype = fixedtype;
+    }
+  dwg_free_object (obj);
+}
+
 static int
 json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               jsmntokens_t *restrict tokens)
@@ -3702,7 +3725,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           if (dwg->header.from_version >= R_13b1 && !oldobj->handle.value)
             {
               LOG_ERROR ("Required %s.handle missing, skipped", oldobj->name);
-              dwg_free_object (oldobj);
+              json_free_partial_object (oldobj);
               obj = oldobj;
               i--;
             }
@@ -3714,7 +3737,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 LOG_ERROR ("Required %s.type missing, skipped", oldobj->name);
               if (!oldobj->parent)
                 oldobj->parent = dwg;
-              dwg_free_object (oldobj);
+              json_free_partial_object (oldobj);
               obj = oldobj;
               i--;
               size--;
@@ -3725,7 +3748,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                          oldobj->name);
               if (!oldobj->parent)
                 oldobj->parent = dwg;
-              dwg_free_object (oldobj);
+              json_free_partial_object (oldobj);
               obj = oldobj;
               i--;
             }
@@ -4468,6 +4491,25 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             LOG_WARN ("%s.sab_size declared %u..%u differs from acis_data "
                       "length %u; using actual length",
                       name, sab_min, sab_max, (unsigned)actual);
+        }
+    }
+  // the loop checks the previous object only at the start of the next one
+  if (i > 0 && dwg->object)
+    {
+      Dwg_Object *last = &dwg->object[i - 1];
+      if (last->tio.object
+          && ((dwg->header.from_version >= R_13b1 && !last->handle.value)
+              || !last->type || last->fixedtype == DWG_TYPE_UNUSED))
+        {
+          LOG_ERROR ("Required %s.handle, type or fixedtype missing, skipped",
+                     last->name ? last->name : "object");
+          if (!last->parent)
+            last->parent = dwg;
+          json_free_partial_object (last);
+          free (last->name);
+          free (last->dxfname);
+          memset (last, 0, sizeof (Dwg_Object));
+          dwg->num_objects--;
         }
     }
   LOG_TRACE ("End of %s\n", section);
