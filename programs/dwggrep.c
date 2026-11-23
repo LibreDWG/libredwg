@@ -37,6 +37,19 @@
 #  include <ctype.h>
 #endif
 #include "my_getopt.h"
+#include <sys/types.h>
+#include <sys/stat.h>
+#ifdef _MSC_VER
+#  include <io.h>
+#  ifndef S_ISDIR
+#    define S_ISDIR(m) (((m) & _S_IFMT) == _S_IFDIR)
+#  endif
+#  ifndef S_ISREG
+#    define S_ISREG(m) (((m) & _S_IFMT) == _S_IFREG)
+#  endif
+#else
+#  include <dirent.h> /* also with mingw */
+#endif
 #ifdef HAVE_PCRE2_H
 // use both, 8 and 16 (r2007+)
 #  define PCRE2_CODE_UNIT_WIDTH 0
@@ -74,6 +87,7 @@ int opt_text = 0;
 int opt_blocks = 0;
 int opt_tables = 0;
 int opt_filename = 1;
+int opt_recurse = 0;
 short numdxf = 0;
 short numtype = 0;
 static short dxf[10];  // ensure zero-fill
@@ -107,7 +121,7 @@ static pcre2_compile_context_16 *compile_context16 = NULL;
 static int
 usage (void)
 {
-  printf ("\nUsage: dwggrep [-bcihntx] [--type TYPE] [--dxf NUM] [--help] "
+  printf ("\nUsage: dwggrep [-bchinRtx] [--type TYPE] [--dxf NUM] [--help] "
           "pattern *.dwg\n");
   return 1;
 }
@@ -133,9 +147,9 @@ help (void)
   printf ("  -c, --count               Print only the count of matched "
           "elements.\n");
   printf ("  -h, --no-filename         Print no filename.\n");
-#if 0
-  printf("  -R, -r, --recursive       Recursively search subdirectories listed.\n");
-#endif
+  printf ("  -R, -r, --recursive       Recursively search all *.dwg in the "
+          "directories listed,\n"
+          "                            or the current directory.\n");
   printf (
       "  -y, --type NAME           Search only NAME entities or objects.\n");
   printf ("  -d, --dxf NUM             Search only DXF group NUM fields.\n");
@@ -1857,13 +1871,214 @@ match_BLOCK_HEADER (const char *restrict filename,
   return found;
 }
 
+/* Match all objects of one DWG file. Returns the count of matches. */
+static int
+grep_file (const char *restrict filename)
+{
+  int error;
+  int count = 0;
+  Dwg_Data dwg;
+  Dwg_Object_Ref *mspace_ref = NULL;
+  memset (&dwg, 0, sizeof (Dwg_Data));
+  dwg.opts = 0;
+  error = dwg_read_file (filename, &dwg);
+  if (error > DWG_ERR_CRITICAL)
+    {
+      fprintf (stderr, "Error: Could not read DWG file %s, error: 0x%x\n",
+               filename, error);
+      return 0;
+    }
+
+  if (!opt_text)
+    count += match_OBJECTS (filename, &dwg);
+  if (dwg.header.version < R_13b1)
+    { // FIXME hack
+      // mspace_ref = (Dwg_Object_Ref *)calloc (1, sizeof
+      // (Dwg_Object_Ref)); mspace_ref->obj = &dwg.object[0];
+      count += match_preR13_entities (filename, &dwg, false);
+    }
+  else
+    mspace_ref = dwg_model_space_ref (&dwg);
+
+  if (!opt_tables)
+    count += match_BLOCK_HEADER (filename, mspace_ref);
+  if (opt_blocks)
+    {
+      if (dwg.header.version < R_13b1)
+        count += match_preR13_entities (filename, &dwg, true);
+      else
+        for (long k = 0; k < dwg.block_control.num_entries; k++)
+          {
+            count
+                += match_BLOCK_HEADER (filename, dwg.block_control.entries[k]);
+          }
+    }
+  if (!opt_tables)
+    count += match_BLOCK_HEADER (filename, dwg_paper_space_ref (&dwg));
+
+  fflush (stdout);
+  // if (dwg.header.version < R_13b1)
+  //   free (mspace_ref);
+  dwg_free (&dwg);
+  return count;
+}
+
+#define MAX_RECURSE_DEPTH 64
+
+static int
+cmp_names (const void *a, const void *b)
+{
+  return strcmp (*(char *const *)a, *(char *const *)b);
+}
+
+/* does the name end with .dwg, case-insensitive */
+static int
+is_dwg_name (const char *name)
+{
+  const size_t len = strlen (name);
+  const char *ext;
+  if (len < 5)
+    return 0;
+  ext = &name[len - 4];
+  return ext[0] == '.' && (ext[1] == 'd' || ext[1] == 'D')
+         && (ext[2] == 'w' || ext[2] == 'W')
+         && (ext[3] == 'g' || ext[3] == 'G');
+}
+
+/* The sorted names in a directory, without . and .., as malloc'ed array.
+   Returns -1 if the directory cannot be read. */
+static int
+list_dir (const char *restrict dir, char ***restrict namesp,
+          size_t *restrict np)
+{
+  char **names = NULL;
+  size_t n = 0, cap = 0;
+#ifdef _MSC_VER
+  struct _finddata_t fd;
+  intptr_t h;
+  char *pat = (char *)malloc (strlen (dir) + 3);
+  if (!pat)
+    return -1;
+  sprintf (pat, "%s/*", dir);
+  h = _findfirst (pat, &fd);
+  free (pat);
+  if (h == -1)
+    return -1;
+  do
+    {
+      const char *name = fd.name;
+#else
+  struct dirent *de;
+  DIR *d = opendir (dir);
+  if (!d)
+    return -1;
+  while ((de = readdir (d)))
+    {
+      const char *name = de->d_name;
+#endif
+      if (!strcmp (name, ".") || !strcmp (name, ".."))
+        continue;
+      if (n == cap)
+        {
+          char **tmp;
+          cap = cap ? cap * 2 : 32;
+          tmp = (char **)realloc (names, cap * sizeof (char *));
+          if (!tmp)
+            break;
+          names = tmp;
+        }
+      names[n] = strdup (name);
+      if (!names[n])
+        break;
+      n++;
+#ifdef _MSC_VER
+    }
+  while (_findnext (h, &fd) == 0);
+  _findclose (h);
+#else
+    }
+  closedir (d);
+#endif
+  if (n > 1)
+    qsort (names, n, sizeof (char *), cmp_names);
+  *namesp = names;
+  *np = n;
+  return 0;
+}
+
+static int grep_path_depth (const char *restrict path, const int recurse,
+                            const int depth);
+
+/* A file is grepped even without the .dwg extension. A directory is only
+   walked with -R, and then only the *.dwg files in it, not following
+   symlinked directories. The "" path is the cwd. */
+static int
+grep_path_depth (const char *restrict path, const int recurse, const int depth)
+{
+  struct stat st;
+  const char *dir = *path ? path : ".";
+  if (stat (dir, &st) != 0 || !S_ISDIR (st.st_mode))
+    return grep_file (path); // reports the error
+  if (!recurse)
+    {
+      fprintf (stderr, "%s: Is a directory\n", path);
+      return 0;
+    }
+  if (depth >= MAX_RECURSE_DEPTH)
+    {
+      fprintf (stderr, "%s: Too many nested directories\n", path);
+      return 0;
+    }
+  {
+    int count = 0;
+    size_t n = 0;
+    char **names = NULL;
+    const size_t plen = strlen (path);
+    const int sep = plen && path[plen - 1] != '/' && path[plen - 1] != '\\';
+    if (list_dir (dir, &names, &n) != 0)
+      {
+        fprintf (stderr, "%s: Cannot read directory\n", path);
+        return 0;
+      }
+    for (size_t k = 0; k < n; k++)
+      {
+        char *full = (char *)malloc (plen + 1 + strlen (names[k]) + 1);
+        if (full)
+          {
+            struct stat est;
+            sprintf (full, "%s%s%s", path, sep ? "/" : "", names[k]);
+            if (stat (full, &est) == 0)
+              {
+                if (S_ISDIR (est.st_mode))
+                  {
+#ifndef _WIN32
+                    struct stat lst; // do not follow symlinked dirs
+                    if (lstat (full, &lst) == 0 && S_ISDIR (lst.st_mode))
+#endif
+                      count += grep_path_depth (full, 1, depth + 1);
+                  }
+                else if (S_ISREG (est.st_mode) && is_dwg_name (names[k]))
+                  count += grep_file (full);
+              }
+            free (full);
+          }
+        free (names[k]);
+      }
+    free (names);
+    return count;
+  }
+}
+
+static int
+grep_path (const char *restrict path, const int recurse)
+{
+  return grep_path_depth (path, recurse, 0);
+}
+
 int
 main (int argc, char *argv[])
 {
-  int error = 0;
   int i = 1, j;
-  char *filename;
-  Dwg_Data dwg;
 #ifdef HAVE_PCRE2_H
   int errcode;
   size_t plen;
@@ -1872,9 +2087,6 @@ main (int argc, char *argv[])
 #  ifdef HAVE_PCRE2_16
   BITCODE_TU pattern16;
 #  endif
-#endif
-#if 0
-  int opt_recurse = 0;
 #endif
   int count = 0;
   int c;
@@ -1933,12 +2145,10 @@ main (int argc, char *argv[])
         case 'h':
           opt_filename = 0;
           break;
-#if 0
         case 'r':
         case 'R':
           opt_recurse = 1;
           break;
-#endif
         case 't':
           opt_text = 1;
           break;
@@ -1971,7 +2181,8 @@ main (int argc, char *argv[])
         }
     }
   i = optind;
-  if (i > argc - 2) // need 2 more args. TODO: unless -R given
+  // need a pattern and a file, with -R the files default to the cwd
+  if (i > argc - (opt_recurse ? 1 : 2))
     return usage ();
 
   pattern = argv[i];
@@ -2029,54 +2240,11 @@ main (int argc, char *argv[])
 #  endif
 #endif
 
-  // for all filenames...
+  // for all filenames, and with -R also all *.dwg in the directories
+  if (opt_recurse && i + 1 >= argc)
+    count += grep_path ("", 1);
   for (j = i + 1; j < argc; j++)
-    {
-      Dwg_Object_Ref *mspace_ref = NULL;
-      filename = argv[j];
-      memset (&dwg, 0, sizeof (Dwg_Data));
-      dwg.opts = 0;
-      error = dwg_read_file (filename, &dwg);
-      if (error > DWG_ERR_CRITICAL)
-        {
-          fprintf (stderr, "Error: Could not read DWG file %s, error: 0x%x\n",
-                   filename, error);
-          continue;
-        }
-
-      if (!opt_text)
-        count += match_OBJECTS (filename, &dwg);
-      if (dwg.header.version < R_13b1)
-        { // FIXME hack
-          // mspace_ref = (Dwg_Object_Ref *)calloc (1, sizeof
-          // (Dwg_Object_Ref)); mspace_ref->obj = &dwg.object[0];
-          count += match_preR13_entities (filename, &dwg, false);
-        }
-      else
-        mspace_ref = dwg_model_space_ref (&dwg);
-
-      if (!opt_tables)
-        count += match_BLOCK_HEADER (filename, mspace_ref);
-      if (opt_blocks)
-        {
-          if (dwg.header.version < R_13b1)
-            count += match_preR13_entities (filename, &dwg, true);
-          else
-            for (long k = 0; k < dwg.block_control.num_entries; k++)
-              {
-                count += match_BLOCK_HEADER (filename,
-                                             dwg.block_control.entries[k]);
-              }
-        }
-      if (!opt_tables)
-        count += match_BLOCK_HEADER (filename, dwg_paper_space_ref (&dwg));
-
-      fflush (stdout);
-      // if (dwg.header.version < R_13b1)
-      //   free (mspace_ref);
-      if (j < argc)
-        dwg_free (&dwg); // skip the last free
-    }
+    count += grep_path (argv[j], opt_recurse);
   if (opt_count)
     printf ("%d\n", count);
 

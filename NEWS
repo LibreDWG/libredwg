@@ -167,6 +167,9 @@ Major features:
     API change: the former Bit_Chain based dwg_write_json and
     dwg_write_geojson (src/out_json.h, not in the public headers) are
     renamed to dwg_write_json_dat and dwg_write_geojson_dat.
+  * dwggrep -R, -r, --recursive: search all *.dwg files in the directories
+    given, or in the current directory, sorted and not following symlinked
+    directories.  With POSIX, mingw and MSVC.  GH #1135.
 
 Minor bugfixes / fuzzing fixes:
   * Fixed DXF input termination at mmap page boundaries, avoiding writes

@@ -1574,6 +1574,7 @@ Search regex pattern in all text values in a list of DWGs. dwggrep uses PCRE.
 With @code{-i} searches case-insensitive.
 With @code{-c} prints only the count of found texts.
 With @code{-h} or @code{--no-filename} does not print the filename.
+With @code{-R}, @code{-r} or @code{--recursive} searches all @file{*.dwg} files in the directories listed, or in the current directory.
 With @code{--type NAME} search only NAME entities or objects.
 With @code{--dxf NUM} search only in DXF group NUM fields.
 With @code{--text} searches only TEXT-like entities: TEXT, MTEXT, ATTRIB, ATTDEF.

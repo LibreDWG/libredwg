@@ -310,6 +310,24 @@ case $PROGS in
             echo "dwggrep failure $?"
             echo "result $n, expected 24"
         fi
+        # -R walks the directories: all *.dwg (any case) in the subdirs,
+        # not the other files
+        rdir=dwggrep-R.tmp
+        rm -rf "$rdir"
+        mkdir -p "$rdir/sub/deep"
+        cp "${DATADIR}/example_2000.dwg" "$rdir/"
+        cp "${DATADIR}/example_2004.dwg" "$rdir/sub/UPPER.DWG"
+        cp "${DATADIR}/example_2010.dwg" "$rdir/sub/deep/"
+        cp "${DATADIR}/example_2013.dwg" "$rdir/sub/notes.txt"
+        echo "$TESTPROG dwggrep${EXEEXT} -R -i -c tekst $rdir"
+        n="$($TESTPROG "./dwggrep${EXEEXT}" -i -c tekst "${DATADIR}/example_2000.dwg" "${DATADIR}/example_2004.dwg" "${DATADIR}/example_2010.dwg" | tr -d "\r")"
+        nr="$($TESTPROG "./dwggrep${EXEEXT}" -R -i -c tekst "$rdir" | tr -d "\r")"
+        if test -z "$n" || test "$n" = "0" || test "$n" != "$nr"; then
+            i=$((i+1))
+            echo "dwggrep -R failure $?"
+            echo "result $nr, expected $n"
+        fi
+        rm -rf "$rdir"
 esac
 
 #run dwgread r11/ACEL10
