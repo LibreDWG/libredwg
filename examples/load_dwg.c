@@ -33,7 +33,9 @@
 #include <time.h>
 #ifndef DISABLE_WRITE
 #  include <sys/stat.h>
-#  include <unistd.h>
+#  ifdef HAVE_UNISTD_H
+#    include <unistd.h>
+#  endif
 #endif
 #include "dwg.h"
 #include "dwg_api.h"
