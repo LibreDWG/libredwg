@@ -1472,16 +1472,11 @@ lwpolyline_to_polyline (Dwg_Data *restrict dwg, const BITCODE_BL idx)
   if (!owner || owner->fixedtype != DWG_TYPE_BLOCK_HEADER)
     owner = dwg_model_space_object (dwg);
   /* dwg_insert_entity() requires the model space. A fuzzed DWG may have none.
-     The paper space is optional, e.g. in DXF imports. */
+   */
   if (!owner || !owner->tio.object || !owner->tio.object->tio.BLOCK_HEADER
-      || !dwg_model_space_ref (dwg))
+      || !dwg_model_space_ref (dwg) || !dwg_paper_space_ref (dwg))
     {
-      LOG_ERROR ("LWPOLYLINE to POLYLINE: no model space owner=%p obj=%p "
-                 "hdr=%p msref=%p dirty=%d", (void *)owner,
-                 owner ? (void *)owner->tio.object : NULL,
-                 owner && owner->tio.object
-                     ? (void *)owner->tio.object->tio.BLOCK_HEADER : NULL,
-                 (void *)dwg_model_space_ref (dwg), (int)dwg->dirty_refs);
+      LOG_ERROR ("LWPOLYLINE to POLYLINE: no model or paper space");
       return DWG_ERR_INVALIDDWG;
     }
   hdr = owner->tio.object->tio.BLOCK_HEADER;

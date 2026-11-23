@@ -1457,6 +1457,20 @@ dwg_model_space_ref (Dwg_Data *dwg)
       dwg->header_vars.BLOCK_RECORD_MSPACE = block_control->model_space;
       return block_control->model_space;
     }
+  // An import may have no *Model_Space name, e.g. the r14 example has it
+  // renamed to *U. Look for the standard handle then.
+  if ((dwg->header.version >= R_13b1 || dwg->header.from_version >= R_13b1)
+      && dwg->object_map)
+    {
+      Dwg_Object *o = dwg_resolve_handle (dwg, 0x1F);
+      if (o && o->fixedtype == DWG_TYPE_BLOCK_HEADER)
+        {
+          dwg->header_vars.BLOCK_RECORD_MSPACE
+              = dwg_add_handleref (dwg, 5, o->handle.value, o);
+          dwg->header_vars.BLOCK_RECORD_MSPACE->obj = o;
+          return dwg->header_vars.BLOCK_RECORD_MSPACE;
+        }
+    }
   obj = dwg_get_first_object (dwg, DWG_TYPE_BLOCK_CONTROL);
   if (!obj)
     return NULL;
