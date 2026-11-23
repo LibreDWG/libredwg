@@ -664,6 +664,23 @@ my_strcasecmp (const char *a, const char *b)
   return toupper ((unsigned char)*a) - toupper ((unsigned char)*b);
 }
 
+#ifdef _WIN32
+EXPORT int
+my_strncasecmp (const char *a, const char *b, size_t n)
+{
+  while (n && *a && *b)
+    {
+      int diff = toupper ((unsigned char)*a) - toupper ((unsigned char)*b);
+      if (diff)
+        return diff;
+      a++;
+      b++;
+      n--;
+    }
+  return n ? toupper ((unsigned char)*a) - toupper ((unsigned char)*b) : 0;
+}
+#endif
+
 #ifdef _MSC_VER
 EXPORT char *
 basename (char *path)

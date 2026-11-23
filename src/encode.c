@@ -1581,6 +1581,119 @@ calc_preR13_ctrl_flags_r11 (Dwg_Data *restrict dwg, Dwg_Section *tbl, int i)
     }
 }
 
+// A pre-R13 BLOCK table has no *Model_Space and *Paper_Space*, they are
+// synthesized by the decoder. Only for R13+ sources, decoded pre-R13 sources
+// keep their table as is.
+static bool
+preR13_block_wanted (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
+{
+  Dwg_Object_BLOCK_HEADER *hdr;
+  char *name;
+  bool wanted = true;
+  if (!obj || obj->fixedtype != DWG_TYPE_BLOCK_HEADER || !obj->tio.object
+      || !obj->tio.object->tio.BLOCK_HEADER)
+    return false;
+  hdr = obj->tio.object->tio.BLOCK_HEADER;
+  if (!hdr->name)
+    return true;
+  name = IS_FROM_TU_DWG (dwg)
+             ? bit_convert_TU ((BITCODE_TU)hdr->name)
+             : hdr->name;
+  if (name
+      && (!strncasecmp (name, "*MODEL_SPACE", 12)
+          || !strncasecmp (name, "*PAPER_SPACE", 12)))
+    wanted = false;
+  if (name && IS_FROM_TU_DWG (dwg))
+    free (name);
+  return wanted;
+}
+
+static Dwg_Object_Type
+preR13_ctrl_record_type (const Dwg_Object_Type ctrltype)
+{
+  switch (ctrltype)
+    {
+    case DWG_TYPE_BLOCK_CONTROL:
+      return DWG_TYPE_BLOCK_HEADER;
+    case DWG_TYPE_LAYER_CONTROL:
+      return DWG_TYPE_LAYER;
+    case DWG_TYPE_STYLE_CONTROL:
+      return DWG_TYPE_STYLE;
+    case DWG_TYPE_LTYPE_CONTROL:
+      return DWG_TYPE_LTYPE;
+    case DWG_TYPE_VIEW_CONTROL:
+      return DWG_TYPE_VIEW;
+    case DWG_TYPE_UCS_CONTROL:
+      return DWG_TYPE_UCS;
+    case DWG_TYPE_VPORT_CONTROL:
+      return DWG_TYPE_VPORT;
+    case DWG_TYPE_APPID_CONTROL:
+      return DWG_TYPE_APPID;
+    case DWG_TYPE_DIMSTYLE_CONTROL:
+      return DWG_TYPE_DIMSTYLE;
+    case DWG_TYPE_VX_CONTROL:
+      return DWG_TYPE_VX_TABLE_RECORD;
+    default:
+      return DWG_TYPE_UNUSED;
+    }
+}
+
+// The number of the table records which are written. A R13+ source has
+// entries[] which are not all valid records, and no *Model_Space or
+// *Paper_Space in the BLOCK table.
+static BITCODE_RL
+preR13_table_number (Dwg_Data *restrict dwg, Dwg_Object *restrict ctrl,
+                     const BITCODE_RL number)
+{
+  // all the table controls share the layout of the common fields
+  Dwg_Object_APPID_CONTROL *_ctrl;
+  const Dwg_Object_Type type = preR13_ctrl_record_type (ctrl->fixedtype);
+  BITCODE_RL n = 0;
+  if (type == DWG_TYPE_UNUSED || dwg->header.from_version < R_13b1
+      || !ctrl->tio.object || !ctrl->tio.object->tio.APPID_CONTROL)
+    return number;
+  _ctrl = ctrl->tio.object->tio.APPID_CONTROL;
+  for (BITCODE_BL i = 0; _ctrl->entries && i < _ctrl->num_entries; i++)
+    {
+      Dwg_Object *o = _ctrl->entries[i]
+                          ? dwg_ref_object (dwg, _ctrl->entries[i])
+                          : NULL;
+      if (!o || o->fixedtype != type)
+        {
+          LOG_TRACE ("%s.entries[%u] is not a %s\n", ctrl->name, i,
+                     dwg_type_name (type));
+        }
+      else if (type != DWG_TYPE_BLOCK_HEADER || preR13_block_wanted (dwg, o))
+        n++;
+    }
+  return n;
+}
+
+// The i-th record of a table, by the control entries[], not by the position
+// of the objects. Else records are skipped or doubled, e.g. with the ByBlock
+// and ByLayer LTYPEs before the others.
+static Dwg_Object *
+preR13_table_object (Dwg_Data *restrict dwg, Dwg_Object *restrict ctrl,
+                     const Dwg_Object_Type type, const BITCODE_RL num,
+                     const int i)
+{
+  if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.APPID_CONTROL)
+    {
+      // all the table controls share the layout of the common fields
+      Dwg_Object_APPID_CONTROL *c = ctrl->tio.object->tio.APPID_CONTROL;
+      if (c->entries && i < (int)c->num_entries && c->entries[i])
+        {
+          Dwg_Object *o = dwg_ref_object (dwg, c->entries[i]);
+          if (o && o->fixedtype == type && o->tio.object)
+            return o;
+        }
+      // not counted by preR13_table_number(), so not written
+      if (dwg->header.from_version >= R_13b1)
+        return NULL;
+    }
+  return dwg_get_next_object (dwg, type, num + i);
+}
+
 // see below for the elements
 static void
 calc_preR13_ctrl_size (Dwg_Data *restrict dwg, Dwg_Object *obj)
@@ -1603,7 +1716,7 @@ calc_preR13_ctrl_size (Dwg_Data *restrict dwg, Dwg_Object *obj)
     case DWG_TYPE_STYLE_CONTROL:
       if (ver == R_11)
         obj->size = 198;
-      else if (ver == R_2_10)
+      else if (ver < R_2_4) // no bigfont_file: r1.x, r2.0, r2.10, r2.21/22
         obj->size = 130;
       else if (ver <= R_10) // also r2.4, r2.5
         obj->size = 194;
@@ -1713,10 +1826,11 @@ encode_preR13_section_hdr (const char *restrict name,
           Dwg_Object_##ctrltoken *_obj = obj->tio.object->tio.ctrltoken;      \
           strncpy (tbl->name, obj->name, sizeof (tbl->name) - 1);             \
           tbl->name[sizeof (tbl->name) - 1] = '\0';                           \
-          if (!obj->size)                                                     \
+          /* a R13+ obj->size is the size of the object, not the table */   \
+          if (!obj->size || dwg->header.from_version >= R_13b1)               \
             calc_preR13_ctrl_size (dwg, obj);                                 \
           tbl->size = obj->size;                                              \
-          tbl->number = _obj->num_entries;                                    \
+          tbl->number = preR13_table_number (dwg, obj, _obj->num_entries);    \
           if (!tbl->flags_r11)                                                \
             tbl->flags_r11 = _obj->flags_r11; /* from JSON/DXF, GH #758 */    \
           if (!tbl->flags_r11)                                                \
@@ -5009,7 +5123,8 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   int error = 0;
   BITCODE_BL vcount;
   int tblnum = tbl->number;
-  BITCODE_RL num = tbl->objid_r11; // from decode_r11
+  // from decode_r11, which only exists for pre-R13 sources
+  BITCODE_RL num = dwg->header.from_version < R_13b1 ? tbl->objid_r11 : 0;
   Bit_Chain *hdl_dat = dat;
   Dwg_Object *ctrl = NULL;
   assert (id <= SECTION_VX);
@@ -5045,11 +5160,14 @@ if (num + tblnum >= dwg->num_objects)                                          \
 
 #define PREP_TABLE(token)                                                     \
   size_t size_adr = dat->byte;                                                \
-  Dwg_Object *obj = dwg_get_next_object (dwg, DWG_TYPE_##token, num + i);     \
+  Dwg_Object *obj = preR13_table_object (dwg, ctrl, DWG_TYPE_##token, num, i);\
   Dwg_Object_##token *_obj;                                                   \
   if (!obj)                                                                   \
     {                                                                         \
-      LOG_ERROR ("No table %s after pos %u found", #token, num + i);          \
+      if (dwg->header.from_version < R_13b1)                                  \
+        {                                                                     \
+          LOG_ERROR ("No table %s after pos %u found", #token, num + i);      \
+        }                                                                     \
       if (num + i > dwg->num_objects)                                         \
         num = 0;                                                              \
       continue;                                                               \
@@ -5067,6 +5185,9 @@ if (num + tblnum >= dwg->num_objects)                                          \
       continue;                                                               \
     }                                                                         \
   _obj = obj->tio.object->tio.token;                                          \
+  /* a R13+ obj->size is the size of the object, not the table record */      \
+  if (dwg->header.from_version >= R_13b1)                                     \
+    obj->size = tbl->size;                                                    \
   LOG_TRACE ("contents table " #token " [%d]: (0x%zx, 0x%zx)\n", i,           \
              obj->address, dat->byte);
 
@@ -5110,16 +5231,18 @@ if (num + tblnum >= dwg->num_objects)                                          \
                            dwg_type_name (obj->fixedtype), i);
                 continue;
               }
-            if (_obj->name && strEQc (_obj->name, "*MODEL_SPACE"))
+            if (dwg->header.from_version >= R_13b1
+                    ? !preR13_block_wanted (dwg, obj)
+                    : (_obj->name && strEQc (_obj->name, "*MODEL_SPACE")))
               {
-                LOG_TRACE ("Skip *MODEL_SPACE\n");
+                LOG_TRACE ("Skip %s\n", "*MODEL_SPACE/*PAPER_SPACE");
                 continue;
               }
             // record where this entry starts so block_offset_r11 can be
             // patched
             obj->address = size_adr;
             // ensure obj->size is set so FIELD_RC(unknown_r11) is skipped
-            if (!obj->size)
+            if (!obj->size || dwg->header.from_version >= R_13b1)
               obj->size = tbl->size;
             error |= dwg_encode_BLOCK_HEADER (dat, obj);
             dwg->cur_index += tblnum;

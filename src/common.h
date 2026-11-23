@@ -79,6 +79,13 @@ EXPORT int my_strcasecmp (const char *a, const char *b);
 #  include AX_STRCASECMP_HEADER
 #endif
 
+#ifdef _WIN32
+EXPORT int my_strncasecmp (const char *a, const char *b, size_t n);
+#  ifndef strncasecmp // mingw has a macro already
+#    define strncasecmp my_strncasecmp
+#  endif
+#endif
+
 #if defined WORDS_BIGENDIAN && !WORDS_BIGENDIAN
 #  undef WORDS_BIGENDIAN
 #endif
