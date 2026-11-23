@@ -5983,8 +5983,16 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                   {
                     Dwg_Entity_VERTEX_PFACE_FACE *_vf
                         = _ent->tio.VERTEX_PFACE_FACE;
-                    if (_vf->flag)
-                      _ent->opts_r11 |= 8; // HAS_FLAG
+                    // as dwg_add_VERTEX_PFACE_FACE(): a flag, the 4 indices
+                    // and no x, y
+                    if (!_vf->flag)
+                      _vf->flag = FLAG_VERTEX_PFACE_MESH;
+                    _ent->opts_r11 |= OPTS_R11_VERTEX_HAS_FLAG
+                                      | OPTS_R11_VERTEX_HAS_INDEX1
+                                      | OPTS_R11_VERTEX_HAS_INDEX2
+                                      | OPTS_R11_VERTEX_HAS_INDEX3
+                                      | OPTS_R11_VERTEX_HAS_INDEX4
+                                      | OPTS_R11_VERTEX_HAS_NOT_X_Y;
                     break;
                   }
                 case DWG_TYPE_POLYLINE_2D:

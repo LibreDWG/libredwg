@@ -4350,6 +4350,10 @@ dwg_sections_init (Dwg_Data *dwg)
   // holes)
   if (dwg->header.version < R_13b1)
     {
+      // a R13+ source has its own section counts, e.g. 30 with r2004+
+      if (dwg->header.from_version >= R_13b1)
+        dwg->header.num_sections = dwg->header.sections
+            = dwg->header.numheader_vars = 0;
       if (!dwg->header.num_sections)
         dwg->header.num_sections = 5;
       if (!dwg->header.sections)
