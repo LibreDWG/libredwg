@@ -9034,10 +9034,8 @@ typedef struct _dwg_object_POINTCLOUDDEF_REACTOR_EX
 typedef struct _dwg_ColorRamp
 {
   struct _dwg_POINTCLOUDCOLORMAP_Ramp *parent;
-  // FIXME either
-  BITCODE_T colorscheme;	// DXF 1
-  /// or
-  BITCODE_BL unknown_bl;	// DXF 91
+  BITCODE_T colorscheme;	// DXF 1, class versions before 4
+  BITCODE_BL unknown_bl;	// DXF 91, packed color
   BITCODE_B unknown_b;		// DXF 290
 } Dwg_ColorRamp;
 
@@ -9047,6 +9045,8 @@ typedef struct _dwg_POINTCLOUDCOLORMAP_Ramp
   BITCODE_BS class_version;	// DXF 70: 1
   BITCODE_BL num_ramps;		// DXF 90
   Dwg_ColorRamp *ramps;
+  BITCODE_T guid;		// DXF 1, class version 4
+  BITCODE_T name;		// DXF 1, class version 4
 } Dwg_POINTCLOUDCOLORMAP_Ramp;
 
 typedef struct _dwg_object_POINTCLOUDCOLORMAP

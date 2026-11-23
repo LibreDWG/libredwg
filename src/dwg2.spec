@@ -5939,19 +5939,30 @@ DWG_OBJECT (POINTCLOUDCOLORMAP)
   REPEAT (num_colorramps, colorramps, Dwg_POINTCLOUDCOLORMAP_Ramp)
   REPEAT_BLOCK
     #define ramp colorramps[rcount1]
+    if (_obj->class_version >= 4)
+      {
+        SUB_FIELD_T (ramp, guid, 1);
+      }
     SUB_FIELD_BS (ramp, class_version, 70);
     SUB_FIELD_BL (ramp, num_ramps, 90);
-    REPEAT2 (ramp.num_ramps, colorramps[rcount1].ramps, Dwg_ColorRamp)
+    REPEAT2 (ramp.num_ramps, ramp.ramps, Dwg_ColorRamp)
     REPEAT_BLOCK
-      if (1) {
-        SUB_FIELD_T (ramp.ramps[rcount2], colorscheme, 1);
-      } else {
-        SUB_FIELD_BL (ramp.ramps[rcount2], unknown_bl, 91);
-        SUB_FIELD_B (ramp.ramps[rcount2], unknown_b, 290);
-      }
-      SET_PARENT (ramp.ramps[rcount2], _obj->colorramps);
+      if (_obj->class_version >= 4)
+        {
+          SUB_FIELD_BL (ramp.ramps[rcount2], unknown_bl, 91);
+          SUB_FIELD_B (ramp.ramps[rcount2], unknown_b, 290);
+        }
+      else
+        {
+          SUB_FIELD_T (ramp.ramps[rcount2], colorscheme, 1);
+        }
+      SET_PARENT (ramp.ramps[rcount2], &_obj->ramp);
     END_REPEAT_BLOCK
     END_REPEAT (ramp.ramps)
+    if (_obj->class_version >= 4)
+      {
+        SUB_FIELD_T (ramp, name, 1);
+      }
     SET_PARENT_OBJ (ramp);
     #undef ramp
   END_REPEAT_BLOCK
@@ -5961,19 +5972,30 @@ DWG_OBJECT (POINTCLOUDCOLORMAP)
   REPEAT (num_classification_colorramps, classification_colorramps, Dwg_POINTCLOUDCOLORMAP_Ramp)
   REPEAT_BLOCK
     #define ramp classification_colorramps[rcount1]
+    if (_obj->class_version >= 4)
+      {
+        SUB_FIELD_T (ramp, guid, 1);
+      }
     SUB_FIELD_BS (ramp, class_version, 70);
     SUB_FIELD_BL (ramp, num_ramps, 90);
     REPEAT2 (ramp.num_ramps, ramp.ramps, Dwg_ColorRamp)
     REPEAT_BLOCK
-      if (1) {
-        SUB_FIELD_T (ramp.ramps[rcount2], colorscheme, 1);
-      } else {
-        SUB_FIELD_BL (ramp.ramps[rcount2], unknown_bl, 91);
-        SUB_FIELD_B (ramp.ramps[rcount2], unknown_b, 290);
-      }
-      SET_PARENT (ramp.ramps[rcount2], _obj->classification_colorramps);
+      if (_obj->class_version >= 4)
+        {
+          SUB_FIELD_BL (ramp.ramps[rcount2], unknown_bl, 91);
+          SUB_FIELD_B (ramp.ramps[rcount2], unknown_b, 290);
+        }
+      else
+        {
+          SUB_FIELD_T (ramp.ramps[rcount2], colorscheme, 1);
+        }
+      SET_PARENT (ramp.ramps[rcount2], &_obj->ramp);
     END_REPEAT_BLOCK
     END_REPEAT (ramp.ramps)
+    if (_obj->class_version >= 4)
+      {
+        SUB_FIELD_T (ramp, name, 1);
+      }
     SET_PARENT_OBJ (ramp);
     #undef ramp
   END_REPEAT_BLOCK
