@@ -292,7 +292,12 @@ done
 # dwgread converts to json here, but has no --as yet.
 # Only with the write programs of the programs/ dir, not from examples/, not
 # with --disable-write, and not all of them with check-minimal.
-if [ "$DISABLE_WRITE" != "1" ] && [ -z "$CHECK_MINIMAL" ]; then
+# make check in examples/ runs this test also, without the programs/ programs
+case "$(pwd)" in
+    */examples) run_as= ;;
+    *)          run_as=1 ;;
+esac
+if [ "$DISABLE_WRITE" != "1" ] && [ -z "$CHECK_MINIMAL" ] && [ -n "$run_as" ]; then
     for prog in dwgwrite dwgrewrite dxf2dwg dwg2dxf dxfwrite ; do
         for dwg in $DATA; do
             for r in $WRITE_REVS; do
