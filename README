@@ -56,6 +56,16 @@ Optionally:
 - libmimalloc: faster memory allocation, but usually not worth the hassle.
 - pslib for dwg2ps: http://pslib.sourceforge.net/doc/pslib.html
 - pcre2 with 8bit and 16bit libraries for dwggrep regexp support.
+- GNU plotutils with libplot and its header plot.h for dwgplot, which writes
+  png, pnm, gif, svg, ai, ps, cgm, fig, pcl, hpgl, regis and tek.
+  The plot(1) tool for the default plot(5) meta format comes with it.
+    rpm (Fedora, RHEL):  dnf install plotutils plotutils-devel
+    deb (Debian, Ubuntu): apt install plotutils libplot-dev
+    Homebrew (macOS):    brew install plotutils
+    Arch Linux:          pacman -S plotutils
+  Others, e.g. Windows (mingw, msys2), the BSDs or without a package: build
+  the plotutils release from https://www.gnu.org/software/plotutils/ and
+  point configure to it: CPPFLAGS=-I/prefix/include LDFLAGS=-L/prefix/lib
 - gperf to update static hashes for several API's
   Only needed when you added objects or changed the dwg.spec significantly.
   Then also the cpan package Convert::Binary::C is required.
