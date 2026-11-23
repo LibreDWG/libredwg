@@ -325,6 +325,12 @@ Minor bugfixes / fuzzing fixes:
   * New dwg_style_font_file() returns the font of a STYLE: the font_file,
     or the typeface and the ttf flags of the ACAD EED, for non-ASCII
     TrueType font names (SimHei) with an empty font_file.  GH #312.
+  * New dwgplot, with GNU plotutils libplot (configure and cmake find it,
+    --enable-release needs it): converts the 2D entities, including INSERTs,
+    to png, pnm, gif, svg, ps, ai, cgm, fig, pcl, hpgl, regis, tek or the
+    plot(5) meta format.  GH #229.
+  * dwg2SVG and dwg2ps are deprecated, and will be replaced by dwgplot,
+    with dwgplot -T svg and dwgplot -T ps.
 
 LibreDWG version 0.14 - 2026-06-27 - beta:
 

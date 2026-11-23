@@ -336,6 +336,29 @@ case $PROGS in
         rm -rf "$rdir"
 esac
 
+# dwgplot needs libplot, and is not built without
+if test -f "./dwgplot${EXEEXT}"; then
+    test -z "$TESTPROG" && TESTPROG="@LTEXEC@"
+    for fmt in ps svg png; do
+        out="dwgplot-example_2000.$fmt"
+        rm -f "$out"
+        echo "$TESTPROG dwgplot${EXEEXT} -T $fmt -o $out ${DATADIR}/example_2000.dwg"
+        $TESTPROG "./dwgplot${EXEEXT}" -T $fmt -o "$out" "${DATADIR}/example_2000.dwg" 2>"dwgplot-$fmt.log"
+        rc=$?
+        case $fmt in
+            ps)  magic="$(head -c 4 "$out" 2>/dev/null)"; expected="%!PS" ;;
+            svg) magic="$(head -c 5 "$out" 2>/dev/null)"; expected="<?xml" ;;
+            png) magic="$(head -c 4 "$out" 2>/dev/null | tail -c 3)"; expected="PNG" ;;
+        esac
+        if test "$rc" != 0 || test "$magic" != "$expected"; then
+            i=$((i+1))
+            echo "dwgplot -T $fmt failure $rc, got \"$magic\" instead of \"$expected\""
+        else
+            rm -f "$out" "dwgplot-$fmt.log"
+        fi
+    done
+fi
+
 #run dwgread r11/ACEL10
 
 # TODO: check generated DXF's against original DXF's

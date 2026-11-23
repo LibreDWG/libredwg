@@ -168,9 +168,6 @@
 /* Define to 1 if you have the 'm' library (-lm). */
 #undef HAVE_LIBM
 
-/* Define to 1 if -lplot is available */
-#undef HAVE_LIBPLOT
-
 /* Define to 1 if you have the <libps/pslib.h> header file. */
 #undef HAVE_LIBPS_PSLIB_H
 

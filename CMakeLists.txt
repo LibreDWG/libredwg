@@ -86,6 +86,9 @@ elseif (APPLE)
 endif()
 CHECK_INCLUDE_FILE("iconv.h" HAVE_ICONV_H)
 CHECK_INCLUDE_FILE("pcre2.h" HAVE_PCRE2_H)
+# GNU plotutils libplot for dwgplot
+find_path(PLOT_INCLUDE_DIR plot.h)
+find_library(PLOT_LIBRARY plot)
 CHECK_INCLUDE_FILE("sys/stat.h" HAVE_SYS_STAT_H)
 CHECK_INCLUDE_FILE("sys/mman.h" HAVE_SYS_MMAN_H)
 CHECK_INCLUDE_FILE("direct.h" HAVE_DIRECT_H)
@@ -327,6 +330,23 @@ if(NOT LIBREDWG_LIBONLY)
   add_executable(dwg2SVG programs/dwg2SVG.c
                          programs/escape.c ${getopt_c})
 
+  # the examples of examples/Makefile.am
+  add_executable(dwgadd examples/dwgadd.c ${getopt_c})
+  add_executable(dwg2svg2 examples/dwg2svg2.c ${getopt_c})
+  add_executable(load_dwg examples/load_dwg.c ${getopt_c})
+  add_executable(dwgfuzz examples/dwgfuzz.c ${getopt_c})
+  target_include_directories(load_dwg PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_BINARY_DIR}/src)
+  target_include_directories(dwgfuzz PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_BINARY_DIR}/src)
+
+  if (PLOT_INCLUDE_DIR AND PLOT_LIBRARY)
+    add_executable(dwgplot programs/dwgplot.c programs/escape.c ${getopt_c})
+    target_include_directories(dwgplot PRIVATE ${PLOT_INCLUDE_DIR})
+    target_link_libraries(dwgplot ${redwg} ${PLOT_LIBRARY})
+    set(executables_TARGETS ${executables_TARGETS} dwgplot)
+  endif()
+
   if (HAVE_PCRE2_H)
     if(HAVE_PCRE2_16)
       target_link_libraries(dwggrep ${redwg} -lpcre2-8 -lpcre2-16)
@@ -387,8 +407,16 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
           if(NOT LIBREDWG_DISABLE_JSON)
             configure_file(programs/json.test.in json.test @ONLY)
             add_test(json.test json.test)
+            # the script of the test
+            set(prefix ${CMAKE_INSTALL_PREFIX})
+            set(exec_prefix ${CMAKE_INSTALL_PREFIX})
+            set(bindir ${CMAKE_INSTALL_PREFIX}/bin)
+            set(EXEEXT ${CMAKE_EXECUTABLE_SUFFIX})
+            configure_file(programs/dwgfilter.in dwgfilter @ONLY
+                           FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+                           GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
             configure_file(programs/dwgfilter.test.in dwgfilter.test @ONLY)
-            add_test(dwgfilter.test dwgfilter.test)
+            add_test(NAME dwgfilter.test COMMAND sh dwgfilter.test)
           endif(NOT LIBREDWG_DISABLE_JSON)
         endif(NOT LIBREDWG_DISABLE_DXF)
         configure_file(programs/svg.test.in svg.test @ONLY)

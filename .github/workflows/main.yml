@@ -59,6 +59,11 @@ jobs:
       run: |
         sudo apt-get -y update
         sudo apt-get -y install gcc-multilib
+    - if: ${{ !contains(matrix.CONFIGURE_ARGS, 'i686-linux-gnu') }}
+      name: setup libplot for dwgplot
+      run: |
+        sudo apt-get -y update
+        sudo apt-get -y install libplot-dev plotutils
     #- name: setup-python-libxml2
     #  run: |
     #    python -m pip install --upgrade pip
@@ -197,7 +202,12 @@ jobs:
       with:
         create-symlink: true
         key: ${{ github.job }}
-    - run: cmake -DLIBREDWG_LIBONLY=On -DCMAKE_C_COMPILER_LAUNCHER=ccache .
+    - name: setup libplot for dwgplot
+      run: |
+        sudo apt-get -y update
+        sudo apt-get -y install libplot-dev plotutils
+    # also the programs and the examples
+    - run: cmake -DCMAKE_C_COMPILER_LAUNCHER=ccache .
     - run: make -j
     - run: make -j test
     - if: failure()
@@ -212,7 +222,7 @@ jobs:
     runs-on: macOS-latest
     steps:
     - name: init
-      run: brew install autoconf automake libtool texinfo
+      run: brew install autoconf automake libtool texinfo plotutils
     - name: link texinfo
       run: brew link texinfo --force
     - name: setup-python

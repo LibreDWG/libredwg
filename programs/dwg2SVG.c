@@ -88,8 +88,10 @@ static int
 help (void)
 {
   printf ("\nUsage: dwg2SVG [OPTION]... DWGFILE >SVGFILE\n");
-  printf ("Converts some 2D elements of the DWG to a SVG.\n"
-          "\n");
+  printf (
+      "Converts some 2D elements of the DWG to a SVG.\n"
+      "Deprecated: use dwgplot -T svg, which also writes png, ps, hpgl, ...\n"
+      "\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf ("           --mspace         only model-space, no paper-space\n");

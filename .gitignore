@@ -213,6 +213,7 @@ compile_commands.json
 /programs/json.test
 # temp. mingw gcc DLLs for wine
 /programs/dwg2SVG
+/programs/dwgplot
 /programs/dwg2dxf
 /programs/dwg2ps
 /programs/dxf2dwg

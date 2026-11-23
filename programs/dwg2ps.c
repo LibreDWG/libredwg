@@ -54,6 +54,7 @@ help (void)
 {
   printf ("\nUsage: dwg2ps [OPTION]... DWGFILE [PSFILE]\n");
   printf ("Converts some 2D elements of the DWG to a Postscript file.\n"
+          "Deprecated: use dwgplot -T ps, which does not need pslib.\n"
           "\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");

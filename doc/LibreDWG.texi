@@ -1592,6 +1592,8 @@ With @code{-i} replaces the DWG in-place. This only makes sense with an JQ expre
 @cindex dwg2SVG
 @anchor{dwg2SVG}
 
+@strong{Deprecated} in favor of @code{dwgplot -T svg}.
+
 Convert a DWG to a limited SVG. All paperspace or modelspace enties of type:
 TEXT, LINE, CIRCLE, ARC, POLYLINE_2D, LWPOLYLINE, INSERT, ELLIPSE (unrotated),
 SOLID, 3DFACE, RAY, XLINE.
@@ -1606,6 +1608,8 @@ Limitations: Many other graphical entities and some properties are still missing
 @item @file{dwg2ps}
 @cindex dwg2ps
 @anchor{dwg2ps}
+
+@strong{Deprecated} in favor of @code{dwgplot -T ps}, which does not need pslib.
 
 Convert a DWG to a very limited Postscript file. All paperspace and modelspace entities of type LINE,
 POLYLINE_2D, LWPOLYLINE, ARC and CIRCLE.
@@ -1624,6 +1628,21 @@ Planned is @strong{dwgplot}, via GNU Plotutils @uref{https://www.gnu.org/softwar
 There are also some more examples in the source distribution:
 
 @table @asis
+
+@item @file{dwgplot}
+@cindex dwgplot
+@anchor{dwgplot}
+
+Convert a DWG with GNU plotutils @code{libplot} to one of its formats:
+png, pnm, gif (bitmaps), svg, ps, ai, cgm, fig, pcl, hpgl, regis, tek, or the
+default @code{meta}, the plot(5) format for @code{plot} and @code{graph}.
+The entities are those of dwg2SVG, but with all blocks (INSERT) transformed.
+It replaces dwg2SVG and dwg2ps. Requires GNU plotutils with @file{plot.h}.
+
+With @code{-T FORMAT} sets the output format, with @code{-o FILE} the output
+file, else stdout. With @code{-p SIZE} the pagesize, e.g. @code{a4}, with
+@code{-b WxH} the size of the bitmap formats.
+With @code{-m} or @code{--mspace} all paper-space entities are ignored.
 
 @item @file{load_dwg}
 @cindex load_dwg

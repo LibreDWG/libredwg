@@ -93,16 +93,11 @@ AC_C_RESTRICT
 dnl Checks for libraries
 AM_ICONV
 
-dnl GNU plotutils
-AC_CHECK_LIB([plot],[pl_newplparams],
-  [libredwg_have_libplot=yes])
-if test yes = "$libredwg_have_libplot"; then
-  AC_DEFINE([HAVE_LIBPLOT],1,[Define to 1 if -lplot is available])
-  PLOT_CFLAGS=`pkg-config libplot --cflags`
-  PLOT_LIBS=`pkg-config libplot --libs`
-  test -z "$PLOT_LIBS" && PLOT_LIBS="-lplot"
-fi
-AC_SUBST([PLOT_CFLAGS])
+dnl GNU plotutils: libplot for dwgplot. It has no pkg-config file.
+AC_CHECK_LIB([plot],[pl_newpl_r],
+  [libredwg_have_libplot=yes
+   PLOT_LIBS="-lplot"],
+  [libredwg_have_libplot=no],[-lm])
 AC_SUBST([PLOT_LIBS])
 
 dnl extra lib from sourceforge, deprecated
@@ -192,7 +187,7 @@ AM_CONDITIONAL([HAVE_LIBPS],[test x$libredwg_have_libps = xyes &&
                              test x$ac_cv_header_libps_pslib_h = xyes])
 
 if test xyes = x$libredwg_have_libplot ; then
-  AC_CHECK_HEADERS([plot.h])
+  AC_CHECK_HEADERS([plot.h],[],[],[#include <stdio.h>])
 fi
 AM_CONDITIONAL([HAVE_LIBPLOT],[test x$libredwg_have_libplot = xyes &&
                                test x$ac_cv_header_plot_h = xyes])
@@ -270,6 +265,7 @@ dnl ability to override with a .git dir, to test release features
 AC_ARG_ENABLE([release],AS_HELP_STRING([--enable-release],[
     Override IS_RELEASE with .git dir present (default: $ax_is_release).]),
     [ax_is_release=yes
+    libredwg_enable_release=yes
     AC_MSG_RESULT(IS_RELEASE override with --enable-release)])
 if test x$ax_is_release = xyes; then
    if test x$have_libxml2 != xyes; then
@@ -282,6 +278,14 @@ if test x$ax_is_release = xyes; then
 skipping unstable DWG features, unknown DWG versions and objects.])
 fi
 AM_CONDITIONAL([IS_RELEASE], [test x$ax_is_release = xyes])
+
+# a release needs dwgplot, i.e. GNU plotutils with libplot and plot.h
+if test x$libredwg_enable_release = xyes; then
+  if test x$libredwg_have_libplot != xyes || test x$ac_cv_header_plot_h != xyes; then
+    AC_MSG_ERROR([--enable-release needs libplot and plot.h of GNU plotutils for dwgplot.
+Install plotutils-devel (rpm), libplot-dev (deb), plotutils (brew), see README.])
+  fi
+fi
 
 dnl Detect emscripten
 if test `basename "$CC"` = emcc; then
