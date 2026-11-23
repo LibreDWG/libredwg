@@ -1618,17 +1618,6 @@ This requires installation of pslib @uref{http://pslib.sourceforge.net/doc/pslib
 
 Note that the graphical representation for PS and SVG output is severely lacking, block references (insert entities) are not yet exploded, UCS and paper space transformations per entity are not yet done.
 
-@end table
-
-@cindex dwgplot
-@anchor{dwgplot}
-
-Planned is @strong{dwgplot}, via GNU Plotutils @uref{https://www.gnu.org/software/plotutils/}, to replace @code{dwg2SVG} and @code{dwg2ps}. This supports much more bitmap and vector formats.
-
-There are also some more examples in the source distribution:
-
-@table @asis
-
 @item @file{dwgplot}
 @cindex dwgplot
 @anchor{dwgplot}
@@ -1643,6 +1632,12 @@ With @code{-T FORMAT} sets the output format, with @code{-o FILE} the output
 file, else stdout. With @code{-p SIZE} the pagesize, e.g. @code{a4}, with
 @code{-b WxH} the size of the bitmap formats.
 With @code{-m} or @code{--mspace} all paper-space entities are ignored.
+
+@end table
+
+There are also some more examples in the source distribution:
+
+@table @asis
 
 @item @file{load_dwg}
 @cindex load_dwg
