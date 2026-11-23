@@ -2300,8 +2300,13 @@ dwg_style_font_file (const Dwg_Object_STYLE *restrict style,
           if (data->u.eed_0.is_tu)
             typeface = bit_convert_TU ((BITCODE_TU)data->u.eed_0_r2007.string);
           else
-            typeface = bit_TV_to_utf8 (data->u.eed_0.string,
-                                       data->u.eed_0.codepage);
+            {
+              // bit_TV_to_utf8 may return the same string, not a copy
+              typeface = bit_TV_to_utf8 (data->u.eed_0.string,
+                                         data->u.eed_0.codepage);
+              if (typeface == data->u.eed_0.string)
+                typeface = strdup (data->u.eed_0.string);
+            }
         }
       else if (data->code == 71 && ttf_flags)
         *ttf_flags = data->u.eed_71.rl;
@@ -2315,7 +2320,11 @@ dwg_style_font_file (const Dwg_Object_STYLE *restrict style,
       else if (dwg->opts & DWG_OPTS_IN) // DXF, JSON: already utf-8
         font_file = strdup (style->font_file);
       else
-        font_file = bit_TV_to_utf8 (style->font_file, dwg->header.codepage);
+        {
+          font_file = bit_TV_to_utf8 (style->font_file, dwg->header.codepage);
+          if (font_file == style->font_file) // not a copy
+            font_file = strdup (style->font_file);
+        }
       if (font_file && *font_file)
         {
           free (typeface);
