@@ -12227,6 +12227,65 @@ dxf_read_binary_chunks (Bit_Chain *restrict dat, Dxf_Pair **restrict ppair,
   return data;
 }
 
+/* The size of a binary TF field has a pair of its own, which arrives before
+   or after its 310 chunks: 93 in bits (PROXY_OBJECT.data_numbits) or 90 in
+   bytes (VBA_PROJECT.data_size). The encoders write the data by that size,
+   so it must match the bytes of the chunks. Called when all pairs of the
+   object are read. An absent size (0) is derived from the data, a size which
+   does not match the data drops the data.
+   For a size in bits the DXF has the bits of the last partial byte MSB-first,
+   bit_write_bits wants them LSB-first. */
+static void
+dxf_reconcile_binary_size (void *restrict _obj, const char *restrict name,
+                           const Dwg_DYNAPI_field *restrict f,
+                           const size_t len)
+{
+  const char *sizename;
+  BITCODE_BL size = 0;
+  BITCODE_TF data = NULL;
+  int in_bits;
+  size_t expected;
+
+  if (dwg_dynapi_entity_field (name, "data_numbits"))
+    sizename = "data_numbits";
+  else if (dwg_dynapi_entity_field (name, "data_size"))
+    sizename = "data_size";
+  else
+    return;
+  in_bits = !strcmp (sizename, "data_numbits");
+  if (!dwg_dynapi_entity_value (_obj, name, sizename, &size, NULL)
+      || !dwg_dynapi_entity_value (_obj, name, f->name, &data, NULL))
+    return;
+  expected = in_bits ? ((size_t)size + 7) / 8 : (size_t)size;
+  if (!size && len)
+    {
+      size = (BITCODE_BL)(in_bits ? len * 8 : len);
+      dwg_dynapi_entity_set_value (_obj, name, sizename, &size, 0);
+      LOG_TRACE ("%s.%s = %u (from the data) [BL]\n", name, sizename,
+                 (unsigned)size);
+    }
+  else if (expected != len)
+    {
+      LOG_ERROR ("Invalid %s.%s %u for %" PRIuSIZE " bytes of %s, "
+                 "data dropped",
+                 name, sizename, (unsigned)size, len, f->name);
+      free (data);
+      data = NULL;
+      size = 0;
+      dwg_dynapi_entity_set_value (_obj, name, f->name, &data, 0);
+      dwg_dynapi_entity_set_value (_obj, name, sizename, &size, 0);
+    }
+  else if (in_bits && (size % 8) && data)
+    {
+      unsigned char b = data[size / 8];
+      unsigned char r = 0;
+      int i;
+      for (i = 0; i < 8; i++)
+        r |= (unsigned char)(((b >> i) & 1) << (7 - i));
+      data[size / 8] = r;
+    }
+}
+
 /* For tables, entities and objects.
  */
 static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
@@ -12271,6 +12330,8 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
   BITCODE_3BD pt;
   Dwg_Object *ctrl;
   const Dwg_DYNAPI_field *prev_vstyle = NULL;
+  const Dwg_DYNAPI_field *bin_f = NULL; // the binary TF field, and its bytes
+  size_t bin_len = 0;
   subclass[0] = '\0';
 
   dxf_mtext_text = 0; // reset for this object
@@ -14015,9 +14076,10 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
               pair = add_proxy_entity_data (obj, dat, pair);
               goto start_loop;
             }
-          // the DXF <= r2002 has a 2nd 90 for the light_color.rgb, the first 90
-          // is the class_version. Else it overwrote class_version with a huge
-          // value, and free skipped the rest of the LIGHT, leaking its name.
+          // the DXF <= r2002 has a 2nd 90 for the light_color.rgb, the first
+          // 90 is the class_version. Else it overwrote class_version with a
+          // huge value, and free skipped the rest of the LIGHT, leaking its
+          // name.
           else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_LIGHT
                    && obj->tio.entity->tio.LIGHT->class_version)
             {
@@ -15660,35 +15722,21 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                         {
                           // binary TF field, e.g. PROXY_OBJECT.data (310).
                           // dxf_read_pair already decoded the hex chunks to
-                          // raw bytes (pair->value.s.ptr/len). The total
-                          // bit count arrived earlier via 93 (data_numbits).
+                          // raw bytes (pair->value.s.ptr/len). Its size,
+                          // 93 or 90, may come before or after, and is
+                          // reconciled at the end of the object.
                           size_t len = 0;
                           BITCODE_TF data;
-                          BITCODE_BL numbits = 0;
                           data = dxf_read_binary_chunks (dat, &pair, f->dxf,
                                                          &len);
                           if (!data)
                             goto fail;
-                          // The DXF packs the last partial byte MSB-first,
-                          // bit_write_bits expects it LSB-first (see the
-                          // PROXY_OBJECT spec DECODER).
-                          if (dwg_dynapi_entity_value (_obj, obj->name,
-                                                       "data_numbits",
-                                                       &numbits, NULL)
-                              && (numbits % 8) && (numbits / 8) < len)
-                            {
-                              unsigned char b = data[numbits / 8];
-                              unsigned char r = 0;
-                              int _i;
-                              for (_i = 0; _i < 8; _i++)
-                                r |= (unsigned char)(((b >> _i) & 1)
-                                                     << (7 - _i));
-                              data[numbits / 8] = r;
-                            }
                           dwg_dynapi_entity_set_value (_obj, obj->name,
                                                        f->name, &data, 0);
                           LOG_TRACE ("%s.%s = TF %u bytes [%s %d]\n", name,
                                      f->name, (unsigned)len, f->type, f->dxf);
+                          bin_f = f; // its size is reconciled at the end
+                          bin_len = len;
                           if (!pair || pair->code == 0)
                             goto end_object_loop; // keep the terminating
                                                   // pair for the caller
@@ -16880,6 +16928,8 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
     }
 
 end_object_loop:
+  if (bin_f)
+    dxf_reconcile_binary_size (_obj, obj->name, bin_f, bin_len);
   if (obj->fixedtype == DWG_TYPE_SEQEND)
     dxf_postprocess_SEQEND (obj);
   else if (obj->fixedtype == DWG_TYPE_LAYOUT)

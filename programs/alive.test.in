@@ -336,6 +336,22 @@ case $PROGS in
         rm -rf "$rdir"
 esac
 
+# GH #1564: the size of a binary 310 field must match its data. The 93 of the
+# first ACAD_PROXY_OBJECT is raised, which overread its data when written.
+if test -f "./dxf2dwg${EXEEXT}" && test -f "${DATADIR}/sample_r14.dxf"; then
+    test -z "$TESTPROG" && TESTPROG="@LTEXEC@"
+    awk '/^ *0\r?$/ {print; getline nxt; print nxt; inpx=(nxt ~ /^ACAD_PROXY_OBJECT/); next} inpx && /^ *93\r?$/ && !done {print; getline; print "61000"; done=1; next} {print}' "${DATADIR}/sample_r14.dxf" > gh1564.dxf
+    echo "$TESTPROG dxf2dwg${EXEEXT} -y -o gh1564.dwg gh1564.dxf"
+    $TESTPROG "./dxf2dwg${EXEEXT}" -y -o gh1564.dwg gh1564.dxf 2>gh1564.log
+    rc=$?
+    if test "$rc" -ne 0; then
+        i=$((i+1))
+        echo "dxf2dwg with a wrong binary size failure $rc"
+    else
+        rm -f gh1564.dxf gh1564.dwg gh1564.log
+    fi
+fi
+
 # dwgplot needs libplot, and is not built without
 if test -f "./dwgplot${EXEEXT}"; then
     test -z "$TESTPROG" && TESTPROG="@LTEXEC@"
