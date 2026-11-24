@@ -322,6 +322,7 @@ template_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain *str_dat = dat;
   Dwg_Template *_obj = &dwg->Template;
   Dwg_Object *obj = NULL;
+  BITCODE_BL vcount = 0;
   int error = 0;
 
   // clang-format off
@@ -1743,6 +1744,7 @@ static int
 read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                          uint32_t comp_data_size, uint32_t decomp_data_size)
 {
+  BITCODE_BL vcount = 0;
   Bit_Chain dec = { 0 };
   BITCODE_BL i, j;
   int error;
@@ -2777,6 +2779,7 @@ summaryinfo_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain *str_dat = dat;
   Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
   Dwg_Object *obj = NULL;
+  BITCODE_BL vcount = 0;
   int error = 0;
 
   // clang-format off
@@ -2903,7 +2906,7 @@ objfreespace_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
   Dwg_Object *obj = NULL;
   int error = 0;
-  // BITCODE_BL vcount;
+  BITCODE_BL vcount = 0;
   if (!dat->chain || !dat->size)
     return 1;
 
@@ -2962,6 +2965,7 @@ appinfo_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_AppInfo *_obj = &dwg->appinfo;
   Dwg_Object *obj = NULL;
   int error = 0;
+  BITCODE_BL vcount = 0;
   if (!dat->chain || !dat->size)
     return 1;
 
@@ -3097,6 +3101,7 @@ security_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Security *_obj = &dwg->security;
   Dwg_Object *obj = NULL;
   int error = 0;
+  BITCODE_BL vcount = 0;
   memset (_obj, 0, sizeof (Dwg_Security));
 
   // clang-format off
@@ -3304,6 +3309,7 @@ revhistory_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_RevHistory *_obj = &dwg->revhistory;
   Dwg_Object *obj = NULL;
   int error = 0;
+  BITCODE_BL vcount = 0;
 
   // clang-format off
   #include "revhistory.spec"
@@ -3359,6 +3365,7 @@ static int
 read_2004_section_objfreespace (Bit_Chain *restrict dat,
                                 Dwg_Data *restrict dwg)
 {
+  BITCODE_BL vcount = 0;
   Bit_Chain old_dat, sec_dat = { 0 };
   int error;
   Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
@@ -3590,6 +3597,7 @@ GCC30_DIAG_IGNORE (-Wformat-nonliteral)
 static int
 decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
 {
+  BITCODE_BL vcount = 0;
   int error = 0;
   Dwg_Object *obj = NULL;
   Dwg_R2004_Header *_obj = &dwg->fhdr.r2004_header;
@@ -3752,6 +3760,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
 static int
 decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
+  BITCODE_BL vcount = 0;
   int error = 0;
   Dwg_Section *section;
 
@@ -3760,7 +3769,6 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object *obj = NULL;
     Bit_Chain *hdl_dat = dat;
     int i;
-    BITCODE_BL vcount = 0;
     assert (dat->byte == 0xb); // after version magic
 
     // clang-format off
@@ -4729,6 +4737,7 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   Dwg_Object_Entity *_obj = ent;
   Dwg_Object_Entity *_ent = ent;
   size_t objectpos = bit_position (dat);
+  BITCODE_BL vcount = 0;
   int has_wrong_bitsize = 0;
 
   // obj->dat_address = dat->byte; // the data stream offset
@@ -7245,6 +7254,7 @@ decode_preR13_section_chk (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 int
 decode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
+  BITCODE_BL vcount = 0;
   int error = 0;
   BITCODE_RS crc, crcc;
   Dwg_AuxHeader *_obj = &dwg->auxheader;

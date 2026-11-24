@@ -1984,6 +1984,7 @@ read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                            r2007_section *restrict sections_map,
                            r2007_page *restrict pages_map)
 {
+  BITCODE_BL vcount = 0;
   static Bit_Chain old_dat, sec_dat = { 0 };
   // Bit_Chain *str_dat;
   Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
@@ -2027,6 +2028,7 @@ read_2007_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                            r2007_section *restrict sections_map,
                            r2007_page *restrict pages_map)
 {
+  BITCODE_BL vcount = 0;
   Bit_Chain old_dat, sec_dat = { 0 };
   // Bit_Chain *str_dat;
   Dwg_AppInfo *_obj = &dwg->appinfo;
@@ -2154,6 +2156,7 @@ read_2007_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                               r2007_section *restrict sections_map,
                               r2007_page *restrict pages_map)
 {
+  BITCODE_BL vcount = 0;
   Bit_Chain old_dat, sec_dat = { 0 };
   // Bit_Chain *str_dat;
   Dwg_RevHistory *_obj = &dwg->revhistory;
@@ -2197,6 +2200,7 @@ read_2007_section_objfreespace (Bit_Chain *restrict dat,
                                 r2007_section *restrict sections_map,
                                 r2007_page *restrict pages_map)
 {
+  BITCODE_BL vcount = 0;
   Bit_Chain old_dat, sec_dat = { 0 };
   // Bit_Chain *str_dat;
   Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
@@ -2240,6 +2244,7 @@ read_2007_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                             r2007_section *restrict sections_map,
                             r2007_page *restrict pages_map)
 {
+  BITCODE_BL vcount = 0;
   Bit_Chain old_dat, sec_dat = { 0 };
   // Bit_Chain *str_dat;
   Dwg_Template *_obj = &dwg->Template;
@@ -2329,6 +2334,7 @@ read_2007_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                             r2007_section *restrict sections_map,
                             r2007_page *restrict pages_map)
 {
+  BITCODE_BL vcount = 0;
   Bit_Chain old_dat, sec_dat = { 0 };
   int error;
   // Bit_Chain *str_dat;

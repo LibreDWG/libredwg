@@ -83,7 +83,9 @@
     FIELD_RL (oldCECOLOR_hi, 0); //            -"-
   }
   VERSIONS (R_1_1, R_1_4) {
+#ifndef IS_DECODER
     BITCODE_BL vcount;
+#endif
     FIELD_VECTOR_INL (layer_colors, RS, 128, 0); // color of each layer
     VERSION (R_1_1) {
       dwg->header.dwg_version = 1;

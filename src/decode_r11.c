@@ -599,6 +599,7 @@ EXPORT int
 decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                       Dwg_Object_Entity *_ent)
 {
+  BITCODE_BL vcount = 0;
   Dwg_Object_Entity *_obj = _ent;
   const bool is_block = obj->address >= 0x40000000;
   Bit_Chain *hdl_dat = NULL, *str_dat = NULL;
@@ -723,7 +724,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     int i;
     Dwg_Header *_obj = (Dwg_Header *)&dwg->header;
     // Bit_Chain *hdl_dat = dat;
-    BITCODE_BL vcount;
+    BITCODE_BL vcount = 0;
 
     // clang-format off
     #include "header.spec"

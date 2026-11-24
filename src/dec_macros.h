@@ -102,6 +102,13 @@
 #define VALUE_RD(value, dxf) VALUE (value, RD, dxf)
 #define VALUE_BD(value, dxf) VALUE (value, BD, dxf)
 
+#define TRACE_NM(str)                                                         \
+  trace_idx_name (_nb, sizeof (_nb), str, (long)vcount, (long)rcount1,        \
+                  (long)rcount2)
+
+#define LOG_TRACE_NM(nm, fmt, ...)                                            \
+  LOG_TRACE ("%s" fmt, TRACE_NM (nm), __VA_ARGS__)
+
 #define FIELDG(nam, type, dxf)                                                \
   {                                                                           \
     _obj->nam = bit_read_##type (dat);                                        \
@@ -169,127 +176,33 @@
 #define FIELD_G_TRACE(nam, type, dxfgroup)                                    \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
-      char *s1 = strrplc (#nam, "[rcount1]", "[%d]");                         \
-      if (s1)                                                                 \
-        {                                                                     \
-          char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
-          if (s2)                                                             \
-            {                                                                 \
-              s2 = (char *)realloc (s2, strlen (s2)                           \
-                                    + sizeof (": " FORMAT_##type " [" #type " %d]")); \
-              if (s2)                                                         \
-                {                                                             \
-                  strcat (s2, ": " FORMAT_##type " [" #type " %d]");          \
-                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
-                  LOG_TRACE (s2, rcount1, rcount2,                            \
-                             (BITCODE_##type)_obj->nam, dxfgroup);            \
-                  GCC46_DIAG_RESTORE                                          \
-                }                                                             \
-              free (s2);                                                      \
-              free (s1);                                                      \
-            }                                                                 \
-          else                                                                \
-            {                                                                 \
-              s1 = (char *)realloc (s1, strlen (s1)                           \
-                                    + sizeof (": " FORMAT_##type " [" #type " %d]")); \
-              if (s1)                                                         \
-                {                                                             \
-                  strcat (s1, ": " FORMAT_##type " [" #type " %d]");          \
-                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
-                  LOG_TRACE (s1, rcount1, (BITCODE_##type)_obj->nam, dxfgroup); \
-                  GCC46_DIAG_RESTORE                                          \
-                }                                                             \
-              free (s1);                                                      \
-            }                                                                 \
-        }                                                                     \
-      else                                                                    \
-        LOG_TRACE (#nam ": " FORMAT_##type " [" #type " %d]",                 \
-                   (BITCODE_##type)_obj->nam, dxfgroup);                      \
+      char _nb[96];                                                           \
+      LOG_TRACE ("%s: " FORMAT_##type " [" #type " %d]",                      \
+                 trace_idx_name (_nb, sizeof (_nb), #nam, (long)vcount,       \
+                                 (long)rcount1, (long)rcount2),               \
+                 (BITCODE_##type)_obj->nam, dxfgroup);                        \
       LOG_RPOS                                                                \
     }
 
 #define FIELD_G_TRACE_ANGLE(nam, type, dxfgroup)                              \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
-      char *s1 = strrplc (#nam, "[rcount1]", "[%d]");                         \
-      if (s1)                                                                 \
-        {                                                                     \
-          char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
-          if (s2)                                                             \
-            {                                                                 \
-              s2 = (char *)realloc (s2, strlen (s2)                           \
-                                    + sizeof (": " FORMAT_##type " [" #type " %d] %gº")); \
-              if (s2)                                                         \
-                {                                                             \
-                  strcat (s2, ": " FORMAT_##type " [" #type " %d] %gº");      \
-                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
-                  LOG_TRACE (s2, rcount1, rcount2, _obj->nam, dxfgroup,       \
-                             rad2deg (_obj->nam));                            \
-                  GCC46_DIAG_RESTORE                                          \
-                }                                                             \
-              free (s2);                                                      \
-              free (s1);                                                      \
-            }                                                                 \
-          else                                                                \
-            {                                                                 \
-              s1 = (char *)realloc (s1, strlen (s1)                           \
-                                    + sizeof (": " FORMAT_##type " [" #type " %d] %gº")); \
-              if (s1)                                                         \
-                {                                                             \
-                  strcat (s1, ": " FORMAT_##type " [" #type " %d] %gº");      \
-                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
-                  LOG_TRACE (s1, rcount1, _obj->nam, dxfgroup,                \
-                             rad2deg (_obj->nam));                            \
-                  GCC46_DIAG_RESTORE                                          \
-                }                                                             \
-              free (s1);                                                      \
-            }                                                                 \
-        }                                                                     \
-      else                                                                    \
-        LOG_TRACE (#nam ": " FORMAT_##type " [" #type " %d] %gº",             \
-                   (BITCODE_##type)_obj->nam, dxfgroup, rad2deg (_obj->nam)); \
+      char _nb[96];                                                           \
+      LOG_TRACE ("%s: " FORMAT_##type " [" #type " %d] %gº",                  \
+                 trace_idx_name (_nb, sizeof (_nb), #nam, (long)vcount,                 \
+                                 (long)rcount1, (long)rcount2),               \
+                 _obj->nam, dxfgroup, rad2deg (_obj->nam));                   \
       LOG_RPOS                                                                \
     }
 
 #define FIELD_TRACE(nam, type)                                                \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
-      char *s1 = strrplc (#nam, "[rcount1]", "[%d]");                         \
-      if (s1)                                                                 \
-        {                                                                     \
-          char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
-          if (s2)                                                             \
-            {                                                                 \
-              s2 = (char *)realloc (s2, strlen (s2)                           \
-                                    + sizeof (": " FORMAT_##type " " #type "\n")); \
-              if (s2)                                                         \
-                {                                                             \
-                  strcat (s2, ": " FORMAT_##type " " #type "\n");             \
-                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
-                  LOG_TRACE (s2, rcount1, rcount2, _obj->nam);                \
-                  GCC46_DIAG_RESTORE                                          \
-                }                                                             \
-              free (s2);                                                      \
-              free (s1);                                                      \
-            }                                                                 \
-          else                                                                \
-            {                                                                 \
-              s1 = (char *)realloc (s1, strlen (s1)                           \
-                                    + sizeof (": " FORMAT_##type " " #type "\n")); \
-              if (s1)                                                         \
-                {                                                             \
-                  strcat (s1, ": " FORMAT_##type " " #type "\n");             \
-                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
-                  LOG_TRACE (s1, rcount1, _obj->nam);                         \
-                  GCC46_DIAG_RESTORE                                          \
-                }                                                             \
-              free (s1);                                                      \
-            }                                                                 \
-        }                                                                     \
-      else                                                                    \
-        {                                                                     \
-          LOG_TRACE (#nam ": " FORMAT_##type " [" #type "]\n", _obj->nam);    \
-        }                                                                     \
+      char _nb[96];                                                           \
+      LOG_TRACE ("%s: " FORMAT_##type " " #type "\n",                         \
+                 trace_idx_name (_nb, sizeof (_nb), #nam, 0L,                 \
+                                 (long)rcount1, (long)rcount2),               \
+                 _obj->nam);                                                  \
     }
 #define LOG_TF(level, var, len)                                               \
   {                                                                           \
@@ -317,49 +230,6 @@
   }
 #define LOG_TRACE_TF(var, len) LOG_TF (TRACE, var, len);
 #define LOG_INSANE_TF(var, len) LOG_TF (INSANE, var, len);
-
-/* The name of a field for the trace: the indices of the enclosing vectors
-   and REPEATs instead of the [vcount], [rcount1] and [rcount2] in the name.
-   Writes into buf. */
-static inline const char *
-trace_idx_name (char *restrict buf, const size_t size,
-                const char *restrict nam, const long vcount,
-                const long rcount1, const long rcount2)
-{
-  size_t n = 0;
-  while (*nam && n + 1 < size)
-    {
-      long idx = 0;
-      size_t len = 0;
-      if (!strncmp (nam, "[vcount]", 8))
-        {
-          idx = vcount;
-          len = 8;
-        }
-      else if (!strncmp (nam, "[rcount1]", 9))
-        {
-          idx = rcount1;
-          len = 9;
-        }
-      else if (!strncmp (nam, "[rcount2]", 9))
-        {
-          idx = rcount2;
-          len = 9;
-        }
-      if (len)
-        {
-          const int w = snprintf (buf + n, size - n, "[%ld]", idx);
-          if (w < 0)
-            break;
-          n += (size_t)w < size - n ? (size_t)w : size - n - 1;
-          nam += len;
-        }
-      else
-        buf[n++] = *nam++;
-    }
-  buf[n] = '\0';
-  return buf;
-}
 
 #define FIELD_VEC_TRACE_N(nam, type, vcount, value, dxf)                      \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
@@ -396,13 +266,14 @@ trace_idx_name (char *restrict buf, const size_t size,
 #define ANYCODE -1
 #define VALUE_HANDLE(ref, nam, code, dxf)                                     \
   {                                                                           \
+    char _nb[96]; \
     PRE (R_13b1)                                                              \
     {                                                                         \
       size_t _pos = bit_position (dat);                                       \
       if (ref && !ref->handleref.is_global)                                   \
         free (ref);                                                           \
       ref = dwg_decode_preR13_handleref (dat, code /*as size */, dwg);        \
-      LOG_TRACE (#nam ": %hd [H(%s) %d]", (short)ref->r11_idx,                \
+      LOG_TRACE_NM (#nam, ": %hd [H(%s) %d]", (short)ref->r11_idx,                \
                  code == 1 ? "RC" : "RSd", dxf);                              \
       LOG_INSANE (" @%" PRIuSIZE ".%u", _pos / 8, (unsigned)(_pos % 8));      \
       LOG_TRACE ("\n");                                                       \
@@ -477,11 +348,12 @@ trace_idx_name (char *restrict buf, const size_t size,
 
 #define VALUE_HANDLE_N(ref, nam, vcount, code, dxf)                           \
   {                                                                           \
+    char _nb[96]; \
     PRE (R_13b1)                                                              \
     {                                                                         \
       size_t pos = bit_position (dat);                                        \
       ref = dwg_decode_preR13_handleref (dat, code, dwg);                     \
-      LOG_TRACE (#nam "[%d]: " FORMAT_RS " [RS %d]", (int)vcount,             \
+      LOG_TRACE_NM (#nam, "[%d]: " FORMAT_RS " [RS %d]", (int)vcount,             \
                  ref->r11_idx, dxf);                                          \
       LOG_INSANE (" @%" PRIuSIZE ".%u", pos / 8, (unsigned)(pos % 8));        \
       LOG_TRACE ("\n");                                                       \
@@ -519,7 +391,7 @@ trace_idx_name (char *restrict buf, const size_t size,
             }                                                                 \
           else                                                                \
             {                                                                 \
-              LOG_TRACE (#nam "[%d]: NULL %d [H* %d]", (int)vcount, code,     \
+              LOG_TRACE_NM (#nam, "[%d]: NULL %d [H* %d]", (int)vcount, code,     \
                          dxf);                                                \
             }                                                                 \
           LOG_INSANE (" @%" PRIuSIZE ".%u", pos / 8, (unsigned)(pos % 8));    \
@@ -532,10 +404,11 @@ trace_idx_name (char *restrict buf, const size_t size,
 
 #define FIELD_DATAHANDLE(nam, code, dxf)                                      \
   {                                                                           \
+    char _nb[96]; \
     _obj->nam = dwg_decode_handleref (dat, obj, dwg);                         \
     if (_obj->nam)                                                            \
       {                                                                       \
-        LOG_TRACE (#nam ": " FORMAT_H " [H %d]",                              \
+        LOG_TRACE_NM (#nam, ": " FORMAT_H " [H %d]",                              \
                    ARGS_H (_obj->nam->handleref), dxf);                       \
         LOG_RPOS                                                              \
       }                                                                       \
@@ -581,8 +454,9 @@ trace_idx_name (char *restrict buf, const size_t size,
 #define FIELD_RC(nam, dxf) FIELDG (nam, RC, dxf)
 #define FIELD_RCu(nam, dxf)                                                   \
   {                                                                           \
+    char _nb[96]; \
     _obj->nam = bit_read_RC (dat);                                            \
-    LOG_TRACE (#nam ": %u [RC %d]", (unsigned)((unsigned char)_obj->nam),     \
+    LOG_TRACE_NM (#nam, ": %u [RC %d]", (unsigned)((unsigned char)_obj->nam),     \
                dxf);                                                          \
     LOG_RPOS                                                                  \
   }
@@ -614,13 +488,15 @@ trace_idx_name (char *restrict buf, const size_t size,
 #define FIELD_RLLd(nam, dxf) FIELDG (nam, RLLd, dxf)
 #define FIELD_MC(nam, dxf) FIELDG (nam, MC, dxf)
 #define FIELD_MS(nam, dxf) FIELDG (nam, MS, dxf)
-/* preR13 we have no obj->address and obj->size yet, skip VECTOR_CHKCOUNT */
+/* preR13 we have no obj->address and
+ * obj->size yet, skip VECTOR_CHKCOUNT */
 // clang-format off
 #define FIELD_TF(nam, len, dxf)                                               \
   {                                                                           \
+    char _nb[96]; \
     SINCE (R_13b1) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }  \
     _obj->nam = bit_read_TF (dat, (size_t)len);                               \
-    LOG_TRACE (#nam ": \"%s\" [TF %" PRIuSIZE " " #dxf "]", _obj->nam, (size_t)len); \
+    LOG_TRACE_NM (#nam, ": \"%s\" [TF %" PRIuSIZE " " #dxf "]", _obj->nam, (size_t)len); \
     if (!_obj->nam)                                                           \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     LOG_INSANE (" @%" PRIuSIZE ".%u", dat->byte, (unsigned)dat->bit);         \
@@ -629,10 +505,11 @@ trace_idx_name (char *restrict buf, const size_t size,
   }
 #define FIELD_TFv(nam, len, dxf)                                              \
   {                                                                           \
+    char _nb[96]; \
     /* if (_obj->nam) free (_obj->nam); // preR13 add_Document defaults */    \
     SINCE (R_13b1) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }  \
     _obj->nam = (BITCODE_TV)bit_read_TF (dat, (size_t)len);                   \
-    LOG_TRACE (#nam ": \"%s\" [TFv %" PRIuSIZE " " #dxf "]", _obj->nam,       \
+    LOG_TRACE_NM (#nam, ": \"%s\" [TFv %" PRIuSIZE " " #dxf "]", _obj->nam,       \
                (size_t)len);                                                  \
     if (!_obj->nam)                                                           \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
@@ -641,18 +518,20 @@ trace_idx_name (char *restrict buf, const size_t size,
   }
 #define FIELD_TFF(nam, len, dxf)                                              \
   {                                                                           \
+    char _nb[96]; \
     SINCE (R_13b1) { _VECTOR_CHKCOUNT_STATIC (nam, len, 8, dat) }             \
     bit_read_fixed (dat, _obj->nam, (size_t)len);                             \
-    LOG_TRACE (#nam ": \"%.*s\" [TFF %" PRIuSIZE " " #dxf "]", (int)len,      \
+    LOG_TRACE_NM (#nam, ": \"%.*s\" [TFF %" PRIuSIZE " " #dxf "]", (int)len,      \
                _obj->nam, (size_t)len);                                       \
     LOG_RPOS                                                                  \
     LOG_TRACE_TF (FIELD_VALUE (nam), (size_t)len);                            \
   }
 #define FIELD_TFFx(nam, len, dxf)                                             \
   {                                                                           \
+    char _nb[96]; \
     SINCE (R_13b1) { _VECTOR_CHKCOUNT_STATIC (nam, len, 8, dat) }             \
     bit_read_fixed (dat, (BITCODE_RC*)_obj->nam, (int)len);                   \
-    LOG_TRACE (#nam ": [TFFx %d " #dxf "]", (int)len);                        \
+    LOG_TRACE_NM (#nam, ": [TFFx %d " #dxf "]", (int)len);                        \
     LOG_RPOS                                                                  \
     LOG_TRACE_TF ((BITCODE_RC*)_obj->nam, (int)len);                          \
   }
@@ -687,10 +566,11 @@ trace_idx_name (char *restrict buf, const size_t size,
   }
 #define FIELD_TU32(nam, dxf)                                                  \
   {                                                                           \
+    char _nb[96]; \
     _obj->nam = bit_read_TU32 (dat);                                          \
     if (dat->from_version < R_2007)                                           \
       {                                                                       \
-        LOG_TRACE (#nam ": \"%s\" [TU32 %d]", _obj->nam, dxf)                 \
+        LOG_TRACE_NM (#nam, ": \"%s\" [TU32 %d]", _obj->nam, dxf)                 \
         LOG_RPOS                                                              \
       }                                                                       \
     else                                                                      \
@@ -733,20 +613,22 @@ trace_idx_name (char *restrict buf, const size_t size,
 #define FIELD_BT(nam, dxf) FIELDG (nam, BT, dxf)
 #define FIELD_4BITS(nam, dxf)                                                 \
   {                                                                           \
+    char _nb[96]; \
     int _b = _obj->nam = bit_read_4BITS (dat);                                \
-    LOG_TRACE (#nam ": b%d%d%d%d [4BITS %d]", _b & 8, _b & 4, _b & 2, _b & 1, \
+    LOG_TRACE_NM (#nam, ": b%d%d%d%d [4BITS %d]", _b & 8, _b & 4, _b & 2, _b & 1, \
                dxf);                                                          \
     LOG_RPOS                                                                  \
   }
 
 #define FIELD_BE(nam, dxf)                                                    \
   {                                                                           \
+    char _nb[96]; \
     bit_read_BE (dat, &_obj->nam.x, &_obj->nam.y, &_obj->nam.z);              \
     if (dat->version >= R_2000 && FIELD_VALUE (nam.x) == 0.0                  \
         && FIELD_VALUE (nam.y) == 0.0 && FIELD_VALUE (nam.z) == 1.0)          \
-      LOG_TRACE (#nam ": default 0,0,1 [B %d]", dxf);                         \
+      LOG_TRACE_NM (#nam, ": default 0,0,1 [B %d]", dxf);                         \
     else                                                                      \
-      LOG_TRACE (#nam ": (%f, %f, %f) [BE %d]", _obj->nam.x, _obj->nam.y,     \
+      LOG_TRACE_NM (#nam, ": (%f, %f, %f) [BE %d]", _obj->nam.x, _obj->nam.y,     \
                  _obj->nam.z, dxf);                                           \
     LOG_POS;                                                                  \
   }
@@ -839,10 +721,13 @@ trace_idx_name (char *restrict buf, const size_t size,
       }                                                                       \
     FIELD_2PT_TRACE (nam, 2RD, dxf);                                          \
   }
-// FIXME: does this even exist? normal 2DPOINT is 2RD
-//   HATCH.deflines.pt0,offset LAYOUT.plot_origin,plot_window_{ll,ur},
-//   LAYOUT.paper_image_origin GEODATA.northdir, GEODATA.refpt0,1 .zero1, zero2
-//   BACKGROUND.offset,scale
+// FIXME: does this even exist? normal 2DPOINT
+// is 2RD
+//   HATCH.deflines.pt0,offset
+//   LAYOUT.plot_origin,plot_window_{ll,ur},
+//   LAYOUT.paper_image_origin
+//   GEODATA.northdir, GEODATA.refpt0,1
+//   .zero1, zero2 BACKGROUND.offset,scale
 #define FIELD_2BD(nam, dxf)                                                   \
   {                                                                           \
     _obj->nam.x = bit_read_BD (dat);                                          \
@@ -865,7 +750,8 @@ trace_idx_name (char *restrict buf, const size_t size,
       }                                                                       \
     FIELD_2PT_TRACE (nam, 2BD_1, dxf);                                        \
   }
-// FIELDG(nam.x, BD, dxf); FIELDG(nam.y, BD, dxf+1);
+// FIELDG(nam.x, BD, dxf); FIELDG(nam.y, BD,
+// dxf+1);
 #define FIELD_3BD_1(nam, dxf)                                                 \
   {                                                                           \
     _obj->nam.x = bit_read_BD (dat);                                          \
@@ -879,13 +765,14 @@ trace_idx_name (char *restrict buf, const size_t size,
       }                                                                       \
     FIELD_3PT_TRACE (nam, 3BD_1, dxf);                                        \
   }
-//    FIELDG(nam.x, BD, dxf); FIELDG(nam.y, BD, dxf+1);
-//    FIELDG(nam.z, BD, dxf+2); }
+//    FIELDG(nam.x, BD, dxf); FIELDG(nam.y,
+//    BD, dxf+1); FIELDG(nam.z, BD, dxf+2); }
 #define FIELD_2DPOINT(nam, dxf) FIELD_2RD (nam, dxf)
 #define FIELD_3DPOINT(nam, dxf) FIELD_3BD (nam, dxf)
 #define FIELD_3DVECTOR(nam, dxf) FIELD_3BD_1 (nam, dxf)
 #define FIELD_TIMEBLL(nam, dxf)                                               \
   {                                                                           \
+    char _nb[96]; \
     _obj->nam = bit_read_TIMEBLL (dat);                                       \
     if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                   \
       {                                                                       \
@@ -898,13 +785,14 @@ trace_idx_name (char *restrict buf, const size_t size,
           strftime (_buf, 60, STRFTIME_DATE, &tm);                            \
         else                                                                  \
           strftime (_buf, 60, STRFTIME_TIME, &tm);                            \
-        LOG_TRACE (#nam ": [" FORMAT_BL ", " FORMAT_BL "] %s [TIMEBLL %d]",   \
+        LOG_TRACE_NM (#nam, ": [" FORMAT_BL ", " FORMAT_BL "] %s [TIMEBLL %d]",   \
                    _obj->nam.days, _obj->nam.ms, _buf, dxf);                  \
         LOG_RPOS                                                              \
       }                                                                       \
   }
 #define FIELD_TIMERLL(nam, dxf)                                               \
   {                                                                           \
+    char _nb[96]; \
     _obj->nam = bit_read_TIMERLL (dat);                                       \
     if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                   \
       {                                                                       \
@@ -914,33 +802,34 @@ trace_idx_name (char *restrict buf, const size_t size,
           strftime (_buf, 60, STRFTIME_DATE, cvt_TIMEBLL (&tm, _obj->nam));   \
         else                                                                  \
           strftime (_buf, 60, STRFTIME_TIME, cvt_TIMEBLL (&tm, _obj->nam));   \
-        LOG_TRACE (#nam ": [" FORMAT_RL ", " FORMAT_RL "] %s [TIMERLL %d]",   \
+        LOG_TRACE_NM (#nam, ": [" FORMAT_RL ", " FORMAT_RL "] %s [TIMERLL %d]",   \
                    _obj->nam.days, _obj->nam.ms, _buf, dxf);                  \
         LOG_RPOS                                                              \
       }                                                                       \
   }
 #define FIELD_CMC(color, dxf)                                                 \
   {                                                                           \
+    char _nb[96]; \
     error |= bit_read_CMC (dat, str_dat, &_obj->color);                       \
-    LOG_TRACE (#color ".index: %d [CMC.%s %d]", _obj->color.index,            \
+    LOG_TRACE_NM (#color, ".index: %d [CMC.%s %d]", _obj->color.index,            \
                dat->from_version < R_13b1 ? "RS" : "BS", dxf);                \
     LOG_RPOS                                                                  \
     if (dat->from_version >= R_2004)                                          \
       {                                                                       \
-        LOG_TRACE (#color ".rgb: 0x%06x [CMC.BL %d]\n",                       \
+        LOG_TRACE_NM (#color, ".rgb: 0x%06x [CMC.BL %d]\n",                       \
                    (unsigned)_obj->color.rgb, dxf + 420 - 62);                \
-        LOG_TRACE (#color ".method: 0x%x %s\n", _obj->color.method,           \
+        LOG_TRACE_NM (#color, ".method: 0x%x %s\n", _obj->color.method,           \
                    dwg_color_method_name (_obj->color.method));               \
-        LOG_TRACE (#color ".flag: 0x%x [CMC.RC]\n",                           \
+        LOG_TRACE_NM (#color, ".flag: 0x%x [CMC.RC]\n",                           \
                    (unsigned)_obj->color.flag);                               \
         if (_obj->color.flag & 1)                                             \
           {                                                                   \
-            LOG_TRACE (#color ".name: %s [CMC.%s]\n", _obj->color.name,       \
+            LOG_TRACE_NM (#color, ".name: %s [CMC.%s]\n", _obj->color.name,       \
                        dat->from_version >= R_2007 ? "T" : "TV");             \
           }                                                                   \
         if (_obj->color.flag & 2)                                             \
           {                                                                   \
-            LOG_TRACE (#color ".book_name: %s [CMC.%s]\n",                    \
+            LOG_TRACE_NM (#color, ".book_name: %s [CMC.%s]\n",                    \
                        _obj->color.book_name,                                 \
                        dat->from_version >= R_2007 ? "T" : "TV");             \
           }                                                                   \
@@ -948,27 +837,28 @@ trace_idx_name (char *restrict buf, const size_t size,
   }
 #define SUB_FIELD_CMC(o, color, dxf)                                          \
   {                                                                           \
+    char _nb[96]; \
     error |= bit_read_CMC (dat, str_dat, &_obj->o.color);                     \
-    LOG_TRACE (#o "." #color ".index: %d [CMC.BS %d]", _obj->o.color.index,   \
+    LOG_TRACE_NM (#o "." #color, ".index: %d [CMC.BS %d]", _obj->o.color.index,   \
                dxf);                                                          \
     LOG_RPOS                                                                  \
     if (dat->from_version >= R_2004)                                          \
       {                                                                       \
-        LOG_TRACE (#o "." #color ".rgb: 0x%06x [CMC.BL %d]\n",                \
+        LOG_TRACE_NM (#o "." #color, ".rgb: 0x%06x [CMC.BL %d]\n",                \
                    (unsigned)_obj->o.color.rgb, dxf + 420 - 62);              \
-        LOG_TRACE (#color ".method: 0x%x %s\n", _obj->o.color.method,         \
+        LOG_TRACE_NM (#o "." #color, ".method: 0x%x %s\n", _obj->o.color.method,         \
                    dwg_color_method_name (_obj->o.color.method));             \
-        LOG_TRACE (#o "." #color ".flag: 0x%x [CMC.RC]\n",                    \
+        LOG_TRACE_NM (#o "." #color, ".flag: 0x%x [CMC.RC]\n",                    \
                    (unsigned)_obj->o.color.flag);                             \
         if (_obj->o.color.flag & 1)                                           \
           {                                                                   \
-            LOG_TRACE (#o "." #color ".name: %s [CMC.%s]\n",                  \
+            LOG_TRACE_NM (#o "." #color, ".name: %s [CMC.%s]\n",                  \
                        _obj->o.color.name,                                    \
                        dat->from_version >= R_2007 ? "T" : "TV");             \
           }                                                                   \
         if (_obj->o.color.flag & 2)                                           \
           {                                                                   \
-            LOG_TRACE (#o "." #color ".book_name: %s [CMC.%s]\n",             \
+            LOG_TRACE_NM (#o "." #color, ".book_name: %s [CMC.%s]\n",             \
                        _obj->o.color.book_name,                               \
                        dat->from_version >= R_2007 ? "T" : "TV");             \
           }                                                                   \
@@ -993,43 +883,45 @@ trace_idx_name (char *restrict buf, const size_t size,
   }
 #define FIELD_ENC(color, dxf)                                                 \
   {                                                                           \
+    char _nb[96]; \
     bit_read_ENC (dat, hdl_dat, str_dat, &_obj->color);                       \
-    LOG_TRACE (#color ".index: %d [ENC.BS %d]", _obj->color.index, dxf);      \
+    LOG_TRACE_NM (#color, ".index: %d [ENC.BS %d]", _obj->color.index, dxf);      \
     LOG_POS                                                                   \
     if (dat->from_version >= R_2004)                                          \
       {                                                                       \
         if (_obj->color.flag)                                                 \
-          LOG_TRACE (#color ".flag: 0x%x\n", (unsigned)_obj->color.flag);     \
+          LOG_TRACE_NM (#color, ".flag: 0x%x\n", (unsigned)_obj->color.flag);     \
         if (_obj->color.flag & 0x20)                                          \
-          LOG_TRACE (#color ".alpha: %d [ENC.BL %d]\n",                       \
+          LOG_TRACE_NM (#color, ".alpha: %d [ENC.BL %d]\n",                       \
                      (int)_obj->color.alpha, dxf + 440 - 62);                 \
         if (_obj->color.flag & 0x80)                                          \
-          LOG_TRACE (#color ".rgb: 0x%06x [ENC.BL %d]\n",                     \
+          LOG_TRACE_NM (#color, ".rgb: 0x%06x [ENC.BL %d]\n",                     \
                      (unsigned)_obj->color.rgb, dxf + 420 - 62);              \
         if (_obj->color.flag & 0x40 && _obj->color.handle)                    \
-          LOG_TRACE (#color ".handle: %X [ENC.H %d]\n",                       \
+          LOG_TRACE_NM (#color, ".handle: %X [ENC.H %d]\n",                       \
                      _obj->color.handle->handleref.value, dxf + 430 - 62);    \
       }                                                                       \
   }
 #define SUB_FIELD_ENC(o, color, dxf)                                          \
   {                                                                           \
+    char _nb[96]; \
     bit_read_ENC (dat, hdl_dat, str_dat, &_obj->o.color);                     \
-    LOG_TRACE (#o "." #color ".index: %d [ENC.BS %d]", _obj->o.color.index,   \
+    LOG_TRACE_NM (#o "." #color, ".index: %d [ENC.BS %d]", _obj->o.color.index,   \
                dxf);                                                          \
     LOG_POS                                                                   \
     if (dat->from_version >= R_2004)                                          \
       {                                                                       \
         if (_obj->o.color.flag)                                               \
-          LOG_TRACE (#o "." #color ".flag: 0x%x\n",                           \
+          LOG_TRACE_NM (#o "." #color, ".flag: 0x%x\n",                           \
                      (unsigned)_obj->o.color.flag);                           \
         if (_obj->o.color.flag & 0x20)                                        \
-          LOG_TRACE (#o "." #color ".alpha: %d [ENC.BL %d]\n",                \
+          LOG_TRACE_NM (#o "." #color, ".alpha: %d [ENC.BL %d]\n",                \
                      (unsigned)_obj->o.color.alpha, dxf + 440 - 62);          \
         if (_obj->o.color.flag & 0x80)                                        \
-          LOG_TRACE (#o "." #color ".rgb: 0x%06x [ENC.BL %d]\n",              \
+          LOG_TRACE_NM (#o "." #color, ".rgb: 0x%06x [ENC.BL %d]\n",              \
                      (unsigned)_obj->o.color.rgb, dxf + 420 - 62);            \
         if (_obj->o.color.flag & 0x40 && _obj->o.color.handle)                \
-          LOG_TRACE (#o "." #color ".handle: " FORMAT_HV " [ENC.H %d]\n",     \
+          LOG_TRACE_NM (#o "." #color, ".handle: " FORMAT_HV " [ENC.H %d]\n",     \
                      _obj->o.color.handle->handleref.value, dxf + 430 - 62);  \
       }                                                                       \
   }
@@ -1147,7 +1039,8 @@ trace_idx_name (char *restrict buf, const size_t size,
   DEBUG_POS                                                                   \
   _DEBUG_HERE (0UL)
 
-// check for overflow into next object (invalid num_elems)
+// check for overflow into next object
+// (invalid num_elems)
 #define AVAIL_BITS(dat) (int64_t) ((dat->size * 8) - bit_position (dat))
 #define TYPE_MAXELEMSIZE(type) dwg_bits_size[BITS_##type]
 #define VECTOR_CHKCOUNT(nam, type, size, dat)                                 \
@@ -1190,7 +1083,7 @@ trace_idx_name (char *restrict buf, const size_t size,
         free (_obj->nam), _obj->nam = NULL;                                   \
       size = 0; /* return DWG_ERR_VALUEOUTOFBOUNDS; */                                  \
     }
-// for static TFF types with a size field
+            // for static TFF types with a size field
 #define _VECTOR_CHKCOUNT(nam, size, maxelemsize, dat)                         \
   if ((int64_t)(size) > AVAIL_BITS (dat)                                      \
       || (int64_t)(size) * (maxelemsize) > AVAIL_BITS (dat))                  \
@@ -1219,8 +1112,9 @@ trace_idx_name (char *restrict buf, const size_t size,
   _VECTOR_CHKCOUNT (nam, size, TYPE_MAXELEMSIZE (HANDLE), hdl_dat)
 
 // FIELD_VECTOR_N(name, type, size):
-// reads data of the type indicated by 'type' 'size' times and stores
-// it all in the vector called 'name'.
+// reads data of the type indicated by 'type'
+// 'size' times and stores it all in the
+// vector called 'name'.
 #define FIELD_VECTOR_N(name, type, size, dxf)                                 \
   if (size > 0)                                                               \
     {                                                                         \
@@ -1347,8 +1241,10 @@ trace_idx_name (char *restrict buf, const size_t size,
           }                                                                   \
         }                                                                     \
     }
-/* as FIELD_VECTOR_T, but reads the strings from the r2007+ split string
-   stream (str_dat), like FIELD_T does. Only for T types. */
+/* as FIELD_VECTOR_T, but reads the strings
+   from the r2007+ split string stream
+   (str_dat), like FIELD_T does. Only for T
+   types. */
 #define FIELD_VECTOR_TS(name, type, size, dxf)                                \
   if (_obj->size > 0)                                                         \
     {                                                                         \
@@ -1556,7 +1452,8 @@ trace_idx_name (char *restrict buf, const size_t size,
         }                                                                     \
     }
 
-// count 1 bytes, until non-1 bytes or a terminating zero
+// count 1 bytes, until non-1 bytes or a
+// terminating zero
 #define FIELD_NUM_INSERTS(num_inserts, type, dxf)                             \
   FIELD_VALUE (num_inserts) = 0;                                              \
   vcount = 0;                                                                 \
@@ -1666,7 +1563,8 @@ trace_idx_name (char *restrict buf, const size_t size,
 #define END_STRING_STREAM                                                     \
   *dat = sav_dat;                                                             \
   }
-/* just checking. skip the has_strings bit. hdl_dat is already set */
+/* just checking. skip the has_strings bit.
+ * hdl_dat is already set */
 #define START_HANDLE_STREAM                                                   \
   {                                                                           \
     size_t _pos = bit_position (dat);                                         \
@@ -1796,8 +1694,9 @@ trace_idx_name (char *restrict buf, const size_t size,
   if (_obj->name)                                                             \
     for (rcount##idx = 0; rcount##idx < (BITCODE_BL)times; rcount##idx++)
 
-// not allocating versions unchecked: _REPEAT_CNF
-// not allocating versions checked: _REPEAT_NF
+// not allocating versions unchecked:
+// _REPEAT_CNF not allocating versions
+// checked: _REPEAT_NF
 
 #define REPEAT(times, name, type) _REPEAT (times, name, type, 1)
 #define REPEAT2(times, name, type) _REPEAT (times, name, type, 2)
@@ -1815,9 +1714,10 @@ trace_idx_name (char *restrict buf, const size_t size,
     START_HANDLE_STREAM;                                                      \
   }
 
-/** Add the empty entity or object with its three structs to the DWG.
-    All fields are zero'd. TODO: some are initialized with default values, as
-    defined in dwg.spec.
+/** Add the empty entity or object with its
+   three structs to the DWG. All fields are
+   zero'd. TODO: some are initialized with
+   default values, as defined in dwg.spec.
     Returns 0 or DWG_ERR_OUTOFMEM.
 */
 
@@ -2049,8 +1949,10 @@ trace_idx_name (char *restrict buf, const size_t size,
 
 #define DWG_OBJECT_END DWG_ENTITY_END
 
-// only for exported BLOCK_HEADER, LAYER, STYLE, LTYPE, VIEW, UCS, VPORT,
-// APPID, DIMSTYLE, VX_TABLE_RECORD table records, needed for the r11 add API.
+// only for exported BLOCK_HEADER, LAYER,
+// STYLE, LTYPE, VIEW, UCS, VPORT, APPID,
+// DIMSTYLE, VX_TABLE_RECORD table records,
+// needed for the r11 add API.
 #define DWG_TABLE(token)                                                      \
   EXPORT int dwg_setup_##token (Dwg_Object *obj)                              \
   {                                                                           \

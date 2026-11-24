@@ -68,6 +68,12 @@ EXPORT void ATTRIBUTE_FORMAT (1, 2) log_warn (const char *restrict fmt, ...);
 
 EXPORT void log_text32 (const unsigned int minlevel, const BITCODE_TU wstr);
 
+/* The name of a field for the trace, with the indices of the enclosing
+   vectors and REPEATs. */
+EXPORT const char *trace_idx_name (char *restrict buf, const size_t size,
+                                   const char *restrict nam, const long v0,
+                                   const long r1, const long r2) __nonnull_all;
+
 #define HANDLER fprintf
 #define OUTPUT stderr
 
