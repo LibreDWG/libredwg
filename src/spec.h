@@ -461,7 +461,8 @@
 #  define FIELD_2RD_1(nam, dxf) FIELD_2RD (nam, dxf)
 #endif
 
-// double stored as a string, in the same stream as FIELD_T (r2007+ text stream).
+// double stored as a string, in the same stream as FIELD_T (r2007+ text
+// stream).
 #ifndef FIELD_D2T
 #  define FIELD_D2T(name, dxf) FIELD_T (name, dxf)
 #endif
@@ -910,7 +911,7 @@
       Dwg_Object_##parenttype *restrict _obj, Bit_Chain * dat,                \
       Bit_Chain * hdl_dat, Bit_Chain * str_dat, Dwg_Object *restrict obj)     \
   {                                                                           \
-    BITCODE_BL vcount, rcount3, rcount4;                                      \
+    BITCODE_BL vcount = 0, rcount3, rcount4;                                  \
     Dwg_Data *dwg = obj->parent;                                              \
     int error = 0;                                                            \
     subtype##_fields;                                                         \
@@ -922,7 +923,7 @@
       Dwg_Entity_##parenttype *restrict _obj, Bit_Chain * dat,                \
       Bit_Chain * hdl_dat, Bit_Chain * str_dat, Dwg_Object *restrict obj)     \
   {                                                                           \
-    BITCODE_BL vcount, rcount3, rcount4;                                      \
+    BITCODE_BL vcount = 0, rcount3, rcount4;                                  \
     Dwg_Data *dwg = obj->parent;                                              \
     int error = 0;                                                            \
     subtype##_fields;                                                         \

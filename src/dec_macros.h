@@ -33,6 +33,7 @@
 /* ctype.h is ISO C. config.h often leaves HAVE_CTYPE_H unset, and C99
    rejects the implicit isprint() declaration inside FIELD_TFF. */
 #include <ctype.h>
+#include <stdio.h>
 
 #ifdef IN_DXF_H
 #  error in_dxf.h must be included after dec_macros.h because of FORMAT_BD
@@ -317,140 +318,78 @@
 #define LOG_TRACE_TF(var, len) LOG_TF (TRACE, var, len);
 #define LOG_INSANE_TF(var, len) LOG_TF (INSANE, var, len);
 
+/* The name of a field for the trace: the indices of the enclosing vectors
+   and REPEATs instead of the [vcount], [rcount1] and [rcount2] in the name.
+   Writes into buf. */
+static inline const char *
+trace_idx_name (char *restrict buf, const size_t size,
+                const char *restrict nam, const long vcount,
+                const long rcount1, const long rcount2)
+{
+  size_t n = 0;
+  while (*nam && n + 1 < size)
+    {
+      long idx = 0;
+      size_t len = 0;
+      if (!strncmp (nam, "[vcount]", 8))
+        {
+          idx = vcount;
+          len = 8;
+        }
+      else if (!strncmp (nam, "[rcount1]", 9))
+        {
+          idx = rcount1;
+          len = 9;
+        }
+      else if (!strncmp (nam, "[rcount2]", 9))
+        {
+          idx = rcount2;
+          len = 9;
+        }
+      if (len)
+        {
+          const int w = snprintf (buf + n, size - n, "[%ld]", idx);
+          if (w < 0)
+            break;
+          n += (size_t)w < size - n ? (size_t)w : size - n - 1;
+          nam += len;
+        }
+      else
+        buf[n++] = *nam++;
+    }
+  buf[n] = '\0';
+  return buf;
+}
+
 #define FIELD_VEC_TRACE_N(nam, type, vcount, value, dxf)                      \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
-      char *s1 = strrplc (#nam, "[rcount1]", "[%d]");                         \
-      if (s1)                                                                 \
-        {                                                                     \
-          char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
-          if (s2)                                                             \
-            {                                                                 \
-              s2 = (char *)realloc (s2, strlen (s2)                           \
-                                    + sizeof ("[%ld]: " FORMAT_##type " [" #type " %d]")); \
-              if (s2)                                                         \
-                {                                                             \
-                  strcat (s2, "[%ld]: " FORMAT_##type " [" #type " %d]");     \
-                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
-                  LOG_TRACE (s2, rcount1, rcount2, vcount, value, dxf);       \
-                  GCC46_DIAG_RESTORE                                          \
-                }                                                             \
-              free (s2);                                                      \
-              free (s1);                                                      \
-            }                                                                 \
-          else                                                                \
-            {                                                                 \
-              s1 = (char *)realloc (s1, strlen (s1)                           \
-                                    + sizeof ("[%ld]: " FORMAT_##type " [" #type " %d]")); \
-              if (s1)                                                         \
-                {                                                             \
-                  strcat (s1, "[%ld]: " FORMAT_##type " [" #type " %d]");     \
-                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
-                  LOG_TRACE (s1, rcount1, vcount, value, dxf);                \
-                  GCC46_DIAG_RESTORE                                          \
-                }                                                             \
-              free (s1);                                                      \
-            }                                                                 \
-        }                                                                     \
-      else                                                                    \
-        {                                                                     \
-          LOG_TRACE (#nam "[%ld]: " FORMAT_##type " [" #type " %d]", vcount,  \
-                     value, dxf);                                             \
-        }                                                                     \
+      char _nb[96];                                                           \
+      LOG_TRACE ("%s[%ld]: " FORMAT_##type " [" #type " %d]",                 \
+                 trace_idx_name (_nb, sizeof (_nb), #nam, (long)vcount,       \
+                                 (long)rcount1, (long)rcount2),               \
+                 (long)vcount, value, dxf);                                   \
       LOG_POS;                                                                \
     }
 #define FIELD_2PT_TRACE(nam, type, dxf)                                       \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
-      char *s1 = strrplc (#nam, "[rcount1]", "[%d]");                         \
-      if (s1)                                                                 \
-        {                                                                     \
-          char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
-          if (s2)                                                             \
-            {                                                                 \
-              s2 = (char *)realloc (s2, strlen (s2)                           \
-                                    + sizeof (": (" FORMAT_BD ", " FORMAT_BD  \
-                                               ") [" #type " %d]"));          \
-              if (s2)                                                         \
-                {                                                             \
-                  strcat (s2, ": (" FORMAT_BD ", " FORMAT_BD                  \
-                                    ") [" #type " %d]");                      \
-                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
-                  LOG_TRACE (s2, rcount1, rcount2, _obj->nam.x,               \
-                             _obj->nam.y, dxf);                               \
-                  GCC46_DIAG_RESTORE                                          \
-                }                                                             \
-              free (s2);                                                      \
-              free (s1);                                                      \
-            }                                                                 \
-          else                                                                \
-            {                                                                 \
-              s1 = (char *)realloc (s1, strlen (s1)                           \
-                                    + sizeof (": (" FORMAT_BD ", " FORMAT_BD  \
-                                               ") [" #type " %d]"));          \
-              if (s1)                                                         \
-                {                                                             \
-                  strcat (s1, ": (" FORMAT_BD ", " FORMAT_BD                  \
-                                    ") [" #type " %d]");                      \
-                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
-                  LOG_TRACE (s1, rcount1, _obj->nam.x, _obj->nam.y, dxf);     \
-                  GCC46_DIAG_RESTORE                                          \
-                }                                                             \
-              free (s1);                                                      \
-            }                                                                 \
-        }                                                                     \
-      else                                                                    \
-        LOG_TRACE (#nam ": (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]",    \
-                   _obj->nam.x, _obj->nam.y, dxf);                            \
+      char _nb[96];                                                           \
+      LOG_TRACE ("%s: (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]",         \
+                 trace_idx_name (_nb, sizeof (_nb), #nam, (long)vcount,       \
+                                 (long)rcount1, (long)rcount2),               \
+                 _obj->nam.x, _obj->nam.y, dxf);                              \
       LOG_POS;                                                                \
     }
 #define FIELD_3PT_TRACE(nam, type, dxf)                                       \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
-      char *s1 = strrplc (#nam, "[rcount1]", "[%d]");                         \
-      if (s1)                                                                 \
-        {                                                                     \
-          char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
-          if (s2)                                                             \
-            {                                                                 \
-              s2 = (char *)realloc (s2, strlen (s2)                           \
-                                    + sizeof (": (" FORMAT_BD ", " FORMAT_BD  \
-                                               ", " FORMAT_BD ") [" #type " %d]")); \
-              if (s2)                                                         \
-                {                                                             \
-                  strcat (s2, ": (" FORMAT_BD ", " FORMAT_BD                  \
-                                     ", " FORMAT_BD ") [" #type " %d]");      \
-                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
-                  LOG_TRACE (s2, rcount1, rcount2, _obj->nam.x,               \
-                             _obj->nam.y, _obj->nam.z, dxf);                  \
-                  GCC46_DIAG_RESTORE                                          \
-                }                                                             \
-              free (s2);                                                      \
-              free (s1);                                                      \
-            }                                                                 \
-          else                                                                \
-            {                                                                 \
-              s1 = (char *)realloc (s1, strlen (s1)                           \
-                                    + sizeof (": (" FORMAT_BD ", " FORMAT_BD  \
-                                               ", " FORMAT_BD ") [" #type " %d]")); \
-              if (s1)                                                         \
-                {                                                             \
-                  strcat (s1, ": (" FORMAT_BD ", " FORMAT_BD                  \
-                                     ", " FORMAT_BD ") [" #type " %d]");      \
-                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
-                  LOG_TRACE (s1, rcount1, _obj->nam.x, _obj->nam.y,          \
-                             _obj->nam.z, dxf);                               \
-                  GCC46_DIAG_RESTORE                                          \
-                }                                                             \
-              free (s1);                                                      \
-            }                                                                 \
-        }                                                                     \
-      else                                                                    \
-        {                                                                     \
-          LOG_TRACE (#nam ": (" FORMAT_BD ", " FORMAT_BD ", " FORMAT_BD       \
-                          ") [" #type " %d]",                                 \
-                     _obj->nam.x, _obj->nam.y, _obj->nam.z, dxf);             \
-        }                                                                     \
+      char _nb[96];                                                           \
+      LOG_TRACE ("%s: (" FORMAT_BD ", " FORMAT_BD ", " FORMAT_BD              \
+                 ") [" #type " %d]",                                          \
+                 trace_idx_name (_nb, sizeof (_nb), #nam, (long)vcount,       \
+                                 (long)rcount1, (long)rcount2),               \
+                 _obj->nam.x, _obj->nam.y, _obj->nam.z, dxf);                 \
       LOG_POS;                                                                \
     }
 
@@ -1306,8 +1245,12 @@
         return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)csize; vcount++)                  \
         {                                                                     \
+          char _nb[96];                                                       \
           _obj->o.nam[vcount] = bit_read_##type (dat);                        \
-          LOG_TRACE (#nam "[%ld]: " FORMAT_##type " [" #type " %d]",          \
+          LOG_TRACE ("%s[%ld]: " FORMAT_##type " [" #type " %d]",             \
+                     trace_idx_name (_nb, sizeof (_nb), #o "." #nam,          \
+                                     (long)vcount, (long)rcount1,             \
+                                     (long)rcount2),                          \
                      (long)vcount, _obj->o.nam[vcount], dxf);                 \
           LOG_POS                                                             \
         }                                                                     \
@@ -1320,7 +1263,14 @@
                                                sizeof (BITCODE_##type));      \
       if (!_obj->o.name)                                                      \
         return DWG_ERR_OUTOFMEM;                                              \
-      LOG_TRACE (#name ": { ");                                               \
+      {                                                                       \
+        char _nb[96];                                                         \
+        LOG_TRACE ("%s (%u): { ",                                             \
+                   trace_idx_name (_nb, sizeof (_nb), #o "." #name,           \
+                                   (long)vcount, (long)rcount1,               \
+                                   (long)rcount2),                            \
+                   (unsigned)_obj->o.sizefield);                              \
+      }                                                                       \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->o.sizefield; vcount++)      \
         {                                                                     \
           _obj->o.name[vcount] = bit_read_##type (dat);                       \
@@ -1359,8 +1309,12 @@
       _VECTOR_CHKCOUNT_STATIC (nam, csize, TYPE_MAXELEMSIZE (type), dat);     \
       for (vcount = 0; vcount < (BITCODE_BL)csize; vcount++)                  \
         {                                                                     \
+          char _nb[96];                                                       \
           _obj->o.nam[vcount] = bit_read_##type (dat);                        \
-          LOG_TRACE (#nam "[%ld]: " FORMAT_##type " [" #type " %d]",          \
+          LOG_TRACE ("%s[%ld]: " FORMAT_##type " [" #type " %d]",             \
+                     trace_idx_name (_nb, sizeof (_nb), #o "." #nam,          \
+                                     (long)vcount, (long)rcount1,             \
+                                     (long)rcount2),                          \
                      (long)vcount, _obj->o.nam[vcount], dxf);                 \
           LOG_POS                                                             \
         }                                                                     \
@@ -1960,7 +1914,7 @@
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj)                                               \
   {                                                                           \
-    BITCODE_BL vcount, rcount3, rcount4;                                      \
+    BITCODE_BL vcount = 0, rcount3, rcount4;                                  \
     int error = 0;                                                            \
     Dwg_Entity_##token *ent, *_obj;                                           \
     Dwg_Object_Entity *_ent;                                                  \
@@ -2080,7 +2034,7 @@
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj)                                               \
   {                                                                           \
-    BITCODE_BL vcount, rcount3, rcount4;                                      \
+    BITCODE_BL vcount = 0, rcount3, rcount4;                                  \
     int error = 0;                                                            \
     Dwg_Object_##token *_obj = NULL;                                          \
     Dwg_Data *dwg = obj->parent;                                              \
@@ -2163,7 +2117,7 @@
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj)                                               \
   {                                                                           \
-    BITCODE_BL vcount, rcount3, rcount4;                                      \
+    BITCODE_BL vcount = 0, rcount3, rcount4;                                  \
     int error = 0;                                                            \
     Dwg_Object_##token *_obj = NULL;                                          \
     Dwg_Data *dwg = obj->parent;                                              \

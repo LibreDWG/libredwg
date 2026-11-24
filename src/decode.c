@@ -356,7 +356,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Header *_obj = &dwg->header;
     Bit_Chain *hdl_dat = dat;
     int i;
-    BITCODE_BL vcount;
+    BITCODE_BL vcount = 0;
     assert (dat->byte == 0xb); // after version magic
 
     // clang-format off
@@ -445,7 +445,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       else
         {
           size_t old_size = dat->size;
-          BITCODE_BL vcount;
+          BITCODE_BL vcount = 0;
           dat->size = end_address;
           // clang-format off
           #include "auxheader.spec"
@@ -2836,7 +2836,7 @@ auxheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_AuxHeader *_obj = &dwg->auxheader;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_BL vcount;
+  BITCODE_BL vcount = 0;
   if (!dat->chain || !dat->size)
     return 1;
 
@@ -2862,7 +2862,7 @@ secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Object *obj = &xobj;
 #endif
   int error = 0;
-  BITCODE_BL vcount;
+  BITCODE_BL vcount = 0;
   if (!dat->chain || !dat->size)
     return 1;
 
@@ -3039,7 +3039,7 @@ filedeplist_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_FileDepList *_obj = &dwg->filedeplist;
   Dwg_Object *obj = NULL; // for obj->size overflow check
   int error = 0;
-  BITCODE_BL vcount;
+  BITCODE_BL vcount = 0;
 
   // clang-format off
   #include "filedeplist.spec"
@@ -3453,7 +3453,7 @@ acds_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain *str_dat = dat;
   Dwg_AcDs *_obj = &dwg->acds;
   Dwg_Object *obj = NULL;
-  BITCODE_BL rcount3 = 0, rcount4, vcount;
+  BITCODE_BL rcount3 = 0, rcount4, vcount = 0;
   int error = 0;
 
   // clang-format off
@@ -3760,7 +3760,7 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object *obj = NULL;
     Bit_Chain *hdl_dat = dat;
     int i;
-    BITCODE_BL vcount;
+    BITCODE_BL vcount = 0;
     assert (dat->byte == 0xb); // after version magic
 
     // clang-format off
@@ -3873,7 +3873,7 @@ decode_R2007 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Header *_obj = &dwg->header;
     Dwg_Object *obj = NULL;
     int i;
-    BITCODE_BL vcount;
+    BITCODE_BL vcount = 0;
     assert (dat->byte == 0xb); // after version magic
 
     // clang-format off
@@ -3930,10 +3930,9 @@ eed_need_dat (const Bit_Chain *restrict dat, const size_t need)
 {
   if (dat->byte >= dat->size || need > dat->size - dat->byte)
     {
-      LOG_ERROR ("Invalid EED size %" PRIuSIZE ", only %" PRIuSIZE
-                 " bytes left",
-                 need,
-                 dat->byte < dat->size ? dat->size - dat->byte : (size_t)0);
+      LOG_ERROR (
+          "Invalid EED size %" PRIuSIZE ", only %" PRIuSIZE " bytes left",
+          need, dat->byte < dat->size ? dat->size - dat->byte : (size_t)0);
       return 1;
     }
   return 0;
@@ -4827,7 +4826,7 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   Dwg_Object *obj = &dwg->object[_obj->objid];
   size_t objectpos = bit_position (dat);
   int has_wrong_bitsize = 0; // first possibly fatal problem
-  BITCODE_BL vcount;
+  BITCODE_BL vcount = 0;
 
   // obj->dat_address = dat->byte; // the data stream
   obj->bitsize_pos = objectpos; // absolute. needed for encode
@@ -5219,6 +5218,7 @@ dwg_decode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
   int error = 0;
+  BITCODE_BL vcount = 0;
 
   // clang-format off
   #include "header_variables.spec"
@@ -5237,7 +5237,7 @@ dwg_decode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
 
   Dwg_Data *dwg = obj->parent;
   Dwg_Object_Entity *_obj, *_ent;
-  BITCODE_BL vcount;
+  BITCODE_BL vcount = 0;
   int error = 0;
 
   _obj = _ent = obj->tio.entity;
@@ -5773,8 +5773,7 @@ dwg_add_object (Dwg_Data *restrict dwg)
 int
 dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                        Bit_Chain *hdl_dat, size_t address, BITCODE_BL num,
-                       const int prescan_objects,
-                       const BITCODE_RLL map_handle)
+                       const int prescan_objects, const BITCODE_RLL map_handle)
 {
   size_t objpos, restartpos;
   Bit_Chain abs_dat = { 0 };
@@ -6927,6 +6926,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   Bit_Chain *hdl_dat = dat;
   Dwg_Data *dwg = obj->parent;
   BITCODE_RC dimtype = 0;
+  BITCODE_BL vcount = 0;
   {
     // decode a generic DIMENSION, and fixup the type after. DIMENSION_ANG2LN
     // is the biggest.

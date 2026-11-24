@@ -112,6 +112,7 @@ decode_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
   Dwg_Object *obj = NULL;
   Bit_Chain *hdl_dat = dat;
   int error = 0;
+  BITCODE_BL vcount = 0;
 
   // clang-format off
   #include "header_variables_r11.spec"
@@ -694,8 +695,7 @@ number_anonymous_blocks (Dwg_Data *restrict dwg)
       else
         snprintf (newname, sizeof (newname), "*%c%u", _hdr->name[1],
                   (unsigned)++max[_hdr->name[1] - 'A']);
-      LOG_TRACE ("BLOCK_HEADER.name: \"%s\" => \"%s\"\n", _hdr->name,
-                 newname);
+      LOG_TRACE ("BLOCK_HEADER.name: \"%s\" => \"%s\"\n", _hdr->name, newname);
       free (_hdr->name);
       _hdr->name = strdup (newname);
       if (_blk)
