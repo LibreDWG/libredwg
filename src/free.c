@@ -1319,11 +1319,9 @@ dwg_free_object (Dwg_Object *obj)
     case DWG_TYPE_OLEFRAME:
       dwg_free_OLEFRAME (dat, obj);
       break;
-#ifdef DEBUG_VBA_PROJECT
     case DWG_TYPE_VBA_PROJECT:
       dwg_free_VBA_PROJECT (dat, obj);
       break;
-#endif
     case DWG_TYPE_LAYOUT:
       dwg_free_LAYOUT (dat, obj);
       break;
@@ -1611,11 +1609,9 @@ dwg_free_object_private (Dwg_Object *obj)
     case DWG_TYPE_OLEFRAME:
       dwg_free_OLEFRAME_private (dat, dat, dat, obj);
       break;
-#ifdef DEBUG_VBA_PROJECT
     case DWG_TYPE_VBA_PROJECT:
       dwg_free_VBA_PROJECT_private (dat, dat, dat, obj);
       break;
-#endif
     case DWG_TYPE_LAYOUT:
       dwg_free_LAYOUT_private (dat, dat, dat, obj);
       break;

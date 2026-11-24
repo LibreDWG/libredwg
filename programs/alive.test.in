@@ -352,6 +352,22 @@ if test -f "./dxf2dwg${EXEEXT}" && test -f "${DATADIR}/sample_r14.dxf"; then
     fi
 fi
 
+
+# A VBA_PROJECT imported from DXF, with its data, leaked them
+if test -f "./dxf2dwg${EXEEXT}" && test -f "${DATADIR}/sample_r14.dxf"; then
+    test -z "$TESTPROG" && TESTPROG="@LTEXEC@"
+    awk '{print} /^ *OBJECTS\r?$/ && !done {print "  0"; print "VBA_PROJECT"; print "  5"; print "7FFF"; print "330"; print "C"; print "100"; print "AcDbVbaProject"; print " 90"; print "5"; print "310"; print "0102030405"; done=1}' "${DATADIR}/sample_r14.dxf" > vba_project.dxf
+    echo "$TESTPROG dxf2dwg${EXEEXT} -y -o vba_project.dwg vba_project.dxf"
+    $TESTPROG "./dxf2dwg${EXEEXT}" -y -o vba_project.dwg vba_project.dxf 2>vba_project.log
+    rc=$?
+    if test "$rc" -ne 0; then
+        i=$((i+1))
+        echo "dxf2dwg with a VBA_PROJECT failure $rc"
+    else
+        rm -f vba_project.dxf vba_project.dwg vba_project.log
+    fi
+fi
+
 # dwgplot needs libplot, and is not built without
 if test -f "./dwgplot${EXEEXT}"; then
     test -z "$TESTPROG" && TESTPROG="@LTEXEC@"

@@ -1317,6 +1317,12 @@ DWG_OBJECT (VBA_PROJECT)
 
     START_OBJECT_HANDLE_STREAM;
   }
+  // before r2000 the data are not part of the object, but an import from DXF
+  // or JSON still allocates them
+  FREE {
+    FIELD_BINARY (data, FIELD_VALUE (data_size), 0);
+  }
+
 DWG_OBJECT_END
 
 #define MLEADER_CONTEXT_DATA_body                                                  \
