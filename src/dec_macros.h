@@ -104,7 +104,7 @@
 
 #define TRACE_NM(str)                                                         \
   trace_idx_name (_nb, sizeof (_nb), str, (long)vcount, (long)rcount1,        \
-                  (long)rcount2)
+                  (long)rcount2, (long)rcount3, (long)rcount4)
 
 #define LOG_TRACE_NM(nm, fmt, ...)                                            \
   LOG_TRACE ("%s" fmt, TRACE_NM (nm), __VA_ARGS__)
@@ -179,7 +179,7 @@
       char _nb[96];                                                           \
       LOG_TRACE ("%s: " FORMAT_##type " [" #type " %d]",                      \
                  trace_idx_name (_nb, sizeof (_nb), #nam, (long)vcount,       \
-                                 (long)rcount1, (long)rcount2),               \
+                                 (long)rcount1, (long)rcount2, (long)rcount3, (long)rcount4),               \
                  (BITCODE_##type)_obj->nam, dxfgroup);                        \
       LOG_RPOS                                                                \
     }
@@ -190,7 +190,7 @@
       char _nb[96];                                                           \
       LOG_TRACE ("%s: " FORMAT_##type " [" #type " %d] %gº",                  \
                  trace_idx_name (_nb, sizeof (_nb), #nam, (long)vcount,                 \
-                                 (long)rcount1, (long)rcount2),               \
+                                 (long)rcount1, (long)rcount2, (long)rcount3, (long)rcount4),               \
                  _obj->nam, dxfgroup, rad2deg (_obj->nam));                   \
       LOG_RPOS                                                                \
     }
@@ -201,7 +201,7 @@
       char _nb[96];                                                           \
       LOG_TRACE ("%s: " FORMAT_##type " " #type "\n",                         \
                  trace_idx_name (_nb, sizeof (_nb), #nam, 0L,                 \
-                                 (long)rcount1, (long)rcount2),               \
+                                 (long)rcount1, (long)rcount2, (long)rcount3, (long)rcount4),               \
                  _obj->nam);                                                  \
     }
 #define LOG_TF(level, var, len)                                               \
@@ -237,7 +237,7 @@
       char _nb[96];                                                           \
       LOG_TRACE ("%s[%ld]: " FORMAT_##type " [" #type " %d]",                 \
                  trace_idx_name (_nb, sizeof (_nb), #nam, (long)vcount,       \
-                                 (long)rcount1, (long)rcount2),               \
+                                 (long)rcount1, (long)rcount2, (long)rcount3, (long)rcount4),               \
                  (long)vcount, value, dxf);                                   \
       LOG_POS;                                                                \
     }
@@ -247,7 +247,7 @@
       char _nb[96];                                                           \
       LOG_TRACE ("%s: (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]",         \
                  trace_idx_name (_nb, sizeof (_nb), #nam, (long)vcount,       \
-                                 (long)rcount1, (long)rcount2),               \
+                                 (long)rcount1, (long)rcount2, (long)rcount3, (long)rcount4),               \
                  _obj->nam.x, _obj->nam.y, dxf);                              \
       LOG_POS;                                                                \
     }
@@ -258,7 +258,7 @@
       LOG_TRACE ("%s: (" FORMAT_BD ", " FORMAT_BD ", " FORMAT_BD              \
                  ") [" #type " %d]",                                          \
                  trace_idx_name (_nb, sizeof (_nb), #nam, (long)vcount,       \
-                                 (long)rcount1, (long)rcount2),               \
+                                 (long)rcount1, (long)rcount2, (long)rcount3, (long)rcount4),               \
                  _obj->nam.x, _obj->nam.y, _obj->nam.z, dxf);                 \
       LOG_POS;                                                                \
     }
@@ -289,11 +289,8 @@
         {                                                                     \
           if (ref)                                                            \
             {                                                                 \
-              char *_name = format_field_name (#nam, rcount1, rcount2, 0);    \
-              LOG_TRACE ("%s: " FORMAT_REF " [H %d]",                         \
-                         _name ? _name : #nam, ARGS_REF (ref), dxf);          \
-              if (_name)                                                      \
-                free (_name);                                                 \
+              LOG_TRACE_NM (#nam, ": " FORMAT_REF " [H %d]", ARGS_REF (ref),  \
+                            dxf);                                             \
               if (dwg_ref_object_silent (dwg, ref)                            \
                   && DWG_LOGLEVEL > DWG_LOGLEVEL_TRACE)                       \
                 {                                                             \
@@ -1144,7 +1141,7 @@
           LOG_TRACE ("%s[%ld]: " FORMAT_##type " [" #type " %d]",             \
                      trace_idx_name (_nb, sizeof (_nb), #o "." #nam,          \
                                      (long)vcount, (long)rcount1,             \
-                                     (long)rcount2),                          \
+                                     (long)rcount2, (long)rcount3, (long)rcount4),                          \
                      (long)vcount, _obj->o.nam[vcount], dxf);                 \
           LOG_POS                                                             \
         }                                                                     \
@@ -1162,7 +1159,7 @@
         LOG_TRACE ("%s (%u): { ",                                             \
                    trace_idx_name (_nb, sizeof (_nb), #o "." #name,           \
                                    (long)vcount, (long)rcount1,               \
-                                   (long)rcount2),                            \
+                                   (long)rcount2, (long)rcount3, (long)rcount4),                            \
                    (unsigned)_obj->o.sizefield);                              \
       }                                                                       \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->o.sizefield; vcount++)      \
@@ -1208,7 +1205,7 @@
           LOG_TRACE ("%s[%ld]: " FORMAT_##type " [" #type " %d]",             \
                      trace_idx_name (_nb, sizeof (_nb), #o "." #nam,          \
                                      (long)vcount, (long)rcount1,             \
-                                     (long)rcount2),                          \
+                                     (long)rcount2, (long)rcount3, (long)rcount4),                          \
                      (long)vcount, _obj->o.nam[vcount], dxf);                 \
           LOG_POS                                                             \
         }                                                                     \
@@ -1814,7 +1811,7 @@
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj)                                               \
   {                                                                           \
-    BITCODE_BL vcount = 0, rcount3, rcount4;                                  \
+    BITCODE_BL vcount = 0;                                  \
     int error = 0;                                                            \
     Dwg_Entity_##token *ent, *_obj;                                           \
     Dwg_Object_Entity *_ent;                                                  \
@@ -1934,7 +1931,7 @@
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj)                                               \
   {                                                                           \
-    BITCODE_BL vcount = 0, rcount3, rcount4;                                  \
+    BITCODE_BL vcount = 0;                                  \
     int error = 0;                                                            \
     Dwg_Object_##token *_obj = NULL;                                          \
     Dwg_Data *dwg = obj->parent;                                              \
@@ -2019,7 +2016,7 @@
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj)                                               \
   {                                                                           \
-    BITCODE_BL vcount = 0, rcount3, rcount4;                                  \
+    BITCODE_BL vcount = 0;                                  \
     int error = 0;                                                            \
     Dwg_Object_##token *_obj = NULL;                                          \
     Dwg_Data *dwg = obj->parent;                                              \

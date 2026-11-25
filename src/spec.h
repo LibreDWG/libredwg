@@ -906,12 +906,18 @@
       Dwg_Entity_##parenttype *restrict _obj, Bit_Chain * dat,                \
       Bit_Chain * hdl_dat, Bit_Chain * str_dat, Dwg_Object *restrict obj)
 
+#ifdef IS_DECODER
+#  define DECL_RCOUNT34 /* the globals */
+#else
+#  define DECL_RCOUNT34 BITCODE_BL rcount3, rcount4;
+#endif
 #define DWG_SUBCLASS(parenttype, subtype)                                     \
   static int DWG_PRIVATE_N (ACTION, parenttype##_##subtype) (                 \
       Dwg_Object_##parenttype *restrict _obj, Bit_Chain * dat,                \
       Bit_Chain * hdl_dat, Bit_Chain * str_dat, Dwg_Object *restrict obj)     \
   {                                                                           \
-    BITCODE_BL vcount = 0, rcount3, rcount4;                                  \
+    BITCODE_BL vcount = 0;                                                    \
+    DECL_RCOUNT34                                                             \
     Dwg_Data *dwg = obj->parent;                                              \
     int error = 0;                                                            \
     subtype##_fields;                                                         \
@@ -923,7 +929,8 @@
       Dwg_Entity_##parenttype *restrict _obj, Bit_Chain * dat,                \
       Bit_Chain * hdl_dat, Bit_Chain * str_dat, Dwg_Object *restrict obj)     \
   {                                                                           \
-    BITCODE_BL vcount = 0, rcount3, rcount4;                                  \
+    BITCODE_BL vcount = 0;                                                    \
+    DECL_RCOUNT34                                                             \
     Dwg_Data *dwg = obj->parent;                                              \
     int error = 0;                                                            \
     subtype##_fields;                                                         \

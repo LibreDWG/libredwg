@@ -1990,7 +1990,7 @@ read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
   Dwg_Object *obj = NULL;
   int error;
-  BITCODE_RL rcount1 = 0, rcount2 = 0;
+  BITCODE_RL rcount1 = 0, rcount2 = 0, rcount3 = 0, rcount4 = 0;
 
   old_dat = *dat;
   error = read_data_section (&sec_dat, dat, sections_map, pages_map,
@@ -2034,7 +2034,7 @@ read_2007_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   Dwg_AppInfo *_obj = &dwg->appinfo;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL rcount1 = 0, rcount2 = 0;
+  BITCODE_RL rcount1 = 0, rcount2 = 0, rcount3 = 0, rcount4 = 0;
 
   // not compressed, page size: 0x80
   error = read_data_section (&sec_dat, dat, sections_map, pages_map,
@@ -2075,7 +2075,7 @@ read_2007_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   Dwg_AuxHeader *_obj = &dwg->auxheader;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL vcount = 0, rcount1 = 0, rcount2 = 0;
+  BITCODE_RL vcount = 0, rcount1 = 0, rcount2 = 0, rcount3 = 0, rcount4 = 0;
 
   // type: 2, compressed, page size: 0x7400
   error = read_data_section (&sec_dat, dat, sections_map, pages_map,
@@ -2162,7 +2162,7 @@ read_2007_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   Dwg_RevHistory *_obj = &dwg->revhistory;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL rcount1 = 0, rcount2 = 0;
+  BITCODE_RL rcount1 = 0, rcount2 = 0, rcount3 = 0, rcount4 = 0;
 
   // compressed, page size: 0x7400
   error = read_data_section (&sec_dat, dat, sections_map, pages_map,
@@ -2206,7 +2206,7 @@ read_2007_section_objfreespace (Bit_Chain *restrict dat,
   Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
   // Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL rcount1 = 0, rcount2 = 0;
+  BITCODE_RL rcount1 = 0, rcount2 = 0, rcount3 = 0, rcount4 = 0;
 
   // compressed, page size: 0x7400
   error = read_data_section (&sec_dat, dat, sections_map, pages_map,
@@ -2250,7 +2250,7 @@ read_2007_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   Dwg_Template *_obj = &dwg->Template;
   Dwg_Object *obj = NULL;
   int error = 0;
-  BITCODE_RL rcount1 = 0, rcount2 = 0;
+  BITCODE_RL rcount1 = 0, rcount2 = 0, rcount3 = 0, rcount4 = 0;
 
   // compressed
   error = read_data_section (&sec_dat, dat, sections_map, pages_map,
@@ -2297,7 +2297,7 @@ read_2007_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   Dwg_FileDepList *_obj = &dwg->filedeplist;
   Dwg_Object *obj = NULL;
   BITCODE_BL vcount = 0;
-  BITCODE_RL rcount1 = 0, rcount2 = 0;
+  BITCODE_RL rcount1 = 0, rcount2 = 0, rcount3 = 0, rcount4 = 0;
 
   // not compressed, page size: 0x80. 0xc or 0xd
   error = read_data_section (&sec_dat, dat, sections_map, pages_map,
@@ -2340,7 +2340,7 @@ read_2007_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   // Bit_Chain *str_dat;
   Dwg_Security *_obj = &dwg->security;
   Dwg_Object *obj = NULL;
-  BITCODE_RL rcount1 = 0, rcount2 = 0;
+  BITCODE_RL rcount1 = 0, rcount2 = 0, rcount3 = 0, rcount4 = 0;
 
   // compressed, page size: 0x7400
   error = read_data_section (&sec_dat, dat, sections_map, pages_map,
@@ -2382,7 +2382,7 @@ read_2007_section_signature (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   Bit_Chain *str_dat;
   struct Dwg_Signature *_obj = &dwg->signature;
   Dwg_Object *obj = NULL;
-  BITCODE_RL rcount1 = 0, rcount2 = 0;
+  BITCODE_RL rcount1 = 0, rcount2 = 0, rcount3 = 0, rcount4 = 0;
 
   // compressed, page size: 0x7400
   error = read_data_section (&sec_dat, dat, sections_map, pages_map,
@@ -2420,7 +2420,7 @@ acds_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Object *obj = NULL;
   int error = 0;
   BITCODE_BL rcount1 = 0, rcount2 = 0;
-  BITCODE_BL rcount3 = 0, rcount4, vcount = 0;
+  BITCODE_BL rcount3 = 0, rcount4 = 0, vcount = 0;
 
   // clang-format off
   #include "acds.spec"

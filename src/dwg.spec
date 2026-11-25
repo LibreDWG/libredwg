@@ -4637,7 +4637,10 @@ int DWG_FUNC_N (ACTION,_HATCH_gradientfill)(
                         const Dwg_Object *restrict obj,
                         Dwg_Entity_HATCH *restrict _obj)
 {
-  BITCODE_BL vcount = 0, rcount3, rcount4;
+  BITCODE_BL vcount = 0;
+#ifndef IS_DECODER
+  BITCODE_BL rcount3, rcount4;
+#endif
   int error = 0;
   Dwg_Data* dwg = obj->parent;
 

@@ -72,7 +72,8 @@ EXPORT void log_text32 (const unsigned int minlevel, const BITCODE_TU wstr);
    vectors and REPEATs. */
 EXPORT const char *trace_idx_name (char *restrict buf, const size_t size,
                                    const char *restrict nam, const long v0,
-                                   const long r1, const long r2) __nonnull_all;
+                                   const long r1, const long r2, const long r3,
+                                   const long r4) __nonnull_all;
 
 #define HANDLER fprintf
 #define OUTPUT stderr

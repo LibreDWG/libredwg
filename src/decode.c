@@ -50,7 +50,7 @@
 
 /* the current version per spec block */
 static int cur_ver = 0;
-static BITCODE_BL rcount1 = 0, rcount2 = 0;
+static BITCODE_BL rcount1 = 0, rcount2 = 0, rcount3 = 0, rcount4 = 0;
 static bool is_teigha = false;
 
 #ifdef DWG_ABORT
@@ -3460,7 +3460,7 @@ acds_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain *str_dat = dat;
   Dwg_AcDs *_obj = &dwg->acds;
   Dwg_Object *obj = NULL;
-  BITCODE_BL rcount3 = 0, rcount4, vcount = 0;
+  BITCODE_BL vcount = 0;
   int error = 0;
 
   // clang-format off

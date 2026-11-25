@@ -87,7 +87,7 @@ log_text32 (const unsigned int minlevel, const BITCODE_TU wstr)
 const char *
 trace_idx_name (char *restrict buf, const size_t size,
                 const char *restrict nam, const long v0, const long r1,
-                const long r2)
+                const long r2, const long r3, const long r4)
 {
   size_t n = 0;
   while (*nam && n + 1 < size)
@@ -107,6 +107,16 @@ trace_idx_name (char *restrict buf, const size_t size,
       else if (!strncmp (nam, "[rcount2]", 9))
         {
           idx = r2;
+          len = 9;
+        }
+      else if (!strncmp (nam, "[rcount3]", 9))
+        {
+          idx = r3;
+          len = 9;
+        }
+      else if (!strncmp (nam, "[rcount4]", 9))
+        {
+          idx = r4;
           len = 9;
         }
       if (len)

@@ -48,7 +48,7 @@
 
 /* the current version per spec block */
 static int cur_ver = 0;
-static BITCODE_BL rcount1 = 0, rcount2 = 0;
+static BITCODE_BL rcount1 = 0, rcount2 = 0, rcount3 = 0, rcount4 = 0;
 
 #ifdef DWG_ABORT
 static unsigned int errors = 0;
