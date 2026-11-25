@@ -412,6 +412,7 @@ Minor bugfixes:
   * spec: harmonized VPORT/VIEW/VIEWPORT fields with HEADER.
   * spec: fixed r2004+ sections checked against ODA specs.
   * Fixed PROXY_OBJECT version corruption in JSON roundtrip.
+  * Fixed ossfuzz 587962393: heap-use-after-free READ 8
   * Fixed ossfuzz 42533395: heap-buffer-overflow in dynapi_set_helper via
     JSON import of pointer-typed subclass fields.
   * Fixed ossfuzz 42510991: memory leak in dxf_header_read when encountering

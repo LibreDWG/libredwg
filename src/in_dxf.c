@@ -17645,6 +17645,11 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                               // dwg->object may have been reallocated
                               newidx = dwg->num_objects - 1;
                               blkhdr = &dwg->object[newidx];
+                              // Refresh object-array pointers after realloc.
+                              obj = &dwg->object[idx];
+                              ent = obj->tio.entity;
+                              _obj = ent->tio.BLOCK;
+                              blkname = (const char *)_obj->name;
                               // Set r11_idx on the new BLOCK_CONTROL.entries
                               // ref so postprocessing resolves block names to
                               // the correct table index.
