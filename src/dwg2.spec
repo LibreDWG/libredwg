@@ -342,7 +342,7 @@ DWG_OBJECT_END
   REPEAT (tdata.num_rows, tdata.rows, Dwg_TableRow)		\
   REPEAT_BLOCK							\
       FIELD_BL (row.num_cells, 90);				\
-      REPEAT2_C (row.num_cells, row.cells, Dwg_TableCell)		\
+      REPEAT2 (row.num_cells, row.cells, Dwg_TableCell)		\
       REPEAT_BLOCK						\
           SUB_FIELD_BL (cell,flag, 90);				\
           SUB_FIELD_T (cell,tooltip, 300);			\
