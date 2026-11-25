@@ -1435,8 +1435,12 @@ void
 json_write_TF (Bit_Chain *restrict dat, const BITCODE_TF restrict src,
                const size_t len)
 {
-  const size_t slen = src ? strlen ((char *)src) : 0;
+  size_t slen = 0;
   bool has_slack = false;
+  /* TF may be an exact-length binary allocation, without a terminator. */
+  if (src)
+    while (slen < len && src[slen])
+      slen++;
   fputc ('"', dat->fh);
   if (!slen)
     {

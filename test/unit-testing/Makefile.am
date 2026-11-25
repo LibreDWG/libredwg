@@ -55,6 +55,7 @@ encode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/dwg.lo \
 	$(top_builddir)/src/encode2.lo \
 	$(top_builddir)/src/encode_acds.lo \
+	$(top_builddir)/src/out_json.lo \
 	$(top_builddir)/src/encode_r2007.lo \
 	$(top_builddir)/src/hash.lo \
 	$(top_builddir)/src/reedsolomon.lo \

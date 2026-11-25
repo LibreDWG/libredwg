@@ -27,6 +27,8 @@ extern int dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 // from out_json.h
 extern int dwg_write_json_dat (Bit_Chain *restrict dat,
                                Dwg_Data *restrict dwg);
+extern void json_write_TF (Bit_Chain *restrict dat,
+                           const BITCODE_TF restrict src, const size_t len);
 // from dwg_api.h
 extern int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial);
 extern int dwg_add_class (Dwg_Data *restrict dwg,
@@ -1873,6 +1875,35 @@ r2004_maint_version_test (void)
   free (file.chain);
 }
 
+static void
+json_tf_bounds_test (void)
+{
+  Bit_Chain dat = { 0 };
+  unsigned char *data = (unsigned char *)malloc (1);
+  char result[16] = { 0 };
+
+  dat.fh = tmpfile ();
+  if (!data || !dat.fh)
+    {
+      fail ("json TF: cannot allocate test resources");
+      free (data);
+      if (dat.fh)
+        fclose (dat.fh);
+      return;
+    }
+  data[0] = 'X';
+  json_write_TF (&dat, data, 1);
+  json_write_TF (&dat, data, 0);
+  rewind (dat.fh);
+  if (fread (result, 1, sizeof (result), dat.fh) == 5
+      && !memcmp (result, "\"X\"\"\"", 5))
+    ok ("json TF: exact-length unterminated data and zero length");
+  else
+    fail ("json TF: incorrect bounded output");
+  fclose (dat.fh);
+  free (data);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -1900,6 +1931,7 @@ main (int argc, char const *argv[])
   acds_sab_test ();
   acds_records_json_test ();
   large_class_strings_test ();
+  json_tf_bounds_test ();
   compress_r2007_tests ();
   encode_r2007_test ();
   r2004_container_test ();
