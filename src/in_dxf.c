@@ -14479,6 +14479,15 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                 return pair;
               goto next_pair;
             }
+          else if (pair->code == 30 && obj->fixedtype == DWG_TYPE_POLYLINE_2D)
+            {
+              Dwg_Entity_POLYLINE_2D *o = obj->tio.entity->tio.POLYLINE_2D;
+              /* The scalar has dynapi DXF code 0; group 30 is the Z of
+                 the dummy header point, not a vertex coordinate. */
+              o->elevation = pair->value.d;
+              LOG_TRACE ("POLYLINE_2D.elevation = %f [BD 30]\n", o->elevation);
+              goto next_pair;
+            }
           else if (pair->code == 350 && strEQc (subclass, "AcDb3dSolid")
                    && dwg_obj_is_3dsolid (obj))
             {

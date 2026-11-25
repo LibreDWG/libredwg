@@ -91,6 +91,11 @@ add_executable(dxf_test
 #  PROPERTY LINK_LIBRARIES -lm ${CMAKE_THREAD_LIBS_INIT})
 add_test(dxf_test ${TARGET_SYSTEM_EMULATOR} dxf_test${CMAKE_EXECUTABLE_SUFFIX})
 
+if(NOT LIBREDWG_DISABLE_WRITE AND NOT LIBREDWG_DISABLE_DXF)
+  add_executable(indxf_test indxf_test.c ../../src/logging.c)
+  add_test(indxf_test ${TARGET_SYSTEM_EMULATOR} indxf_test${CMAKE_EXECUTABLE_SUFFIX})
+endif()
+
 add_executable(dynapi_test
   dynapi_test.c
   ../../src/bits.c
