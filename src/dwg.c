@@ -396,7 +396,8 @@ dwg_fixup_viewport_ids (Dwg_Data *restrict dwg)
     {
       Dwg_Object *obj = &dwg->object[i];
       if (obj->supertype == DWG_SUPERTYPE_ENTITY
-          && obj->fixedtype == DWG_TYPE_VIEWPORT)
+          && obj->fixedtype == DWG_TYPE_VIEWPORT && obj->tio.entity
+          && obj->tio.entity->tio.VIEWPORT)
         {
           Dwg_Entity_VIEWPORT *_obj = obj->tio.entity->tio.VIEWPORT;
           if (obj->tio.entity->entmode == 0)
