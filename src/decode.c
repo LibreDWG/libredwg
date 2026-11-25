@@ -1432,11 +1432,38 @@ add_section (Dwg_Data *dwg)
     }
   else
     {
-      dwg->header.section = (Dwg_Section *)realloc (
-          dwg->header.section,
-          sizeof (Dwg_Section) * (dwg->header.num_sections + 1));
-      memset (&dwg->header.section[dwg->header.num_sections], 0,
-              sizeof (Dwg_Section));
+      Dwg_Section *sections;
+      if (dwg->header.section_info)
+        {
+          /* Section-info pages borrow pointers into the section map. Rebase
+             them while the old allocation is still alive. */
+          BITCODE_BL i, j;
+          sections = (Dwg_Section *)malloc (
+              sizeof (Dwg_Section) * (dwg->header.num_sections + 1));
+          if (!sections)
+            return DWG_ERR_OUTOFMEM;
+          memcpy (sections, dwg->header.section,
+                  sizeof (Dwg_Section) * dwg->header.num_sections);
+          for (i = 0; i < dwg->header.section_infohdr.num_desc; i++)
+            {
+              Dwg_Section_Info *info = &dwg->header.section_info[i];
+              for (j = 0; info->sections && j < info->num_sections; j++)
+                if (info->sections[j])
+                  info->sections[j]
+                      = &sections[info->sections[j] - dwg->header.section];
+            }
+          free (dwg->header.section);
+        }
+      else
+        {
+          sections = (Dwg_Section *)realloc (
+              dwg->header.section,
+              sizeof (Dwg_Section) * (dwg->header.num_sections + 1));
+          if (!sections)
+            return DWG_ERR_OUTOFMEM;
+        }
+      dwg->header.section = sections;
+      memset (&sections[dwg->header.num_sections], 0, sizeof (Dwg_Section));
     }
   if (!dwg->header.section)
     {
@@ -2086,7 +2113,6 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
         {
           // bug in Teigha with Template, with num_sections=0
           BITCODE_BL sec_idx;
-          info->num_sections = 1;
           info->sections = realloc (info->sections, sizeof (Dwg_Section *));
           if (!info->sections)
             return DWG_ERR_OUTOFMEM;
@@ -2096,6 +2122,8 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
           if (add_section (dwg) != 0)
             return DWG_ERR_OUTOFMEM;
           info->sections[0] = &dwg->header.section[sec_idx];
+          /* Publish the page only after its borrowed pointer is initialized. */
+          info->num_sections = 1;
         }
       /*
       else if (type == SECTION_UNKNOWN)

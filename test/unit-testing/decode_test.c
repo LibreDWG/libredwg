@@ -642,6 +642,78 @@ object_map_handle_test (void)
     }
 }
 
+static void
+section_growth_test (void)
+{
+  Dwg_Data dwg = { 0 };
+  Dwg_Section_Info info = { 0 };
+  Dwg_Section *pages[2];
+  int error;
+
+  error = add_section (&dwg);
+  if (error)
+    {
+      fail ("Cannot allocate section map");
+      return;
+    }
+  dwg.header.section[0].address = 1234;
+  pages[0] = dwg.header.section;
+  pages[1] = NULL;
+  info.sections = pages;
+  info.num_sections = 2;
+  dwg.header.section_info = &info;
+  dwg.header.section_infohdr.num_desc = 1;
+  error = add_section (&dwg);
+  if (!error && pages[0] == dwg.header.section
+      && pages[0]->address == 1234 && !pages[1]
+      && dwg.header.num_sections == 2)
+    ok ("Section map growth preserves borrowed page pointers");
+  else
+    fail ("Section map growth invalidates borrowed page pointers");
+  free (dwg.header.section);
+}
+
+static void
+template_section_growth_test (void)
+{
+  Dwg_Data dwg = { 0 };
+  Dwg_Section_Info infos[2] = { { 0 } };
+  Dwg_Section *page;
+  Bit_Chain dat = { 0 }, sec_dat = { 0 };
+  int saved_teigha = is_teigha;
+  int error;
+
+  if (add_section (&dwg))
+    {
+      fail ("Cannot allocate template regression section map");
+      return;
+    }
+  dwg.header.section[0].address = 1234;
+  page = dwg.header.section;
+  infos[0].fixedtype = SECTION_TEMPLATE;
+  infos[0].size = 4;
+  infos[0].unknown = 1;
+  infos[1].fixedtype = SECTION_ACDS;
+  infos[1].num_sections = 1;
+  infos[1].sections = &page;
+  dwg.header.section_info = infos;
+  dwg.header.section_infohdr.num_desc = 2;
+  is_teigha = 1;
+  /* Stop at the decompression-size guard, after the real template fixup. */
+  error = read_2004_compressed_section (&dat, &dwg, &sec_dat,
+                                        SECTION_TEMPLATE);
+  is_teigha = saved_teigha;
+  if (error == DWG_ERR_VALUEOUTOFBOUNDS
+      && dwg.header.num_sections == 2 && infos[0].num_sections == 1
+      && infos[0].sections[0] == &dwg.header.section[1]
+      && page == dwg.header.section && page->address == 1234)
+    ok ("Teigha template growth preserves the later ACDS page");
+  else
+    fail ("Teigha template growth invalidates section pages");
+  free (infos[0].sections);
+  free (dwg.header.section);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -659,6 +731,8 @@ main (int argc, char const *argv[])
   r2007_rs_correction_tests ();
   r2007_class_versions_test ();
   object_map_handle_test ();
+  section_growth_test ();
+  template_section_growth_test ();
 
   return numfailed () ? 1 : 0;
 }
