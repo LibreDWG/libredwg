@@ -95,6 +95,12 @@ typedef struct _bit_chain
   ((dwg->header.from_version >= R_2007) && !(dwg->opts & DWG_OPTS_IN))
 #define TU_to_int(b) le16toh (((uint16_t)b[1] << 8) + b[0])
 
+/* FIELD_VECTOR_T (name, type, ...) element encoding: the generic T is a
+   TV or TU depending on the version, the TU32 vector is always UCS-2 in
+   memory. Use as IS_TU_VEC_##type. */
+#define IS_TU_VEC_T 0
+#define IS_TU_VEC_TU32 1
+
 /* Functions for raw data manipulations.
  */
 void bit_advance_position (Bit_Chain *dat, long advance);
@@ -313,6 +319,15 @@ EXPORT
    stack buffer. */
 char *bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage);
 
+/** Converts a codepage'd TV (or UTF-8 for CP_UTF8) to a new UCS-2 string.
+    src is not freed. */
+EXPORT BITCODE_TU bit_TV_to_TU (const char *restrict src,
+                                const BITCODE_RS codepage) ATTRIBUTE_MALLOC;
+/** Converts a UCS-2 string to a new codepage'd TV. Unrepresentable chars
+    become \U+XXXX. */
+EXPORT char *bit_TU_to_TV (const BITCODE_TU restrict wstr,
+                           const BITCODE_RS codepage) ATTRIBUTE_MALLOC;
+
 /** Converts UTF-8 to UCS-2. Returns a copy.
     Needed by dwg importers, writers (e.g. dxf2dwg)
     cquoted is needed by in_json, to unquote \"
@@ -391,6 +406,6 @@ size_t in_hex2bin (unsigned char *restrict dest, char *restrict src,
                    size_t destlen) __nonnull_all;
 
 // if there's a high char (> 0x7f)
-bool bit_TF_contains_high (char *s, size_t len);
+bool bit_TF_contains_high (const char *s, size_t len);
 
 #endif // BITS_H
