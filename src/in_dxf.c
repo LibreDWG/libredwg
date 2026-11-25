@@ -16655,6 +16655,19 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
               else if (strEQc (name, "HATCH")
                        && (pair->code == 10 || pair->code == 20))
                 ; // ignore the whole PLINE and VERTEX_PFACE_FACE 3BD 10
+              // POLYLINE_2D.elevation has no DXF group code in the spec (on
+              // export it is folded into the z of the group-10 point), so
+              // group 30 must be read explicitly.
+              else if (pair->code == 30 && strEQc (name, "POLYLINE_2D")
+                       && obj->fixedtype == DWG_TYPE_POLYLINE_2D)
+                {
+                  BITCODE_BD elevation = pair->value.d;
+                  dwg_dynapi_entity_set_value (_obj, obj->name, "elevation",
+                                               &elevation, 0);
+                  LOG_TRACE ("POLYLINE_2D.elevation = %f [BD 30]\n",
+                             elevation);
+                  goto next_pair;
+                }
               else if ((strEQc (name, "VERTEX_PFACE_FACE")
                         || strEQc (name, "POLYLINE_3D")
                         || strEQc (name, "POLYLINE_2D")
