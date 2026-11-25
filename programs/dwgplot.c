@@ -563,13 +563,22 @@ put_label (const double x, const double y, const double height,
            const double angle, const char *fontname, const int hjust,
            const int vjust, const char *restrict utf8)
 {
-  char *label;
+  char *label, *expanded;
   if (measuring)
     {
       bbox_add (x, y);
       return;
     }
-  label = utf8 ? utf8_to_latin1 (utf8) : NULL;
+  if (!utf8)
+    return;
+  // bit_u_expand shrinks the \U+XXXX and MIF \M+nXXXX escapes to UTF-8,
+  // in place, so copy the label first.
+  expanded = strdup (utf8);
+  if (!expanded)
+    return;
+  bit_u_expand (expanded);
+  label = utf8_to_latin1 (expanded);
+  free (expanded);
   if (!label)
     return;
   pl_fontname_r (plotter, fontname);

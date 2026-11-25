@@ -3479,7 +3479,11 @@ bit_u_expand (const char *src)
           sscanf (&s[4], "%4hX", &wc);
           assert (i >= 1 && i <= 5);
           uc = dwg_codepage_uwc (mif_tbl[i], wc);
-          if (uc < 0x80)
+          if (!uc)
+            { // unconvertible: drop the escape, keep the rest
+              memmove (s, &s[8], lp - 7);
+            }
+          else if (uc < 0x80)
             {
               *s++ = uc & 0xFF;
               memmove (s, &s[7], lp - 7);

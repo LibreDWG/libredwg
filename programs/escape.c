@@ -330,6 +330,31 @@ mtext_plaintext (const char *restrict src)
                   *d++ = 'U';
                 }
               break;
+            case 'M':
+              // keep MIF \M+nXXXX escapes intact for bit_u_expand
+              if (s[1] == '+' && s[2] >= '1' && s[2] <= '5'
+                  && isxdigit ((unsigned char)s[3])
+                  && isxdigit ((unsigned char)s[4])
+                  && isxdigit ((unsigned char)s[5])
+                  && isxdigit ((unsigned char)s[6]))
+                {
+                  d[0] = '\\';
+                  d[1] = 'M';
+                  d[2] = '+';
+                  d[3] = s[2];
+                  d[4] = s[3];
+                  d[5] = s[4];
+                  d[6] = s[5];
+                  d[7] = s[6];
+                  d += 8;
+                  s += 6;
+                }
+              else
+                {
+                  *d++ = '\\';
+                  *d++ = 'M';
+                }
+              break;
             case 'L':
             case 'l':
             case 'O':
