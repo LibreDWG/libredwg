@@ -322,6 +322,25 @@ check_roundtrip() {
     fi
 }
 
+# The true-color HATCH in HatchG has explicit transparency (method 2).
+if [ -f "$DATADIR/2004/HatchG.dwg" ]; then
+    if $TESTPROG "./dwg2dxf${EXEEXT}" -y -o hatch-alpha.dxf \
+           "$DATADIR/2004/HatchG.dwg" >/dev/null 2>&1 &&
+       awk 'NR % 2 { code = $1; next }
+            { sub(/\r$/, "") }
+            code == 0 { hatch = ($0 == "HATCH"); target = 0 }
+            hatch && code == 5 { target = ($0 == "29F") }
+            target && code == 440 { count++; if ($1 != 33554661) bad = 1 }
+            END { exit !(count == 1 && !bad) }' hatch-alpha.dxf
+    then
+        echo "HATCH transparency ok"
+    else
+        echo "HATCH group 440 missing or incorrect"
+        i=$((i+1))
+    fi
+    rm -f hatch-alpha.dxf
+fi
+
 for year in 2007 2018
 do
     base=PolyLine3D

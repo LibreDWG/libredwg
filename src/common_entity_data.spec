@@ -471,7 +471,7 @@
           FIELD_BLx (color.alpha_raw, 0);
 #endif
 #ifdef IS_DECODER
-          /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
+          /* The high byte is the transparency method. */
           _ent->color.alpha_type = _ent->color.alpha_raw >> 24;
           LOG_TRACE (" color.alpha_type: %d [ENC]\n", _ent->color.alpha_type);
           _ent->color.alpha = _ent->color.alpha_raw & 0xFF;
@@ -492,8 +492,8 @@
           FIELD_TV (color.book_name, 430);
         }
       DXF {
-        if (flags & 0x20 && _ent->color.alpha_type == 3) {
-          FIELD_BL (color.alpha, 440);
+        if (flags & 0x20) {
+          FIELD_BL (color.alpha_raw, 440);
         }
       }
 #endif
