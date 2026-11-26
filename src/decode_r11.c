@@ -623,6 +623,8 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       LOG_TRACE ("=> handle: (0.%d." FORMAT_HV ")\n", obj->handle.size,
                  obj->handle.value);
     }
+  else
+    dwg_add_handle (&obj->handle, 0, obj->handle.value, obj);
   obj->common_size = bit_position (dat) - obj->bitsize_pos;
   return error;
 }

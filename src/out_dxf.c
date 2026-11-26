@@ -1700,7 +1700,7 @@ dxf_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
   for (BITCODE_BL i = 0; i < obj->num_eed; i++)
     {
       const Dwg_Eed *_obj = &obj->eed[i];
-      if (_obj->size)
+      if (_obj->size && dat->from_version >= R_13b1)
         {
           // name of APPID
           Dwg_Object *appid = dwg_resolve_handle (dwg, _obj->handle.value);
@@ -1722,6 +1722,32 @@ dxf_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
                 VALUE_TU (data->u.eed_0_r2007.string, 1000)
               else
                 VALUE_TV (data->u.eed_0.string, 1000)
+              break;
+            case 1:
+              // r11/r12: the appid index. Emitted as the 1001 app name;
+              // the APPID handle only exists r13+
+              if (dat->from_version < R_13b1)
+                {
+                  Dwg_Object *appid = NULL;
+                  Dwg_Object *ctrl
+                      = dwg_get_first_object (dwg, DWG_TYPE_APPID_CONTROL);
+                  if (ctrl && ctrl->tio.object)
+                    {
+                      Dwg_Object_APPID_CONTROL *_c
+                          = ctrl->tio.object->tio.APPID_CONTROL;
+                      if (_c->entries
+                          && data->u.eed_1.appid_index < _c->num_entries
+                          && _c->entries[data->u.eed_1.appid_index])
+                        appid = dwg_resolve_handle (
+                            dwg,
+                            _c->entries[data->u.eed_1.appid_index]
+                                ->absolute_ref);
+                    }
+                  if (appid && appid->fixedtype == DWG_TYPE_APPID)
+                    VALUE_T (appid->tio.object->tio.APPID->name, 1001)
+                  else
+                    VALUE_TFF ("ACAD", 1001);
+                }
               break;
             case 2:
               if (data->u.eed_2.close)
