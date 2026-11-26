@@ -1599,6 +1599,59 @@ test_lwpolyline_to_preR13_dxf (void)
   return numfailed ();
 }
 
+static int
+test_layer_hairline_dxf (void)
+{
+  Dwg_Data *dwg = dwg_new_Document (R_2000, 0, 0);
+  Dwg_Object_LAYER *layer;
+  Bit_Chain dat = { 0 };
+  char code[128], value[128];
+  int in_layer = 0, hairline = 0, count = 0;
+
+  failed = 0;
+  if (!dwg)
+    return 1;
+  layer = dwg_add_LAYER (dwg, "Hairline");
+  dat.version = dat.from_version = R_2000;
+  dat.fh = tmpfile ();
+  if (!layer || !dat.fh)
+    fail ("cannot create hairline test drawing or file");
+  else
+    {
+      layer->linewt = 0;
+      if (dwg_write_dxf (&dat, dwg) >= DWG_ERR_CRITICAL)
+        fail ("cannot write hairline layer");
+      rewind (dat.fh);
+      while (fgets (code, sizeof (code), dat.fh)
+             && fgets (value, sizeof (value), dat.fh))
+        {
+          value[strcspn (value, "\r\n")] = '\0';
+          if (atoi (code) == 0)
+            {
+              in_layer = !strcmp (value, "LAYER");
+              hairline = 0;
+            }
+          else if (in_layer && atoi (code) == 2)
+            hairline = !strcmp (value, "Hairline");
+          else if (hairline && atoi (code) == 370)
+            {
+              count++;
+              if (atoi (value) != 0)
+                fail ("unexpected hairline value %s", value);
+            }
+        }
+      if (count != 1)
+        fail ("expected one group 370 on Hairline, got %d", count);
+      else
+        ok ("explicit zero layer lineweight in DXF");
+    }
+  if (dat.fh)
+    fclose (dat.fh);
+  dwg_free (dwg);
+  free (dwg);
+  return numfailed ();
+}
+
 /* The object_ref vector is reserved from HANDSEED, and grows by whole
    REFS_PER_REALLOC chunks. A HANDSEED which is no multiple of it left no room
    for the refs after it (GH #1526, found with ASAN). */
@@ -3907,6 +3960,7 @@ main (int argc, char *argv[])
 #  ifndef DISABLE_JSON
   error += test_json_write_file ();
 #  endif
+  error += test_layer_hairline_dxf ();
   error += test_material_dxf ();
   error += test_object_ref_chunks ();
   error += test_multileader_vertices ();

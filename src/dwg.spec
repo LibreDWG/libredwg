@@ -3433,7 +3433,7 @@ DWG_TABLE (LAYER)
     }
     SINCE (R_13b1) {
       int lw = dxf_cvt_lweight (FIELD_VALUE (linewt));
-      if (lw) {
+      if (lw || dat->version >= R_2000b) {
         KEY (linewt); VALUE_BSd (lw, 370);
       }
     }
