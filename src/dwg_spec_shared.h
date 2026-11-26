@@ -951,7 +951,7 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
           FIELD_BL (value.data_long, 91);                                     \
           break;                                                              \
         case 1: /* kLong */                                                   \
-          FIELD_BL (value.data_long, 91);                                     \
+          FIELD_BLd (value.data_long, 91);                                    \
           break;                                                              \
         case 2: /* kDouble */                                                 \
           FIELD_BD (value.data_double, 140);                                  \

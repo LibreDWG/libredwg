@@ -3145,6 +3145,34 @@ write_json_string (Dwg_Data *dwg, const char *file)
   return out;
 }
 
+static int
+test_json_signed_table_value (void)
+{
+  static const char json[]
+      = "{\"FILEHEADER\":{\"version\":\"AC1021\"},"
+        "\"CLASSES\":[{\"number\":500,\"dxfname\":\"FIELD\","
+        "\"cppname\":\"AcDbField\",\"appname\":\"ObjectDBX Classes\","
+        "\"item_class_id\":499}],"
+        "\"OBJECTS\":[{\"object\":\"FIELD\",\"type\":500,\"handle\":[0,1,42],"
+        "\"value.data_type\":1,\"value.data_long\":-2147483648}]}";
+  Dwg_Data dwg;
+  char *out = NULL;
+  const char *key;
+
+  failed = 0;
+  if (read_json_string (&dwg, json, sizeof (json) - 1) < DWG_ERR_CRITICAL)
+    out = write_json_string (&dwg, "signed_table_value.json");
+  key = out ? strstr (out, "\"value.data_long\"") : NULL;
+  if (!key || !(key = strchr (key, ':'))
+      || strtoll (key + 1, NULL, 10) != INT32_MIN)
+    fail ("kLong TABLE value lost its sign in JSON");
+  else
+    ok ("kLong TABLE value preserves INT32_MIN in JSON");
+  free (out);
+  dwg_free (&dwg);
+  return numfailed ();
+}
+
 // The writers and dwg_free dispatch a variable-type object by the name of
 // its class (classes.inc), which must be the object's own type: else they
 // read its struct as another one. The JSON importer rejects a SCALE whose
@@ -3925,6 +3953,7 @@ main (int argc, char *argv[])
   error += test_json_dotted_pointer_keys_struct ();
   error += test_json_dotted_pointer_keys_array ();
   error += test_json_class_types ();
+  error += test_json_signed_table_value ();
   error += test_class_object_type ();
   error += test_pointcloud_clippings ();
   error += test_proxy_graphics ();
