@@ -551,16 +551,25 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
     Dwg_Object_Ref *_ref0 = _obj->nam;                                        \
     Dwg_Object *_o0                                                           \
         = _ref0 ? dwg_ref_object ((Dwg_Data *)dwg, _ref0) : NULL;            \
-    char *_n0 = (_o0 && strEQc (_o0->dxfname, #table))                       \
-                    ? _o0->tio.object->tio.table->name                        \
-                    : dwg_handle_name ((Dwg_Data *)dwg, #table, _ref0);       \
-    if (_n0 && *_n0)                                                          \
+    if (_o0 && strEQc (_o0->dxfname, #table))                                 \
       {                                                                       \
-        HEADER_9 (nam);                                                       \
-        fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, _n0);                        \
+        char *_n0 = _o0->tio.object->tio.table->name;                         \
+        if (_n0 && *_n0)                                                      \
+          {                                                                   \
+            HEADER_9 (nam);                                                   \
+            dxf_cvt_tablerecord (dat, _o0, _n0, dxf);                         \
+          }                                                                   \
       }                                                                       \
-    if (_o0 == NULL && _n0)                                                   \
-      free (_n0);                                                              \
+    else                                                                      \
+      {                                                                       \
+        char *_n0 = dwg_handle_name ((Dwg_Data *)dwg, #table, _ref0);         \
+        if (_n0 && *_n0)                                                      \
+          {                                                                   \
+            HEADER_9 (nam);                                                   \
+            fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, _n0);                     \
+          }                                                                   \
+        free (_n0);                                                           \
+      }                                                                       \
   }
 
 #define FIELD_DATAHANDLE(nam, code, dxf)                                      \
