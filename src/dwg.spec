@@ -3004,7 +3004,6 @@ DWG_ENTITY (LEADER)
 
   SINCE (R_2000b)
     {
-      FIELD_BS (unknown_short_1, 0);
       FIELD_B (unknown_bit_4, 0);
       FIELD_B (unknown_bit_5, 0);
     }
