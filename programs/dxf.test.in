@@ -344,6 +344,29 @@ do
     check_pline_order
 done
 
+# The sheet-number FIELD in TS1 has two named children and a result value.
+if [ -f "$DATADIR/2000/TS1.dwg" ]; then
+    if $TESTPROG "./dwg2dxf${EXEEXT}" --as r2007 -y -o field-values.dxf \
+           "$DATADIR/2000/TS1.dwg" >/dev/null 2>&1 &&
+       awk 'NR % 2 { code = $1 + 0; next }
+            { sub(/\r$/, "") }
+            code == 0 { field = ($0 == "FIELD"); target = 0 }
+            field && code == 5 { target = ($0 == "14F") }
+            target && (code == 6 || code == 7 || code == 304) {
+                tags = tags " " code ":" $0
+            }
+            END { exit !(tags == " 6:SheetSetCompName 304:ACVALUE_END" \
+                         " 6:SheetSetPropertyName 304:ACVALUE_END" \
+                         " 7:ACFD_FIELD_VALUE 304:ACVALUE_END") }' field-values.dxf
+    then
+        echo "FIELD value boundaries ok"
+    else
+        echo "FIELD value boundaries missing or out of order"
+        i=$((i+1))
+    fi
+    rm -f field-values.dxf
+fi
+
 # r13,r14 deleted 2 INSERT's
 for year in 2000 2004 2007 2010 2013 2018 # r14 r13
 do

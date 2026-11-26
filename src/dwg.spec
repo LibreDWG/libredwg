@@ -6240,7 +6240,11 @@ DWG_OBJECT (FIELD)
   FIELD_BL (evaluation_error_code, 96);
   //DEBUG_HERE_OBJ
   FIELD_T (evaluation_error_msg, 300);
-  TABLE_value_fields (value) // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
+#ifdef IS_DXF
+  PRE (R_2007a) { TABLE_value_fields (value) }
+#else
+  TABLE_value_fields (value)
+#endif
   if (error & DWG_ERR_INVALIDTYPE)
     return error;
 
@@ -6267,6 +6271,7 @@ DWG_OBJECT (FIELD)
   REPEAT_BLOCK
       SUB_FIELD_T (childval[rcount1],key, 6);
       TABLE_value_fields (childval[rcount1].value)
+      DXF { SINCE (R_2007a) { VALUE_TFF ("ACVALUE_END", 304); } }
       if (error & DWG_ERR_INVALIDTYPE)
         {
           JSON_END_REPEAT (childval);
@@ -6276,6 +6281,11 @@ DWG_OBJECT (FIELD)
   END_REPEAT_BLOCK
   END_REPEAT (childval)
   DXF {
+    SINCE (R_2007a) {
+      VALUE_TFF ("ACFD_FIELD_VALUE", 7);
+      TABLE_value_fields (value)
+      VALUE_TFF ("ACVALUE_END", 304);
+    }
     FIELD_T (value_string, 301); // TODO: and 9 for subsequent >255 chunks
     FIELD_BL (value_string_length, 98); //ODA bug TV
   }
