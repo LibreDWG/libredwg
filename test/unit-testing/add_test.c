@@ -3757,13 +3757,13 @@ test_pointcloud_clippings (void)
 static int
 test_vertex_2d_dxf (void)
 {
+  const char *file = "add_test_vertex_2d.dxf";
   const dwg_point_2d pts[] = { { 0, 0 }, { 2, 1 } };
   Dwg_Data *dwg = dwg_new_Document (R_2000, 0, 0);
+  Dwg_Data in = { 0 };
   Dwg_Object *obj;
-  Dwg_Entity_VERTEX_2D *v;
-  Bit_Chain dat = { 0 };
-  char code[128], value[128];
-  int in_vertex = 0, n = 0;
+  Dwg_Entity_VERTEX_2D *vertex;
+  int error;
 
   failed = 0;
   if (!dwg)
@@ -3772,45 +3772,35 @@ test_vertex_2d_dxf (void)
                        2, pts);
   obj = first_object (dwg, DWG_TYPE_VERTEX_2D);
   if (!obj)
-    fail ("cannot create VERTEX_2D");
+    {
+      fail ("cannot create ordinary VERTEX");
+      goto done;
+    }
+  vertex = obj->tio.entity->tio.VERTEX_2D;
+  vertex->flag = 0;
+  vertex->start_width = 1.5;
+  vertex->end_width = 0.5;
+  vertex->bulge = -0.25;
+  dwg->dirty_refs = 1;
+  unlink (file);
+  error = dxf_write_file (file, dwg, 0);
+  if (error < DWG_ERR_CRITICAL)
+    error = dxf_read_file (file, &in);
+  unlink (file);
+  obj = first_object (&in, DWG_TYPE_VERTEX_2D);
+  if (error >= DWG_ERR_CRITICAL || !obj)
+    fail ("cannot read back ordinary VERTEX");
   else
     {
-      v = obj->tio.entity->tio.VERTEX_2D;
-      v->flag = 0;
-      v->start_width = 1.5;
-      v->end_width = 0.5;
-      v->bulge = -0.25;
-      dwg->dirty_refs = 1;
-      dat.fh = tmpfile ();
-      dat.version = dat.from_version = R_2000;
-      if (!dat.fh || dwg_write_dxf (&dat, dwg) >= DWG_ERR_CRITICAL)
-        fail ("cannot export VERTEX_2D");
+      vertex = obj->tio.entity->tio.VERTEX_2D;
+      if (vertex->flag || vertex->start_width != 1.5
+          || vertex->end_width != 0.5 || vertex->bulge != -0.25)
+        fail ("ordinary VERTEX lost widths or bulge");
       else
-        {
-          rewind (dat.fh);
-          while (fgets (code, sizeof (code), dat.fh)
-                 && fgets (value, sizeof (value), dat.fh))
-            {
-              int group = atoi (code);
-              value[strcspn (value, "\r\n")] = '\0';
-              if (!group)
-                in_vertex = !strcmp (value, "VERTEX");
-              else if (in_vertex && group >= 40 && group <= 42)
-                {
-                  static const double expected[] = { 1.5, 0.5, -0.25 };
-                  if (n >= 3 || group != 40 + n || atof (value) != expected[n])
-                    fail ("unexpected VERTEX tag %d %s", group, value);
-                  n++;
-                }
-            }
-          if (n != 3)
-            fail ("expected width and bulge tags on VERTEX, got %d", n);
-          else if (!numfailed ())
-            ok ("ordinary VERTEX preserves widths and bulge");
-        }
-      if (dat.fh)
-        fclose (dat.fh);
+        ok ("ordinary VERTEX preserves widths and bulge");
     }
+done:
+  dwg_free (&in);
   dwg_free (dwg);
   free (dwg);
   return numfailed ();
