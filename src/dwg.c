@@ -3548,18 +3548,21 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
               if (strEQc (name, "BYLAYER") || strEQc (name, "ByLayer"))
                 {
                   if (!vars->LTYPE_BYLAYER)
-                    vars->LTYPE_BYLAYER = hdlv[i];
+                    vars->LTYPE_BYLAYER = dwg_add_handleref (
+                        dwg, 5, hdlv[i]->handleref.value, NULL);
                 }
               else if (strEQc (name, "BYBLOCK") || strEQc (name, "ByBlock"))
                 {
                   if (!vars->LTYPE_BYBLOCK)
-                    vars->LTYPE_BYBLOCK = hdlv[i];
+                    vars->LTYPE_BYBLOCK = dwg_add_handleref (
+                        dwg, 5, hdlv[i]->handleref.value, NULL);
                 }
               else if (strEQc (name, "CONTINUOUS")
                        || strEQc (name, "Continuous"))
                 {
                   if (!vars->LTYPE_CONTINUOUS)
-                    vars->LTYPE_CONTINUOUS = hdlv[i];
+                    vars->LTYPE_CONTINUOUS = dwg_add_handleref (
+                        dwg, 5, hdlv[i]->handleref.value, NULL);
                 }
             }
           return hdlv[i];
