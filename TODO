@@ -1,8 +1,4 @@
-* add API for dynblocks (3dsolids, hatch and the ACSH solids have one).
-* rename all internal ent->tio.ENTITY to ent->tio._ENTITY, so that all 3D names can
-  stay asis. Only _3DSOLID is renamed so far. Which fixes the public API for
-  all _3D names, to be more consistent.
-* TABLE_Cell
+* add API for dynblocks
 * Enabled, but unstable and un(der)tested (see doc/LibreDWG.texi and
   src/classes.inc for the full list):
   ARCALIGNEDTEXT (only 2018/arcalignedtext.dxf, DXF out is skipped)
@@ -29,19 +25,8 @@
   (CAMERA is DXF only, there is never a DWG with it)
 * likewise for the following missing objects: CSACDOCUMENTOPTIONS
   XREFPANELOBJECT NPOCOLLECTION UCS
-* check-dxf/outdxf: DXFIN coverage for all generated dxfs. some objects even crash acad:
-  VERTEX_3D, MLINE.
 * convert XRECORD xdata linked-list ResBuf to array of eed[],
   same structure as common EED.
-* merge decode_r2007 with the 2004 decoder. It is almost the same, just
-  the sections have multiple pages. Only for this version. 2010+ uses
-  the 2004 format.
-* All DWG versions can be read and written now (r2007: src/encode_r2007.c).
-  Todo: large DWGs written as r2007 or r2010 still need recovery in ODA,
-  and downconverting r2010+ objects to r2007 loses data (TABLESTYLE custom
-  cell styles).
-* GeoJSON: all graphical entities are supported now. Todo: explode INSERT
-  into a GeometryCollection, RAY and XLINE are only a unit segment.
 * more dwgfilter examples, as from the osmctools, with keep and drop rules.
 * check osm tools https://gitlab.com/osm-c-tools/osmctools how
   they could import GIS data easier.
@@ -50,7 +35,6 @@
   See https://wiki.openstreetmap.org/wiki/Dxf2gpx
   https://grass.osgeo.org/grass74/manuals/v.in.dxf.html and dwg (teigha and opencad)
   But only as external sharedlib plugin.
-* add more geom.c utils to tessellate curves (e.g. GeoJSON)
 * ACIS: We already convert the binary SAB to ASCII SAT version 2 (ASM ShapeManager,
   forked from ACIS 7.0), but the add API is still struggling to create them.
   At least I found proper docs for the ACIS SDK.
@@ -60,8 +44,5 @@
   repo and GauchoCAD on gitlab.
 * Add some UI to inspect the DWG internal structs (dwgiview), and maybe a viewer (dwgview).
   Started with perl-tk
-
 * finish documentation of the API functions, refman.
-* add the basic DWG layout, sections and API to the docs.
 * add fuzzing and solver-based test generation (bits)
-* check testsuite errors when cross-compiled under wine.
