@@ -66,8 +66,19 @@ fi
 echo "$dwgread -O json -o $json $dwg"
 $dwgread -O json -o "$json" "$dwg"
 echo "$jq $opts $json"
-$jq "$opts" "$json"
-fail=$?
+if [ -n "$writemode" ]; then
+    # the updating query returns the whole json, which is written back
+    $jq "$opts" "$json" >"$json.new"
+    fail=$?
+    if [ $fail = 0 ]; then
+        mv "$json.new" "$json"
+    else
+        rm -f "$json.new"
+    fi
+else
+    $jq "$opts" "$json"
+    fail=$?
+fi
 if [ $fail = 0 ] && [ -n "$writemode" ]; then
     mv "$dwg" "$dwg.bak"
     echo "$dwgwrite -o $dwg $json"
