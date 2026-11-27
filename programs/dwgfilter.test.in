@@ -167,8 +167,10 @@ if [ "$DISABLE_WRITE" != "1" ] && [ -x "$DWGWRITE" ]; then
     json="test7_inplace.json"
     # dump a copy we can safely modify
     cp "$DWG" "./test7_inplace.dwg"
-    if "$FILTER" -i '.HEADER.CLAYER = "0"' "./test7_inplace.dwg" >"$log" 2>&1; then
-        if [ -f "./test7_inplace.dwg.bak" ] && [ -f "./test7_inplace.dwg" ]; then
+    if "$FILTER" -i '.HEADER.TEXTSIZE = 5' "./test7_inplace.dwg" >"$log" 2>&1; then
+        if [ -f "./test7_inplace.dwg.bak" ] && [ -f "./test7_inplace.dwg" ] \
+           && "$FILTER" '.HEADER.TEXTSIZE' "./test7_inplace.dwg" 2>&1 \
+              | tail -1 | grep -q '^5'; then
             echo "PASS: -i write-back produced backup and modified file"
             rm -f "./test7_inplace.dwg" "./test7_inplace.dwg.bak"
         else
