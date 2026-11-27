@@ -14691,7 +14691,8 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
               else
                 goto search_field;
             }
-          else if (obj->fixedtype == DWG_TYPE_MTEXT && pair->code == 46)
+          else if (obj->fixedtype == DWG_TYPE_MTEXT && pair->code == 46
+                   && in_embedobj)
             {
               Dwg_Entity_MTEXT *o = obj->tio.entity->tio.MTEXT;
               if (!o->num_column_heights)
