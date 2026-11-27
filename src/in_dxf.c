@@ -11182,9 +11182,11 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
         // Match the encoder's expected handle relation-code for the owned
         // list, else it warns "Expected a CODE 4 handle, got a 3":
         // INSERT/MINSERT.attribs[] and POLYLINE_PFACE/MESH.vertex[] are
-        // soft pointers (code 4); only POLYLINE_2D/3D.vertex[] is code 3.
+        // soft pointers (code 4); only POLYLINE_2D/3D.vertex[] and
+        // BLOCK_HEADER.entities[] are code 3.
         BITCODE_RC hdlcode = (owner->fixedtype == DWG_TYPE_POLYLINE_2D
-                              || owner->fixedtype == DWG_TYPE_POLYLINE_3D)
+                              || owner->fixedtype == DWG_TYPE_POLYLINE_3D
+                              || owner->fixedtype == DWG_TYPE_BLOCK_HEADER)
                                  ? 3
                                  : 4;
         owned = (BITCODE_H *)realloc (owned, num_owned * sizeof (BITCODE_H));
@@ -17765,12 +17767,10 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                       && blkhdr->fixedtype == DWG_TYPE_BLOCK_HEADER
                       && (_hdr = blkhdr->tio.object->tio.BLOCK_HEADER))
                     {
-                      // BLOCK_HEADER.entities[] is a soft pointer (code 4)
-                      // list, per the encoder (HANDLE_VECTOR(entities, ...,
-                      // 4)). Using code 3 here made the encoder warn "Expected
-                      // a CODE 4 handle, got a 3" for every owned entity.
+                      // BLOCK_HEADER.entities[] are hard owner (code 3)
+                      // handles, as in the DWG files of AutoCAD and ODA.
                       BITCODE_H ref = dwg_add_handleref (
-                          dwg, 4, obj->handle.value, NULL);
+                          dwg, 3, obj->handle.value, NULL);
                       PUSH_HV (_hdr, num_owned, entities, ref)
                     }
                   if (ent->ownerhandle
@@ -17867,7 +17867,10 @@ add_to_BLOCK_HEADER (Dwg_Object *restrict obj,
         return;
       _ctrl->last_entity = ref;
     }
-  PUSH_HV (_ctrl, num_owned, entities, _ctrl->last_entity);
+  {
+    BITCODE_H ref = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
+    PUSH_HV (_ctrl, num_owned, entities, ref);
+  }
 }
 
 static int

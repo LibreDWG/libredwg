@@ -3222,7 +3222,7 @@ DWG_TABLE (BLOCK_HEADER)
   IF_FREE_OR_SINCE (R_2004a)
     {
       if (FIELD_VALUE (num_owned) < 0xf00000) {
-        HANDLE_VECTOR (entities, num_owned, 4, 0);
+        HANDLE_VECTOR (entities, num_owned, 3, 0);
       }
     }
   IF_FREE_OR_SINCE (R_13b1) {
