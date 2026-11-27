@@ -13,6 +13,16 @@ help() {
     echo "  --debug  keep the tmp json"
     echo "  -i       write back in-place, with an updating JQ query"
     echo "  ...      all other options are passed to jq. See 'man jq'"
+    echo ""
+    echo "The jq query is a single argument, so quote it. With -i it must"
+    echo "return the whole changed JSON."
+    echo ""
+    echo "Examples:"
+    echo "  dwgfilter '[.OBJECTS[] | select(.entity) | .entity] | group_by(.) | map({(.[0]): length}) | add' example.dwg"
+    echo "  dwgfilter '.OBJECTS[] | select(.object == \"LAYER\") | .name' example.dwg"
+    echo "  dwgfilter '.OBJECTS[] | select(.entity == \"CIRCLE\") | [.handle, .center, .radius]' example.dwg"
+    echo "  dwgfilter -i '.HEADER.TEXTSIZE = 5' example.dwg"
+    echo "  dwgfilter -i 'del(.OBJECTS[] | select(.entity == \"TEXT\"))' example.dwg"
     exit
 }
 

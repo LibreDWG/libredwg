@@ -42,7 +42,6 @@
   cell styles).
 * GeoJSON: all graphical entities are supported now. Todo: explode INSERT
   into a GeometryCollection, RAY and XLINE are only a unit segment.
-* more dwgfilter examples, as from the osmctools, with keep and drop rules.
 * check osm tools https://gitlab.com/osm-c-tools/osmctools how
   they could import GIS data easier.
   Check OpenStreetMap XML and PBF formats.

@@ -1587,6 +1587,15 @@ Search and modify a single DWG file via @code{jq}, using the powerful
 JQ query expression language on a temporary json file. See @code{man jq}.
 
 With @code{-i} replaces the DWG in-place. This only makes sense with an JQ expression which changes values.
+The query is a single argument, so quote it. With @code{-i} it must return the whole changed JSON.
+
+@verbatim
+  dwgfilter '.OBJECTS[] | select(.object == "LAYER") | .name' example.dwg
+  dwgfilter '[.OBJECTS[] | select(.entity) | .entity] |
+             group_by(.) | map({(.[0]): length}) | add' example.dwg
+  dwgfilter -i '.HEADER.TEXTSIZE = 5' example.dwg
+  dwgfilter -i 'del(.OBJECTS[] | select(.entity == "TEXT"))' example.dwg
+@end verbatim
 
 @item @file{dwg2SVG}
 @cindex dwg2SVG

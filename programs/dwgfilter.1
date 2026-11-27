@@ -17,6 +17,16 @@ write back in\-place, with an updating JQ query
 .TP
 \&...
 all other options are passed to jq. See 'man jq'
+.PP
+The jq query is a single argument, so quote it. With \fB\-i\fR it must
+return the whole changed JSON.
+.SH EXAMPLES
+.IP
+dwgfilter '[.OBJECTS[] | select(.entity) | .entity] | group_by(.) | map({(.[0]): length}) | add' example.dwg
+dwgfilter '.OBJECTS[] | select(.object == "LAYER") | .name' example.dwg
+dwgfilter '.OBJECTS[] | select(.entity == "CIRCLE") | [.handle, .center, .radius]' example.dwg
+dwgfilter \-i '.HEADER.TEXTSIZE = 5' example.dwg
+dwgfilter \-i 'del(.OBJECTS[] | select(.entity == "TEXT"))' example.dwg
 .SH "SEE ALSO"
 The full documentation for
 .B dwgfilter
