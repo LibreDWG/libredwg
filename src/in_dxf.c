@@ -12313,7 +12313,7 @@ dxf_field_hdl_code (const Dwg_Object *restrict obj, const char *restrict name,
         }
     }
   else if (strEQc (fname, "history_id"))
-    code = 4;
+    code = 3;
   else if (strEQc (fname, "background"))
     code = 4;
   else if (strEQc (fname, "dimensionobj"))
@@ -12330,6 +12330,8 @@ dxf_field_hdl_code (const Dwg_Object *restrict obj, const char *restrict name,
     code = 3;
   else if (strEQc (fname, "sun"))
     code = 3;
+  else if (strEQc (fname, "shadeplot"))
+    code = 4;
   return code;
 }
 
@@ -16305,6 +16307,14 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                                 }
                               else
                                 {
+                                  // a handle given by value is a soft
+                                  // pointer, as in the DWG
+                                  if (pair->code > 300
+                                      && ref->handleref.code != 4
+                                      && ref->absolute_ref
+                                             == (BITCODE_RLL)pair->value.u)
+                                    ref = dwg_add_handleref (
+                                        dwg, 4, ref->absolute_ref, obj);
                                   dwg_dynapi_field_set_value (
                                       dwg, &o->plotsettings, f, &ref, 1);
                                   LOG_TRACE (

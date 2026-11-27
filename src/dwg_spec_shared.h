@@ -855,16 +855,16 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
     SINCE (R_2007a) {                                                         \
       if (!SOLID_SURFACE) {                                             \
         SUBCLASS (AcDb3dSolid);                                               \
-        FIELD_HANDLE (history_id, 4, 350);                                    \
+        FIELD_HANDLE (history_id, 3, 350);                                    \
       }                                                                       \
     }                                                                         \
   } else if (!SOLID_SURFACE                                             \
              && ((IF_IS_ENCODER ? dat->version >= R_2007a : SOLID_VERSION2)  \
                  || SOLID_SAT1_R2007)                                         \
              && (!IF_IS_DECODER || AVAIL_BITS (hdl_dat) >= 8)) {              \
-      FIELD_HANDLE (history_id, 4, 350);                                      \
+      FIELD_HANDLE (history_id, 3, 350);                                      \
   }                                                                           \
-  FREE { FIELD_HANDLE (history_id, 4, 350); }
+  FREE { FIELD_HANDLE (history_id, 3, 350); }
 
 /* The ACIS of the ACSH_SWEEP_CLASS and ACSH_EXTRUSION_CLASS method 37 only
    exists in the decoder, encoder and DXF exporters. */

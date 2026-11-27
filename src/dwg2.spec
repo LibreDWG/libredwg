@@ -587,7 +587,7 @@ DWG_ENTITY (TABLE)
   TABLE_R2010 //AC1024
     {
       FIELD_RC (unknown_rc, 0);
-      FIELD_HANDLE (unknown_h, 5, 0);
+      FIELD_HANDLE (unknown_h, 4, 0);
       FIELD_BL (unknown_bl, 0);
       VERSIONS (R_2010b, R_2010)
         FIELD_B (unknown_b, 0); // default 1

@@ -5442,7 +5442,7 @@ DWG_OBJECT (LAYOUT)
                        ARGS_REF (_obj->plotsettings.plotview));
         }
     }
-    FIELD_HANDLE (plotsettings.plotview, 4, 0); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
+    FIELD_HANDLE (plotsettings.plotview, 5, 0); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
     DECODER {
       if (!_obj->plotsettings.plotview_name && _obj->plotsettings.plotview)
         {
