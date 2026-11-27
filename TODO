@@ -1,9 +1,7 @@
-* pre-R13: finish POLYLINE, VERTEX
-* add API for more complex entities, like 3dsolids, hatch, ACSH solids, dynblocks.
-* PROXY graphics: decode MESH, SHELL, LWPOLYLINE, apply the sub entity
-  colors, layers and the model transformations in dwg2SVG
+* add API for dynblocks (3dsolids, hatch and the ACSH solids have one).
 * rename all internal ent->tio.ENTITY to ent->tio._ENTITY, so that all 3D names can
-  stay asis. Which fixes the public API for all _3D names, to be more consistent.
+  stay asis. Only _3DSOLID is renamed so far. Which fixes the public API for
+  all _3D names, to be more consistent.
 * TABLE_Cell
 * Enabled, but unstable and un(der)tested (see doc/LibreDWG.texi and
   src/classes.inc for the full list):
@@ -13,7 +11,7 @@
   LAYOUTPRINTCONFIG LIGHTLIST OBJECT_PTR PLANESURFACE PROXY_OBJECT
   TABLECONTENT PERSUBENTMGR EXTRUDEDSURFACE REVOLVEDSURFACE SWEPTSURFACE
   DATATABLE MTEXTATTRIBUTEOBJECTCONTEXTDATA ACSH_REVOLVE_CLASS ACSH_SWEEP_CLASS
-  ACSH_EXTRUSION_CLASS ACSH_LOFT_CLASS NURBSURFACE
+  ACSH_EXTRUSION_CLASS ACSH_LOFT_CLASS NURBSURFACE RAPIDRTRENDERENVIRONMENT
   ASSOCALIGNEDDIMACTIONBODY ASSOCSWEPTSURFACEACTIONBODY (the latter DWG only)
   MLEADEROBJECTCONTEXTDATA
 * Debugging only, with configure --enable-debug (fields spec'ed but
@@ -23,30 +21,16 @@
   ASSOCPERSSUBENTMANAGER NAVISWORKSMODELDEF
   *OBJECTCONTEXTDATA (all but ALDIM, BLKREF, LEADER, MTEXT, MTEXTATTRIBUTE, TEXT) ...
 * Unhandled (i.e. passed through, no DXF and fields):
-  ACDSRECORD ACDSSCHEMA NPOCOLLECTION RAPIDRTRENDERENVIRONMENT
+  ACDSRECORD ACDSSCHEMA NPOCOLLECTION
   XREFPANELOBJECT
 * add test coverage - i.e. an extended example_2018.dwg with all types,
-  for the following entities, which are in no test DWG (DGNUNDERLAY
-  DWFUNDERLAY LONG_TRANSACTION have a 2018/*.dxf or *.dxf now, but ODA writes
-  proxies): DGNUNDERLAY DWFUNDERLAY GEOPOSITIONMARKER LONG_TRANSACTION
-  PROXY_ENTITY PROXY_LWPOLYLINE DUMMY BACKGROUND
+  for the following entities, which are in no test DWG: GEOPOSITIONMARKER
+  PROXY_LWPOLYLINE DUMMY BACKGROUND
   (CAMERA is DXF only, there is never a DWG with it)
-* likewise for the following missing objects (DWFDEFINITION LIGHTLIST
-  VBA_PROJECT have a 2018/*.dxf now):
-  CSACDOCUMENTOPTIONS
-  DGNDEFINITION
-  XREFPANELOBJECT IDBUFFER IMAGEDEF
-  IMAGEDEF_REACTOR
-  NPOCOLLECTION OBJECT_PTR PROXY_OBJECT
-  RASTERVARIABLES UCS SUN
+* likewise for the following missing objects: CSACDOCUMENTOPTIONS
+  XREFPANELOBJECT NPOCOLLECTION UCS
 * check-dxf/outdxf: DXFIN coverage for all generated dxfs. some objects even crash acad:
   VERTEX_3D, MLINE.
-* DXFIN errors:
-  Fixed: Drawing_2007, 2010, 2018 (no errors). Drawing_2000_min is gone.
-  example_2000: Invalid LIGHT.class_version, PERSUBENTMGR: Unexpected DXF
-  code 0, expected 90 for num_subents, ASSOCPERSSUBENTMANAGER fields
-  numassocsteps and numassocsubents are invalid
-
 * convert XRECORD xdata linked-list ResBuf to array of eed[],
   same structure as common EED.
 * merge decode_r2007 with the 2004 decoder. It is almost the same, just
@@ -72,17 +56,11 @@
   At least I found proper docs for the ACIS SDK.
 * map DWG constraints to FreeCAD and SolveSpace constraints
   https://www.freecadweb.org/wiki/Sketcher_Workbench#Sketcher_Constraints
-* check valabind vapi files to generate more and better bindings
-  (e.g. radare2-bindings). c++, c#, rust, go, node, java, perl, ruby, php,
-  autolisp (via ARX).
-  Did so, I dislike it. Too much work, valabind crashes and requires glib and gobject.
-  See the work/vapi branch.
 * Finalize the gambas3 bindings, a Visual Basic variant for linux. See the gambas3-bindings
   repo and GauchoCAD on gitlab.
 * Add some UI to inspect the DWG internal structs (dwgiview), and maybe a viewer (dwgview).
   Started with perl-tk
 
-* fix the remaining leaks: indxf
 * finish documentation of the API functions, refman.
 * add the basic DWG layout, sections and API to the docs.
 * add fuzzing and solver-based test generation (bits)
