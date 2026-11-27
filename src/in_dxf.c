@@ -8006,7 +8006,7 @@ add_ASSOCDEPENDENCY (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_B (is_attached_to_object, 290);
   FIELD_B (is_delegating_to_owning_action, 290);
   FIELD_BLd (order, 90); /* -1 or 0 */
-  FIELD_HANDLE (dep_on, 3, 330);
+  FIELD_HANDLE (dep_on, 4, 330);
   FIELD_B (has_name, 290);
   if (o->has_name)
     {
@@ -8036,7 +8036,7 @@ add_sub_ASSOCDEPENDENCY (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   SUB_FIELD_B (assocdep, is_attached_to_object, 290);
   SUB_FIELD_B (assocdep, is_delegating_to_owning_action, 290);
   SUB_FIELD_BLd (assocdep, order, 90); /* -1 or 0 */
-  SUB_FIELD_HANDLE (assocdep, dep_on, 3, 330);
+  SUB_FIELD_HANDLE (assocdep, dep_on, 4, 330);
   SUB_FIELD_B (assocdep, has_name, 290);
   if (dwg_dynapi_subclass_value (o, "Dwg_Object_ASSOCDEPENDENCY", "has_name",
                                  &has_name, 0)

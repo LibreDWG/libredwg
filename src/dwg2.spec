@@ -2001,14 +2001,14 @@ DWG_OBJECT_END
   FIELD_B (assocdep.is_attached_to_object, 290);           \
   FIELD_B (assocdep.is_delegating_to_owning_action, 290);  \
   FIELD_BLd (assocdep.order, 90); /* -1 or 0 or -10000 */  \
-  FIELD_HANDLE (assocdep.dep_on, 3, 330);                  \
+  FIELD_HANDLE (assocdep.dep_on, 4, 330);                  \
   FIELD_B (assocdep.has_name, 290);                        \
   if (FIELD_VALUE (assocdep.has_name)) {                   \
     FIELD_T (assocdep.name, 1);                            \
   }                                                        \
   FIELD_HANDLE (assocdep.readdep, 4, 330);                 \
-  FIELD_HANDLE (assocdep.node, 3, 330);                    \
-  FIELD_HANDLE (assocdep.dep_body, 4, 360);                \
+  FIELD_HANDLE (assocdep.node, 4, 330);                    \
+  FIELD_HANDLE (assocdep.dep_body, 3, 360);                \
   FIELD_BLd (assocdep.depbodyid, 90)
 
 // (varies) UNSTABLE
@@ -2026,14 +2026,14 @@ DWG_OBJECT (ASSOCDEPENDENCY)
   FIELD_B (is_attached_to_object, 290);
   FIELD_B (is_delegating_to_owning_action, 290);
   FIELD_BLd (order, 90); /* -1 or 0 */
-  FIELD_HANDLE (dep_on, 3, 330);
+  FIELD_HANDLE (dep_on, 4, 330);
   FIELD_B (has_name, 290);
   if (FIELD_VALUE (has_name)) {
     FIELD_T (name, 1);
   }
   FIELD_HANDLE (readdep, 4, 330);
-  FIELD_HANDLE (node, 3, 330);
-  FIELD_HANDLE (dep_body, 4, 360);
+  FIELD_HANDLE (node, 4, 330);
+  FIELD_HANDLE (dep_body, 3, 360);
   FIELD_BLd (depbodyid, 90);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
