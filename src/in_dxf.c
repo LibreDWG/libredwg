@@ -7144,7 +7144,7 @@ add_EVAL_Node (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           break;
         case 360:
           o->nodes[i].evalexpr
-              = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+              = dwg_add_handleref (dwg, 3, pair->value.u, obj);
           LOG_TRACE ("%s.nodes[%d].evalexpr = " FORMAT_REF " [H %d]\n",
                      obj->name, i, ARGS_REF (o->nodes[i].evalexpr),
                      pair->code);
@@ -12290,6 +12290,49 @@ dxf_reconcile_binary_size (void *restrict _obj, const char *restrict name,
 
 /* For tables, entities and objects.
  */
+/* The handle code of a generic object field, by DXF group and field name.
+   Defaults to a soft pointer. */
+static int
+dxf_field_hdl_code (const Dwg_Object *restrict obj, const char *restrict name,
+                    const char *restrict fname, const int dxf)
+{
+  int code = 5;
+  if (obj->fixedtype == DWG_TYPE_VIEWPORT)
+    {
+      switch (dxf)
+        {
+        case 332:
+        case 333:
+          code = 4;
+          break;
+        case 361:
+          code = 3;
+          break;
+        default:
+          break;
+        }
+    }
+  else if (strEQc (fname, "history_id"))
+    code = 4;
+  else if (strEQc (fname, "background"))
+    code = 4;
+  else if (strEQc (fname, "dimensionobj"))
+    code = 4;
+  else if (strEQc (fname, "active_viewport") || strEQc (fname, "host_block"))
+    code = 4;
+  else if (strEQc (fname, "writedep") || strEQc (fname, "readdep"))
+    code = 4;
+  else if (strEQc (fname, "imagedefreactor"))
+    code = 3;
+  else if (strEQc (fname, "table_style"))
+    code = 3;
+  else if (strEQc (fname, "owner") && strEQc (name, "ACSH_HISTORY_CLASS"))
+    code = 3;
+  else if (strEQc (fname, "sun"))
+    code = 3;
+  return code;
+}
+
 static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
     char *restrict name, char *restrict dxfname, Bit_Chain *restrict dat,
     Dwg_Data *restrict dwg, BITCODE_BL ctrl_id, BITCODE_BL *i_p)
@@ -15857,39 +15900,8 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                             {
                               if (pair->code > 300)
                                 {
-                                  int code = 5; // default: soft pointer
-                                  if (obj->fixedtype == DWG_TYPE_VIEWPORT)
-                                    {
-                                      switch (pair->code)
-                                        {
-                                        case 340:
-                                        case 332:
-                                        case 333:
-                                          code = 4;
-                                          break;
-                                        case 361:
-                                          code = 3;
-                                          break;
-                                        default:
-                                          break;
-                                        }
-                                    }
-                                  else if (strEQc (f->name, "history_id"))
-                                    code = 4;
-                                  else if (strEQc (f->name, "background"))
-                                    code = 4;
-                                  else if (strEQc (f->name, "dimensionobj"))
-                                    code = 4;
-                                  else if (strEQc (f->name, "active_viewport")
-                                           || strEQc (f->name, "host_block"))
-                                    code = 4;
-                                  else if (strEQc (f->name, "writedep")
-                                           || strEQc (f->name, "readdep"))
-                                    code = 4;
-                                  else if (strEQc (f->name, "imagedefreactor"))
-                                    code = 3;
-                                  else if (strEQc (f->name, "table_style"))
-                                    code = 3;
+                                  int code = dxf_field_hdl_code (
+                                      obj, name, f->name, pair->code);
                                   ref = dwg_add_handleref (dwg, code,
                                                            pair->value.u, obj);
                                   LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n",
@@ -15899,8 +15911,11 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                               else if (pair->type == DWG_VT_INT32
                                        && pair->value.u)
                                 {
-                                  ref = dwg_add_handleref (dwg, 5,
-                                                           pair->value.u, obj);
+                                  ref = dwg_add_handleref (
+                                      dwg,
+                                      dxf_field_hdl_code (obj, name, f->name,
+                                                          pair->code),
+                                      pair->value.u, obj);
                                   LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n",
                                              name, f->name, ARGS_REF (ref),
                                              pair->code);
@@ -15920,6 +15935,18 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                             }
                           else
                             {
+                              // the handle value given as hex, with the
+                              // code of this field
+                              if (pair->code > 300
+                                  && ref->absolute_ref
+                                         == (BITCODE_RLL)pair->value.u)
+                                {
+                                  const int code = dxf_field_hdl_code (
+                                      obj, name, f->name, pair->code);
+                                  if (ref->handleref.code != code)
+                                    ref = dwg_add_handleref (
+                                        dwg, code, ref->absolute_ref, obj);
+                                }
                               dwg_dynapi_entity_set_value (_obj, obj->name,
                                                            f->name, &ref, 1);
                               LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n",

@@ -3233,7 +3233,7 @@ DWG_OBJECT (ACSH_HISTORY_CLASS)
   SUBCLASS (AcDbShHistory);
   FIELD_BL (major, 90);
   FIELD_BL (minor, 91);
-  FIELD_HANDLE (owner, 2, 360);
+  FIELD_HANDLE (owner, 3, 360);
   FIELD_BL (h_nodeid, 92);
   FIELD_B (show_history, 280);
   FIELD_B (record_history, 281);
@@ -3757,7 +3757,7 @@ DWG_OBJECT (EVALUATION_GRAPH)
         break;
       }
       SUB_FIELD_BLd (nodes[rcount1], nextid, 95); // 1
-      SUB_FIELD_HANDLE (nodes[rcount1], evalexpr, 5, 360);
+      SUB_FIELD_HANDLE (nodes[rcount1], evalexpr, 3, 360);
       SUB_FIELD_VECTOR_INL (nodes[rcount1], node, BLd, 4, 92)
       if (FIELD_VALUE (has_graph))
         SUB_FIELD_B (nodes[rcount1], active_cycles, 0);
