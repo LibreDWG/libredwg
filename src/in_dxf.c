@@ -1831,7 +1831,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else if (strEQc (f->type, "H"))
             {
               BITCODE_H hdl;
-              hdl = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
+              hdl = dwg_add_handleref (dwg, 5, pair->value.u, NULL);
               LOG_TRACE ("HEADER.%s %X [H %d]\n", &field[1], pair->value.u,
                          pair->code);
               dwg_dynapi_header_set_value (dwg, &field[1], &hdl, 1);
