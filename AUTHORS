@@ -1,3 +1,6 @@
+Baptiste Teulier <baptisteteulier@gmail.com>
+        DXF import fix and regression test for MTEXT rectangle height.
+
 Sam Coleman <namelocmas@gmail.com>
         Misc. PR's, esp. for dxf-import memory leaks.
 
