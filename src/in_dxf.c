@@ -6148,9 +6148,9 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
           if (mode == CONTENTFORMAT)
             {
               o->content_format.text_style
-                  = dwg_add_handleref (dwg, 3, pair->value.u, NULL);
+                  = dwg_add_handleref (dwg, 5, pair->value.u, NULL);
               LOG_TRACE ("%s.%s.content_format.text_style = " FORMAT_REF
-                         " [H 3 %d]\n",
+                         " [H 5 %d]\n",
                          obj->name, key,
                          ARGS_REF (o->content_format.text_style), pair->code);
             }
@@ -6159,8 +6159,8 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
               if (grid < 0 || grid >= (int)o->num_borders)
                 return NULL;
               o->borders[grid].ltype
-                  = dwg_add_handleref (dwg, 3, pair->value.u, NULL);
-              LOG_TRACE ("%s.%s.borders[%d].ltype = " FORMAT_REF " [H 3 %d]\n",
+                  = dwg_add_handleref (dwg, 5, pair->value.u, NULL);
+              LOG_TRACE ("%s.%s.borders[%d].ltype = " FORMAT_REF " [H 5 %d]\n",
                          obj->name, key, grid,
                          ARGS_REF (o->borders[grid].ltype), pair->code);
             }

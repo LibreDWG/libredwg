@@ -237,7 +237,7 @@ DWG_OBJECT_END
   FIELD_BD (fmt.block_scale, 140);                \
   FIELD_BL (fmt.cell_alignment, 94);              \
   FIELD_CMTC (fmt.content_color, 62);             \
-  FIELD_HANDLE (fmt.text_style, 3, 340);          \
+  FIELD_HANDLE (fmt.text_style, 5, 340);          \
   FIELD_BD (fmt.text_height, 144);                \
   DXF { VALUE_TFF ("CONTENTFORMAT_END", 309) }
 
@@ -285,7 +285,7 @@ DWG_OBJECT_END
 	    SUB_FIELD_BL (sty.borders[rcount4],border_type, 91);	\
 	    SUB_FIELD_CMTC (sty.borders[rcount4],color, 62);		\
 	    SUB_FIELD_BLd (sty.borders[rcount4],linewt, 92);		\
-	    SUB_FIELD_HANDLE (sty.borders[rcount4],ltype, 3, 340);	\
+	    SUB_FIELD_HANDLE (sty.borders[rcount4],ltype, 5, 340);	\
 	    SUB_FIELD_BL (sty.borders[rcount4],visible, 93);		\
 	    SUB_FIELD_BD (sty.borders[rcount4],double_line_spacing, 40);\
 	  }								\
