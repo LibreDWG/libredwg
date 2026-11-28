@@ -804,13 +804,16 @@ close_pi (FILE *pi, long class_filled, long class_size, int k)
   int i;
   // class_summary
   fprintf (pi, "\n%% summary: %ld/%ld=%.1f%%\n\n", class_filled, class_size,
-           100.0 * class_filled / class_size);
+           class_size ? 100.0 * class_filled / class_size : 0.0);
 
+  if (!k) // nothing to pack: "main => go0," is a syntax error
+    fprintf (pi, "main => true.\n");
   for (i = 0; i < k; i++)
     {
       fprintf (pi, "go%d ?=> def(%d,Data).\n", i, i);
     }
-  fprintf (pi, "\nmain => go0%s\n", k == 1 ? "." : ",");
+  if (k)
+    fprintf (pi, "\nmain => go0%s\n", k == 1 ? "." : ",");
   for (i = 1; i < k; i++)
     {
       fprintf (pi, "        go%d%s\n", i, i == k - 1 ? "." : ",");
