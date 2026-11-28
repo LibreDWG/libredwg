@@ -12476,6 +12476,10 @@ static const Dwg_DYNAPI_field _dwg_POINTCLOUDCOLORMAP_Ramp_fields[] = {
     0,0,0, 90 },
   { "ramps",	"Dwg_ColorRamp*", sizeof (Dwg_ColorRamp*),  OFF (struct _dwg_POINTCLOUDCOLORMAP_Ramp, ramps),
     1,1,0, 0 },
+  { "guid",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_POINTCLOUDCOLORMAP_Ramp, guid),
+    1,1,1, 1 },
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_POINTCLOUDCOLORMAP_Ramp, name),
+    1,1,1, 1 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_POINTCLOUDEX_Croppings: (sorted by offset) */

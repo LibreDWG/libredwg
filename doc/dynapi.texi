@@ -15410,6 +15410,10 @@ BS,	DXF 70
 BL,	DXF 90
 @item ramps
 Dwg_ColorRamp*
+@item guid
+T,	DXF 1
+@item name
+T,	DXF 1
 
 @end vtable
 @end indentedblock
