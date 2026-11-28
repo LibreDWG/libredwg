@@ -1835,6 +1835,9 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
       return error;
     }
 
+  /* bit_check_CRC syncs the loglevel from dat->opts, as in the 2004 reader */
+  obj_dat.opts = hdl_dat.opts = dwg->opts & DWG_OPTS_LOGLEVEL;
+
   /* From here on the same code as in decode:read_2004_section_handles */
   startpos = hdl_dat.byte;
   endpos = hdl_dat.byte + hdl_dat.size;
