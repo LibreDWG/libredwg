@@ -73,12 +73,19 @@ odaversion_SOURCES          = odaversion.c
 
 all: $(check_PROGRAMS)
 
-.PHONY: check-syntax regen-unknown full-regen-unknown dsymutil gcov cppcheck \
-	check-minimal
+.PHONY: check-syntax regen-unknown full-regen-unknown regen-unknown-check \
+	dsymutil gcov cppcheck check-minimal
 
 if HAVE_PERL
 # maintainer rules only
-regen-unknown:
+# The unstable classes are only decoded with DEBUG_CLASSES, so the generated
+# includes are incomplete in all other builds. Do not touch them then.
+regen-unknown-check:
+	@grep -q '^#define DEBUG_CLASSES' ../src/config.h || { \
+	  echo "regen-unknown needs a --enable-debug build (DEBUG_CLASSES), e.g. .build-debug"; \
+	  exit 1; }
+
+regen-unknown: regen-unknown-check
 	echo "use existing $(srcdir)/alldwg.inc"
 	-mv $(srcdir)/alldxf_0.inc alldxf_0.inc~ 2>/dev/null
 	-mv $(srcdir)/alldxf_1.inc alldxf_1.inc~ 2>/dev/null
@@ -87,7 +94,7 @@ regen-unknown:
 	-$(MAKE) -C .. unknown
 	$(PERL) $(srcdir)/bd-unknown.pl | sort | uniq -w 96 >$(srcdir)/bd-unknown.inc
 
-full-regen-unknown:
+full-regen-unknown: regen-unknown-check
 	echo Creating $(srcdir)/alldwg.inc will need a few minutes...
 	-rm *_r??.log *_20??.log DS_*.log 2>/dev/null
 	-(cd .. && ./logs-all.sh; \
@@ -111,6 +118,9 @@ $(srcdir)/alldxf_2.inc: alldxf_1.inc
 $(srcdir)/alldxf_1.inc: alldxf_0.inc
 $(srcdir)/alldxf_0.inc: alldwg.inc log_unknown_dxf.pl
 $(srcdir)/alldwg.inc: log_unknown.pl
+else
+regen-unknown full-regen-unknown:
+	@echo "$@ needs perl, which configure did not find"; exit 1
 endif
 
 if HAVE_WINE
