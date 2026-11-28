@@ -18,6 +18,7 @@ BuildRequires:  perl(Convert::Binary::C)
 BuildRequires:  perl(ExtUtils::Embed)
 BuildRequires:  pcre2-devel
 BuildRequires:  pslib-devel
+BuildRequires:  plotutils-devel
 BuildRequires:  libasan
 BuildRequires:  libubsan
 BuildRequires:  texinfo
@@ -127,6 +128,7 @@ fi
 %{_bindir}/dwgbmp
 %{_bindir}/dwgadd
 %{_bindir}/dwgfilter
+%{_bindir}/dwgplot
 %{_bindir}/dwggrep
 %{_bindir}/dwglayers
 %{_bindir}/dwgread
@@ -135,13 +137,14 @@ fi
 %{_bindir}/dxf2dwg
 %{_bindir}/dxfwrite
 %{_libdir}/libredwg.so.0
-%{_libdir}/libredwg.so.0.0.13
+%{_libdir}/libredwg.so.0.0.15
 %{_mandir}/man1/dwg2SVG.1.gz
 %{_mandir}/man1/dwg2dxf.1.gz
 %{_mandir}/man1/dwg2ps.1.gz
 %{_mandir}/man1/dwgadd.1.gz
 %{_mandir}/man1/dwgbmp.1.gz
 %{_mandir}/man1/dwgfilter.1.gz
+%{_mandir}/man1/dwgplot.1.gz
 %{_mandir}/man1/dwggrep.1.gz
 %{_mandir}/man1/dwglayers.1.gz
 %{_mandir}/man1/dwgread.1.gz
