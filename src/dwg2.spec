@@ -3005,8 +3005,10 @@ DWG_OBJECT_END
   DXF { FIELD_BL (evalexpr.nodeid, 90); }                                     \
   FIELD_BLd (evalexpr.parentid, 0);                                           \
   DXF {                                                                       \
-    VALUE_BL (33, 98);                                                        \
-    VALUE_BL (29, 99);                                                        \
+    VALUE_BL (FIELD_VALUE (evalexpr.major) ? FIELD_VALUE (evalexpr.major)     \
+                                           : 33, 98);                         \
+    VALUE_BL (FIELD_VALUE (evalexpr.minor) ? FIELD_VALUE (evalexpr.minor)     \
+                                           : 29, 99);                         \
   } else {                                                                    \
     FIELD_BL (evalexpr.major, 98);                                            \
     FIELD_BL (evalexpr.minor, 99);                                            \
@@ -3407,8 +3409,8 @@ DWG_OBJECT_END
       VALUE_BL (25, 98);                        \
       VALUE_BL (104, 99);                       \
     } LATER_VERSIONS {                          \
-      VALUE_BL (33, 98);                        \
-      VALUE_BL (29, 99);                        \
+      VALUE_BL (FIELD_VALUE (be_major) ? FIELD_VALUE (be_major) : 33, 98); \
+      VALUE_BL (FIELD_VALUE (be_minor) ? FIELD_VALUE (be_minor) : 29, 99); \
     }                                           \
   }                                             \
   FIELD_BL (eed1071, 1071)
