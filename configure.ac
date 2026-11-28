@@ -443,7 +443,11 @@ AC_MSG_CHECKING([for --enable-debug])
 AC_ARG_ENABLE([debug],AS_HELP_STRING([--enable-debug],[
     Enable unstable DEBUG_CLASSES (default: no).]),
   [if test x$ac_compiler_gnu = xyes; then
-    CFLAGS="`echo $CFLAGS|sed 's,-O2,,'` -fno-omit-frame-pointer"
+    dnl rcc and others define __GNUC__, but only warn about gcc options they
+    dnl do not know. The build has -Werror, so check with it.
+    AX_CHECK_COMPILE_FLAG([-fno-omit-frame-pointer],
+      [CFLAGS="`echo $CFLAGS|sed 's,-O2,,'` -fno-omit-frame-pointer"],
+      [], [-Werror])
   fi
   AC_DEFINE([DEBUG_CLASSES],1,[Define to enable unstable classes.])
   AC_SUBST(DEBUG_CLASSES, 1)
