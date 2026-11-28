@@ -112,7 +112,7 @@ TIMEOUT_30 = @TIMEOUT_30@
 
 unknown:
 	-mv examples/alldwg.skip examples/alldwg.skip~
-	$(MAKE) -C src bits.lo && \
+	$(MAKE) -C src bits.lo common.lo codepages.lo && \
 	  $(MAKE) -C examples unknown$(EXEEXT) bd$(EXEEXT) bits$(EXEEXT) && \
 	  $(LTEXEC) examples/unknown$(EXEEXT) >examples/$(UNKNOWN_LOG) 2>examples/$(UNKNOWN_SKIP)
 	if test -s examples/alldwg.skip; then true; \
