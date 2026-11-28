@@ -25,8 +25,10 @@
 #  error in_dxf.h must be included after out_json.h because of FORMAT_BD
 #endif
 
-EXPORT int dwg_write_json_dat (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
-EXPORT int dwg_write_geojson_dat (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+EXPORT int dwg_write_json_dat (Bit_Chain *restrict dat,
+                               Dwg_Data *restrict dwg);
+EXPORT int dwg_write_geojson_dat (Bit_Chain *restrict dat,
+                                  Dwg_Data *restrict dwg);
 
 // converts a TV to a UTF-8 string (with codepage conversion) and quoting
 // ", \n \r, U+XXXX

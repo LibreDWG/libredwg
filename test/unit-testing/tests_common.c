@@ -248,16 +248,24 @@ main (int argc, char *argv[])
     {
       char **ptr;
       struct stat attrib;
-      const char *const files[]
-          = { "example_2000.dwg", "example_2004.dwg", "example_2007.dwg",
-              "example_2010.dwg", "example_2013.dwg", "example_2018.dwg",
-              "example_r14.dwg", "example_r13.dwg",
+      const char *const files[] = { "example_2000.dwg",
+                                    "example_2004.dwg",
+                                    "example_2007.dwg",
+                                    "example_2010.dwg",
+                                    "example_2013.dwg",
+                                    "example_2018.dwg",
+                                    "example_r14.dwg",
+                                    "example_r13.dwg",
 #ifdef USE_WRITE
-              "r11/ACEB10.dwg", "r11/entities-3d.dwg", "r10/entities.dwg",
-              "r9/entities.dwg", "r2.10/entities.dwg", "r2.6/entities.dwg",
-              "r1.4/entities.dwg",
+                                    "r11/ACEB10.dwg",
+                                    "r11/entities-3d.dwg",
+                                    "r10/entities.dwg",
+                                    "r9/entities.dwg",
+                                    "r2.10/entities.dwg",
+                                    "r2.6/entities.dwg",
+                                    "r1.4/entities.dwg",
 #endif
-              NULL };
+                                    NULL };
       const char *prefix = "../test-data";
 
       if (dir)
@@ -340,9 +348,9 @@ main (int argc, char *argv[])
                                      cov);
         }
       if (DWG_TYPE == DWG_TYPE_MULTILEADER)
-       {
-         error += test_code_nodist (prefix, "../issues/gh518/9.dwg", cov);
-       }
+        {
+          error += test_code_nodist (prefix, "../issues/gh518/9.dwg", cov);
+        }
       // if no coverage
       if (!numpassed () && !numfailed ())
         {

@@ -15397,8 +15397,7 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
             {
               // not the is_default 290 of AcDbObjectContextData
               obj->tio.object->tio.MTEXTATTRIBUTEOBJECTCONTEXTDATA
-                  ->enable_context
-                  = pair->value.i;
+                  ->enable_context = pair->value.i;
               LOG_TRACE ("%s.enable_context = %d [B 290]\n", name,
                          pair->value.i);
               goto next_pair;

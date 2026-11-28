@@ -1401,8 +1401,7 @@ encode_r2007_test (void)
                   (unsigned)back.num_classes, (unsigned)back.num_objects);
       else if (back.dwg_class[0].dwg_version != 0x10021
                || back.dwg_class[0].maint_version != 427)
-        snprintf (msg, sizeof msg,
-                  "class versions not read back: %u, %u",
+        snprintf (msg, sizeof msg, "class versions not read back: %u, %u",
                   (unsigned)back.dwg_class[0].dwg_version,
                   (unsigned)back.dwg_class[0].maint_version);
     }

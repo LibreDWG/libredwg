@@ -38,8 +38,7 @@ api_process (dwg_object *obj)
                            class_version, BS);
         CHK_SUBCLASS_TYPE (colorramps[i], POINTCLOUDCOLORMAP_Ramp, num_ramps,
                            BL);
-        if (class_version == 4
-            && (!colorramps[i].guid || !colorramps[i].name))
+        if (class_version == 4 && (!colorramps[i].guid || !colorramps[i].name))
           fail ("Missing POINTCLOUDCOLORMAP_Ramp GUID or name");
         if (!dwg_dynapi_subclass_value (&colorramps[i],
                                         "POINTCLOUDCOLORMAP_Ramp", "ramps",

@@ -1739,9 +1739,8 @@ dxf_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
                           && data->u.eed_1.appid_index < _c->num_entries
                           && _c->entries[data->u.eed_1.appid_index])
                         appid = dwg_resolve_handle (
-                            dwg,
-                            _c->entries[data->u.eed_1.appid_index]
-                                ->absolute_ref);
+                            dwg, _c->entries[data->u.eed_1.appid_index]
+                                     ->absolute_ref);
                     }
                   if (appid && appid->fixedtype == DWG_TYPE_APPID)
                     VALUE_T (appid->tio.object->tio.APPID->name, 1001)

@@ -599,12 +599,12 @@ static void
 object_map_handle_test (void)
 {
   // The R2000 POINT at the end of a wrapped handle delta, including its CRC.
-  unsigned char point[] = { 0x18, 0x00, 0x46, 0xe5, 0x80, 0x00, 0x00,
-                            0x02, 0x3f, 0xff, 0xff, 0xff, 0xff, 0xff,
-                            0xff, 0xfe, 0x65, 0x34, 0x21, 0xda, 0xb8,
-                            0xc1, 0x01, 0x01, 0x44, 0x9c, 0x21, 0xc4 };
-  unsigned char delta[] = { 0xc7, 0xff, 0xff, 0xff, 0xff,
-                            0xff, 0xff, 0xff, 0xff, 0x01 };
+  unsigned char point[]
+      = { 0x18, 0x00, 0x46, 0xe5, 0x80, 0x00, 0x00, 0x02, 0x3f, 0xff,
+          0xff, 0xff, 0xff, 0xff, 0xff, 0xfe, 0x65, 0x34, 0x21, 0xda,
+          0xb8, 0xc1, 0x01, 0x01, 0x44, 0x9c, 0x21, 0xc4 };
+  unsigned char delta[]
+      = { 0xc7, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x01 };
   const BITCODE_HV handle = UINT64_C (0xFFFFFFFFFFFFFFF9);
   Bit_Chain map = EMPTY_CHAIN (sizeof (delta));
 
@@ -664,9 +664,8 @@ section_growth_test (void)
   dwg.header.section_info = &info;
   dwg.header.section_infohdr.num_desc = 1;
   error = add_section (&dwg);
-  if (!error && pages[0] == dwg.header.section
-      && pages[0]->address == 1234 && !pages[1]
-      && dwg.header.num_sections == 2)
+  if (!error && pages[0] == dwg.header.section && pages[0]->address == 1234
+      && !pages[1] && dwg.header.num_sections == 2)
     ok ("Section map growth preserves borrowed page pointers");
   else
     fail ("Section map growth invalidates borrowed page pointers");
@@ -700,11 +699,11 @@ template_section_growth_test (void)
   dwg.header.section_infohdr.num_desc = 2;
   is_teigha = 1;
   /* Stop at the decompression-size guard, after the real template fixup. */
-  error = read_2004_compressed_section (&dat, &dwg, &sec_dat,
-                                        SECTION_TEMPLATE);
+  error
+      = read_2004_compressed_section (&dat, &dwg, &sec_dat, SECTION_TEMPLATE);
   is_teigha = saved_teigha;
-  if (error == DWG_ERR_VALUEOUTOFBOUNDS
-      && dwg.header.num_sections == 2 && infos[0].num_sections == 1
+  if (error == DWG_ERR_VALUEOUTOFBOUNDS && dwg.header.num_sections == 2
+      && infos[0].num_sections == 1
       && infos[0].sections[0] == &dwg.header.section[1]
       && page == dwg.header.section && page->address == 1234)
     ok ("Teigha template growth preserves the later ACDS page");

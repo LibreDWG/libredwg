@@ -2115,8 +2115,12 @@ test_api_version (void)
               major, minor, i0, i1);
       else
         {
-          assert (major == i0);
-          assert (minor == i1);
+          if (major != (int)i0)
+            fail ("major %d != %ld", major, i0);
+          assert (major == (int)i0);
+          if (minor != (int)i1)
+            fail ("minor %d != %ld", minor, i1);
+          assert (minor == (int)i1);
         }
     }
   else

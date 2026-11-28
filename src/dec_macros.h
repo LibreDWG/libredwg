@@ -1080,7 +1080,7 @@
         free (_obj->nam), _obj->nam = NULL;                                   \
       size = 0; /* return DWG_ERR_VALUEOUTOFBOUNDS; */                                  \
     }
-            // for static TFF types with a size field
+// for static TFF types with a size field
 #define _VECTOR_CHKCOUNT(nam, size, maxelemsize, dat)                         \
   if ((int64_t)(size) > AVAIL_BITS (dat)                                      \
       || (int64_t)(size) * (maxelemsize) > AVAIL_BITS (dat))                  \

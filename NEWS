@@ -90,9 +90,28 @@ Security fixes:
   * Fixed GHSA-w5cw-g5gp-p6vf (algorithmic complexity): the r2007 reader
     looked up every section page with a linear get_page(), which was
     quadratic.  It uses an index now.
+  * Fixed GHSA-4cc5-r3qr-m9w3: use-after-free in the add API.
+    dwg_add_VIEWPORT, _LEADER, _DIMENSION_*, _ATTRIB and _Attribute kept a
+    stale Dwg_Object * across dwg_add_object, which can realloc
+    dwg->object[].  The pointers are re-resolved by index now.
+  * Fixed GHSA-jqp7-x35p-3wvx: double free in add_ent_preview after an empty
+    DXF 310 preview chunk.  Empty chunks are skipped.
+  * Fixed GHSA-6c66-qgw3-83w8: heap-buffer-overflow WRITE in
+    add_3DSOLID_encr when importing a DXF with a short or malformed SAT
+    version string.
+  * Fixed GHSA-37w4-c8mv-7m8f: LTYPE dash texts are only written to DXF and
+    DXFB when they are terminated inside their strings_area (OOB read in
+    bit_convert_TU).  Defensive, the report was not reproducible.
+  * Fixed GHSA-w67w-f2fw-prvj: heap-buffer-overflow READ in bit_calc_CRC of
+    the r2004 handles page.  The r2004 resync no longer runs past the
+    buffer, and both the r2004 and r2007 handles readers check the page
+    against the section before its CRC.
+  * GHSA-7jxh-fh88-ccx2 (OOB reads in decompress_r2007 instruction and
+    literal length readers) was already fixed by the src_end checks.
 
 Major features:
   * use mmap for input files.
+  * big-endian support, ppc64 and s390x now run the full CI.
   * new stable entity: ACIDBLOCKREFERENCE
   * unstable -> stable: MATERIAL, TABLE, TABLESTYLE, DIMASSOC,
     ALDIMOBJECTCONTEXTDATA, MTEXTOBJECTCONTEXTDATA, BLKREFOBJECTCONTEXTDATA,
@@ -148,7 +167,9 @@ Major features:
     data style is missing; other custom cell styles are dropped with a
     warning, as that format has no place for them.
   * GeoJSON: added MLINE, MINSERT (MultiPoint), SOLID, TRACE, 3DFACE, RAY,
-    XLINE, POLYLINE_PFACE (MultiPolygon) and POLYLINE_MESH (MultiLineString).
+    XLINE, POLYLINE_PFACE (MultiPolygon), POLYLINE_MESH (MultiLineString),
+    Attributes, HATCH, ELLIPSE, SPLINE, bulged curve segments,
+    UCS transformations (by Antonio García Leal)
   * Added the r2007 DWG writer (new src/encode_r2007.c): r2007 (AC1021) DWGs
     are now written in the r2007 format instead of falling back to r2010,
     with Reed-Solomon coded pages, a new LZ77 compressor (the inverse of
@@ -282,28 +303,34 @@ Minor bugfixes / fuzzing fixes:
     table records and BLOCK.xref_pname), and the testcases 6383958498279424
     (double dwg_free after a failed JSON import) and 5647996143075328
     (dxfb_ENDBLK_empty leak).
-  * All the OSS-Fuzz issues closed since 0.14 (45, 42 verified, 3 not
+  * All the OSS-Fuzz issues closed since 0.14 (52, 49 verified, 3 not
     reproducible):
-    Heap-buffer-overflow: 586576797 (bit_write_TF), 584255889
-    (dxf_process_VERTEX_2D), 583497902 583493833 587347125 (json_eed),
-    587020301 (dxfb_write_eed), 585006963 (dwg_encode_eed_data), 584815047
-    (bit_write_T16), 584794411 (dwg_encode_xdata), 542249044 531106748
-    42534122 (dxf_entities_read), 538648852 526016910
-    (dwg_encode_add_object), 529593671 (json_objects_write), 42531271
-    (dwg_decode_INSERT_private), 525088817 (dxf_fixup_string), 525088107
-    (dwg_geojson_object), 42533395 (dynapi_set_helper).
-    Null-dereference: 587110816 (dwg_require_class), 42531515 (in_hex2bin),
-    530086151 524854787 (encode_preR13_section), 530762732
-    (dwg_dxfb_PROXY_ENTITY), 525291340 (dwg_dxfb_BLOCK_HEADER), 42533974
-    (dwg_free_MLINESTYLE_private), 524392897 (bit_utf8_to_TV).
-    Use-after-free, double-free, others: 583321233 (dxf_tables_write),
+    Heap-buffer-overflow: 589206476 (Overflow in VERTEX_MESH), 586576797
+    (bit_write_TF), 584255889 (dxf_process_VERTEX_2D), 583497902 583493833
+    587347125 (json_eed), 587020301 (dxfb_write_eed), 585006963
+    (dwg_encode_eed_data), 584815047 (bit_write_T16), 584794411
+    (dwg_encode_xdata), 542249044 531106748 42534122 (dxf_entities_read),
+    538648852 526016910 (dwg_encode_add_object), 529593671
+    (json_objects_write), 42531271 (dwg_decode_INSERT_private), 525088817
+    (dxf_fixup_string), 525088107 (dwg_geojson_object), 42533395
+    (dynapi_set_helper).
+    Null-dereference: 589206481 (READ in json_eed), 587110816
+    (dwg_require_class), 42531515 (in_hex2bin), 530086151 524854787
+    (encode_preR13_section), 530762732 (dwg_dxfb_PROXY_ENTITY), 525291340
+    (dwg_dxfb_BLOCK_HEADER), 42533974 (dwg_free_MLINESTYLE_private),
+    524392897 (bit_utf8_to_TV).
+    Use-after-free, double-free, others: 589529859 (UAF in dwg_encode_entity),
+    587967838 (UAF in dwg_free_common_entity), 583321233 (dxf_tables_write),
     529581210 (dxf_blocks_read), 528859714 42535236 (dxf_entities_read),
     528059079 (section_move_before), 524832524 (dwg_encode), 444908414
     (bit_read_MC), 42510991 (dxf_header_read).
     Leaks: 552005396 536190545 (in_postprocess_SEQEND), 382816124
     (bit_read_TV).
-    Out-of-memory: 532220989 530086146 527085540.
-    Timeouts: 531651998 530576161 528659158 526962317.
+    Out-of-memory: 584072754 (Out-of-memory in llvmfuzz), 532220989 530086146
+    527085540.
+    Timeouts: 532839129 (Timeout in llvmfuzz), 531651998 530576161 528659158
+    526962317.
+    Abort: 588507950 (Abrt in _int_free).
   * Fixed now all the remaining memory leaks in in_dxf (GH #151): the unit
     tests, dxf.test, dxfb.test, dxfread.test and the dxf2dwg of alive.test
     now run with the asan leak detection (no more detect_leaks=0).  Freed are
@@ -317,7 +344,8 @@ Minor bugfixes / fuzzing fixes:
     was lost, and the DXF was a zeroed surface which ODA rejected with
     "Object improperly read".  The DXF roundtrips of 2018/Surface.dwg and
     2004/Surface.dwg pass ODA now.  The cached wireframe of the surfaces
-    and solids is still not in the DXF (it is not in ODA's DXF either).
+    and solids is still not in the DXF (it is not in ODA's DXF either), we
+    have no open solid modeller from ACIS yet to reconstruct them by our own.
   * GeoJSON: write the coordinate reference system as the "crs" member of the
     FeatureCollection, WGS 84 (urn:ogc:def:crs:OGC:1.3:CRS84) by default, as
     the RFC 7946 requires without any "crs", or the EPSG code of a GEODATA
@@ -331,6 +359,20 @@ Minor bugfixes / fuzzing fixes:
     plot(5) meta format.  GH #229.
   * dwg2SVG and dwg2ps are deprecated, and will be replaced by dwgplot,
     with dwgplot -T svg and dwgplot -T ps.
+  * Fixed the DXF import and export handle codes (GH #1588): header handle
+    variables, ASSOCDEPENDENCY dep_on/node (soft) and dep_body (hard),
+    BLOCK_HEADER.entities, the cellstyle ltype and text_style, LAYOUT
+    plotview/shadeplot, history_id and unknown_h, and handles given by value
+    now keep the code of their field in the roundtrip.
+  * EVALEXPR and BLOCKELEMENT write their stored major and minor version to
+    DXF.
+  * in_dxf: ordinary MTEXT keeps its defined height (PR #1589).
+  * Removed LEADER.unknown_short_1 for r2000+.
+  * decode_r2007: -v4 logs all objects.
+  * dwgfilter: fixed the -i write-back, added examples.
+  * configure: --enable-debug checks -fno-omit-frame-pointer, make unknown
+    builds common.lo and codepages.lo, and the rpm spec requires libplot for
+    dwgplot.  examples/unknown.pi runs the field packing solver.
 
 LibreDWG version 0.14 - 2026-06-27 - beta:
 
@@ -440,7 +482,6 @@ Minor bugfixes:
   * Fixed ossfuzz 42533974: SEGV in dwg_free_MLINESTYLE_private caused by
     union aliasing of lt.index (BSd) and lt.ltype (H) in MLINESTYLE_line.
     Un-unionized the two fields to lt_index and lt_ltype.
-  * Promoted DIMASSOC to unstable.
   * Fixed compilation on modern GCC, macOS CI, mingw, and Windows
     (appveyor-deploy).
   * Many compiler warning fixes (-Walloc-size, -Wunused-variables,

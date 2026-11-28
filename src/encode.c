@@ -1596,9 +1596,8 @@ preR13_block_wanted (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
   hdr = obj->tio.object->tio.BLOCK_HEADER;
   if (!hdr->name)
     return true;
-  name = IS_FROM_TU_DWG (dwg)
-             ? bit_convert_TU ((BITCODE_TU)hdr->name)
-             : hdr->name;
+  name = IS_FROM_TU_DWG (dwg) ? bit_convert_TU ((BITCODE_TU)hdr->name)
+                              : hdr->name;
   if (name
       && (!strncasecmp (name, "*MODEL_SPACE", 12)
           || !strncasecmp (name, "*PAPER_SPACE", 12)))
@@ -1655,9 +1654,8 @@ preR13_table_number (Dwg_Data *restrict dwg, Dwg_Object *restrict ctrl,
   _ctrl = ctrl->tio.object->tio.APPID_CONTROL;
   for (BITCODE_BL i = 0; _ctrl->entries && i < _ctrl->num_entries; i++)
     {
-      Dwg_Object *o = _ctrl->entries[i]
-                          ? dwg_ref_object (dwg, _ctrl->entries[i])
-                          : NULL;
+      Dwg_Object *o
+          = _ctrl->entries[i] ? dwg_ref_object (dwg, _ctrl->entries[i]) : NULL;
       if (!o || o->fixedtype != type)
         {
           LOG_TRACE ("%s.entries[%u] is not a %s\n", ctrl->name, i,

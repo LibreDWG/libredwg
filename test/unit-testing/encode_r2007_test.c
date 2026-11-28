@@ -164,9 +164,8 @@ static void
 raw_page_size_test (void)
 {
   static const size_t sizes[][2]
-      = { { 128, 160 },     { 768, 800 },     { 1024, 1056 },
-          { 1280, 1312 },   { 2048, 2112 },   { 0x6c00, 28096 },
-          { 303104, 307936 } };
+      = { { 128, 160 },   { 768, 800 },      { 1024, 1056 },    { 1280, 1312 },
+          { 2048, 2112 }, { 0x6c00, 28096 }, { 303104, 307936 } };
   size_t i, bad = 0;
   for (i = 0; i < sizeof (sizes) / sizeof (sizes[0]); i++)
     if (raw_page_size (sizes[i][0]) != sizes[i][1])
@@ -296,9 +295,9 @@ check_r2007_pages (const char *what, unsigned char *buf, size_t size,
       return 1;
     }
   dat.byte += 0x28 + hdr.pages_map_offset;
-  pages_map = read_pages_map (&dat, hdr.pages_map_size_comp,
-                              hdr.pages_map_size_uncomp,
-                              hdr.pages_map_correction);
+  pages_map
+      = read_pages_map (&dat, hdr.pages_map_size_comp,
+                        hdr.pages_map_size_uncomp, hdr.pages_map_correction);
   pg = pages_map ? get_page (pages_map, hdr.sections_map_id) : NULL;
   if (!pg)
     {
@@ -495,8 +494,7 @@ encoded_pages_test (void)
     fail ("encoded r2007 pages: encode error 0x%x", error);
   else
     {
-      check_r2007_pages ("encoded r2007 pages", out.chain, out.byte,
-                         &history);
+      check_r2007_pages ("encoded r2007 pages", out.chain, out.byte, &history);
       if (!history)
         fail ("encoded r2007 pages: no valid AppInfoHistory page");
       out.size = out.byte;
