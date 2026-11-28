@@ -1,0 +1,552 @@
+ACDB_BLOCKREPRESENTATION_DATA: 0x9C2 (73) test/test-data/2010/civil_example-imperial.dxf:
+0100000001010000000010000100000100111000001010100100000011010100111111110
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,37,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,73]
+H330 4.2.9C1: 010000100000100111000001 0 positions
+H330 4.2.9C1: 010000100000100111000001 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/73	2010/civil_example-imperial.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 63
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0xBFD3 (72) test/test-data/2018/Dynblocks.dxf:
+010000000101000000001000010101111111101001001010010100110010011000111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.BFD2: 010000101011111111010010 0 positions
+H330 4.2.BFD2: 010000101011111111010010 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2018/Dynblocks.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0xBFDB (72) test/test-data/2018/Dynblocks.dxf:
+010000000101000000001000010101111111101101001010010100110010011000111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.BFDA: 010000101011111111011010 0 positions
+H330 4.2.BFDA: 010000101011111111011010 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2018/Dynblocks.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0xC148 (72) test/test-data/2018/Dynblocks.dxf:
+010000000101000000001000010110000010100011101010010101101000101101111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.C147: 010000101100000101000111 0 positions
+H330 4.2.C147: 010000101100000101000111 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2018/Dynblocks.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0xC14F (72) test/test-data/2018/Dynblocks.dxf:
+010000000101000000001000010110000010100111001010010101110001111011111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.C14E: 010000101100000101001110 0 positions
+H330 4.2.C14E: 010000101100000101001110 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2018/Dynblocks.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0xC15D (72) test/test-data/2018/Dynblocks.dxf:
+010000000101000000001000010110000010101110001010010101110101100010011111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.C15C: 010000101100000101011100 0 positions
+H330 4.2.C15C: 010000101100000101011100 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2018/Dynblocks.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0xC177 (72) test/test-data/2018/Dynblocks.dxf:
+010000000101000000001000010110000010111011001010010101110110000110011111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.C176: 010000101100000101110110 0 positions
+H330 4.2.C176: 010000101100000101110110 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2018/Dynblocks.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0xC182 (72) test/test-data/2018/Dynblocks.dxf:
+010000000101000000001000010110000011000000101010010101110111100000111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.C181: 010000101100000110000001 0 positions
+H330 4.2.C181: 010000101100000110000001 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2018/Dynblocks.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0x17E7 (72) test/test-data/2013/gh44-error.dxf:
+010000000101000000001000010000101111110011001010010000010001000010111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.17E6: 010000100001011111100110 0 positions
+H330 4.2.17E6: 010000100001011111100110 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2013/gh44-error.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0x17EE (72) test/test-data/2013/gh44-error.dxf:
+010000000101000000001000010000101111110110101010010000010110001010111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.17ED: 010000100001011111101101 0 positions
+H330 4.2.17ED: 010000100001011111101101 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2013/gh44-error.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0x17F5 (72) test/test-data/2013/gh44-error.dxf:
+010000000101000000001000010000101111111010001010010000010111110101111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.17F4: 010000100001011111110100 0 positions
+H330 4.2.17F4: 010000100001011111110100 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2013/gh44-error.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0x17FC (72) test/test-data/2013/gh44-error.dxf:
+010000000101000000001000010000101111111101101010010000011000000010011111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.17FB: 010000100001011111111011 0 positions
+H330 4.2.17FB: 010000100001011111111011 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2013/gh44-error.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0x1803 (72) test/test-data/2013/gh44-error.dxf:
+010000000101000000001000010000110000000001001010010000011000001110111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.1802: 010000100001100000000010 0 positions
+H330 4.2.1802: 010000100001100000000010 0 positions
+H330 8.0.0: 00000000 2 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2013/gh44-error.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 8 + 10 = 18, Missing: 54
+FIELD_H (ownerhandle, 330);	// 8.0.0 00000000 [[33,40],[34,41]]
+
+Most probable result:
+Packed: in order, cost=0
+FIELD_H (ownerhandle, 330);	// 8.0.0 [33,40]
+
+ACDB_BLOCKREPRESENTATION_DATA: 0x1814 (72) test/test-data/2013/gh44-error.dxf:
+010000000101000000001000010000110000001001101010010000011000111011011111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.1813: 010000100001100000010011 0 positions
+H330 4.2.1813: 010000100001100000010011 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2013/gh44-error.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0x1825 (72) test/test-data/2013/gh44-error.dxf:
+010000000101000000001000010000110000010010001010010000011001001010011111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.1824: 010000100001100000100100 0 positions
+H330 4.2.1824: 010000100001100000100100 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2013/gh44-error.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0x182C (72) test/test-data/2013/gh44-error.dxf:
+010000000101000000001000010000110000010101101010010000011001011001011111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.182B: 010000100001100000101011 0 positions
+H330 4.2.182B: 010000100001100000101011 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2013/gh44-error.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0x1833 (72) test/test-data/2013/gh44-error.dxf:
+010000000101000000001000010000110000011001001010010000011001101010111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.1832: 010000100001100000110010 0 positions
+H330 4.2.1832: 010000100001100000110010 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2013/gh44-error.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0x183A (72) test/test-data/2013/gh44-error.dxf:
+010000000101000000001000010000110000011100101010010000011001111001111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.1839: 010000100001100000111001 0 positions
+H330 4.2.1839: 010000100001100000111001 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2013/gh44-error.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0x1896 (72) test/test-data/2013/gh44-error.dxf:
+010000000101000000001000010000110001001010101010010000011110100000011111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.1895: 010000100001100010010101 0 positions
+H330 4.2.1895: 010000100001100010010101 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2013/gh44-error.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0x18AC (72) test/test-data/2013/gh44-error.dxf:
+010000000101000000001000010000110001010101101010010000011110111101111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.18AB: 010000100001100010101011 0 positions
+H330 4.2.18AB: 010000100001100010101011 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2013/gh44-error.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0x18BA (72) test/test-data/2013/gh44-error.dxf:
+010000000101000000001000010000110001011100101010010000011111100011011111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.18B9: 010000100001100010111001 0 positions
+H330 4.2.18B9: 010000100001100010111001 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	2013/gh44-error.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0x18C1 (72) test/test-data/2013/gh44-error.dxf:
+010000000101000000001000010000110001100000001010010000100000000110111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.18C0: 010000100001100011000000 0 positions
+H330 4.2.18C0: 010000100001100011000000 0 positions
+H330 8.0.0: 00000000 fixed = [56,63]
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10],[56,63]]
+sortd = [[1,10],[56,63]]
+
+Definite result: 18/72	2013/gh44-error.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+HOLE([11,55],010000000010000100001100011000000010100100001) len = 45
+FIELD_H (ownerhandle, 330);	// 8.0.0 [56,63]
+HOLE([64,72],110111111) len = 9
+----------------
+Todo: 0 + 18 = 18, Missing: 54
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0x11662 (80) test/test-old/2018/from_cadforum.cz/GRUE_LTM_1090+.dxf:
+01000000010100000000100001100000001000101100110000101010010100000011111101011111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,46,6,0]
+streams: main=[1,21] strings=[22,21] handles=[22,80]
+H330 4.3.11661: 01000011000000010001011001100001 0 positions
+H330 4.3.11661: 01000011000000010001011001100001 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/80	018/from_cadforum.cz/GRUE_LTM_1090+.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 70
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0x187FD (88) test/test-old/2018/from_cadforum.cz/GRUE_LTM_1090+.dxf:
+0100000001010000000010000110000000110000111111111000101001100000001100001111011001011111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,46,6,0]
+streams: main=[1,21] strings=[22,21] handles=[22,88]
+H330 4.3.187FC: 01000011000000011000011111111100 0 positions
+H330 4.3.187FC: 01000011000000011000011111111100 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/88	018/from_cadforum.cz/GRUE_LTM_1090+.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 78
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0x2D6 (72) test/test-old/2018/from_cadforum.cz/Leader_5.dxf:
+010000000101000000001000010000000101101010101010010000000101001011111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.2D5: 010000100000001011010101 0 positions
+H330 4.2.2D5: 010000100000001011010101 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	018/from_cadforum.cz/Leader_5.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_BLOCKREPRESENTATION_DATA: 0x2F0 (72) test/test-old/2018/from_cadforum.cz/Leader_5.dxf:
+010000000101000000001000010000000101110111101010010000000101001011111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[21,0,38,5,0]
+streams: main=[1,21] strings=[22,21] handles=[22,72]
+H330 4.2.2EF: 010000100000001011101111 0 positions
+H330 4.2.2EF: 010000100000001011101111 0 positions
+BS70 1: 0100000001 fixed = [1,10]
+
+fixed = [[1,10]]
+sortd = [[1,10]]
+
+Definite result: 10/72	018/from_cadforum.cz/Leader_5.dxf
+----------------
+FIELD_BS (flag, 70);	// 1 [1,10]
+----------------
+Todo: 0 + 10 = 10, Missing: 62
+
+Most probable result:
+Packed: nothing to pack

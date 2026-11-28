@@ -1,0 +1,49 @@
+ACDB_DYNAMICBLOCKPROXYNODE: 0x70B (105) test/test-data/2010/civil_example-imperial.dxf:
+001111111111111111111111111111111101000111010100000010001111000111011000010000100101100000100101110111110
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[93,0,29,12,0]
+streams: main=[1,93] strings=[94,93] handles=[94,105]
+BL90 9: 0100001001 fixed = [73,82]
+BL99 29: 0100011101 fixed = [35,44]
+
+fixed = [[35,44],[73,82]]
+sortd = [[35,44],[73,82]]
+
+Definite result: 20/105	2010/civil_example-imperial.dxf
+----------------
+HOLE([1,34],0011111111111111111111111111111111) len = 34
+FIELD_BL ([], 99);	// 29 [35,44]
+HOLE([45,72],0100000010001111000111011000) len = 28
+FIELD_BL ([], 90);	// 9 [73,82]
+HOLE([83,105],01100000100101110111110) len = 23
+----------------
+Todo: 0 + 20 = 20, Missing: 85
+
+Most probable result:
+Packed: nothing to pack
+
+ACDB_DYNAMICBLOCKPROXYNODE: 0xBB50 (104) test/test-data/2018/Dynblocks.dxf:
+00111111111111111111111111111111110100100001010001110100111100011101100001000001010110000010000010111111
+
+[hdloff, strsize, commonsize, bitsize, hdlsize]=[93,0,30,12,0]
+streams: main=[1,93] strings=[94,93] handles=[94,104]
+BL90 5: 0100000101 fixed = [73,82]
+BL98 33: 0100100001 fixed = [35,44]
+BL99 29: 0100011101 fixed = [45,54]
+
+fixed = [[35,44],[45,54],[73,82]]
+sortd = [[35,44],[45,54],[73,82]]
+
+Definite result: 30/104	2018/Dynblocks.dxf
+----------------
+HOLE([1,34],0011111111111111111111111111111111) len = 34
+FIELD_BL ([], 98);	// 33 [35,44]
+FIELD_BL ([], 99);	// 29 [45,54]
+HOLE([55,72],001111000111011000) len = 18
+FIELD_BL ([], 90);	// 5 [73,82]
+HOLE([83,104],0110000010000010111111) len = 22
+----------------
+Todo: 0 + 30 = 30, Missing: 74
+
+Most probable result:
+Packed: nothing to pack

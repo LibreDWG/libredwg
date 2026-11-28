@@ -2,7 +2,7 @@ import unknown.
 
 /* CSACDOCUMENTOPTIONS field packing problem.
    examples/unknown generated example, needs picat-lang.org.
-   Usage: picat [-g go2] examples/CSACDOCUMENTOPTIONS.pi
+   Usage: picat [-g go2] CSACDOCUMENTOPTIONS.pi
 */
 def(0, Data) =>
   println("CSACDOCUMENTOPTIONS: 0x366 (1202) test/test-data/2000/2.dxf:"),

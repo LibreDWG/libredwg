@@ -2,80 +2,80 @@ import unknown.
 
 /* ACDBASSOCDEPENDENCY field packing problem.
    examples/unknown generated example, needs picat-lang.org.
-   Usage: picat [-g go2] examples/ACDBASSOCDEPENDENCY.pi
+   Usage: picat [-g go2] ACDBASSOCDEPENDENCY.pi
 */
 def(0, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x397 (106) test/test-data/example_2000.dxf:"),
+  println("ACDBASSOCDEPENDENCY: 0x6EE (129) test/test-data/2010/civil_example-imperial.dxf:"),
   Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/example_2000.dxf",
-  Version=2000,
-  Offsets=[47, 0, 60, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="0100000010101111100010000001011000001000001100011000001000010000000110111111001000000010000000011000011111",
+  Dxf="test/test-data/2010/civil_example-imperial.dxf",
+  Version=2010,
+  Offsets=[40, 0, 29, 6, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="010000000110010110001000001000101000010000001001000010000001101101111101000000010000100000100110110000001100100000011011101111110",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
-     new_struct('H330', ["1100000100000110", 'c.1.6', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    %new_struct('_BE330', ["0000000100000010", '10.1.2', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
     ,new_struct('BL90', ["10", '0', [], "status", 90])
-    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
     ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '0', [], "isobjectstate_dep", 290])
     ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
     ,new_struct('BL90', ["10", '0', [], "order", 90])
-    ,new_struct('H330', ["010000100000001101111110", '4.2.37E', [], "", 330])
+    ,new_struct('H330', ["010000100000011011011111", '4.2.6DF', [], "", 330])
     ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
     ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000010", '2', [], "depbodyid", 90])
+    ,new_struct('H330', ["010000100000100110110000", '4.2.9B0', [], "", 330])
+    ,new_struct('H360', ["001100100000011011101111", '3.2.6EF', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000100", '4', [], "depbodyid", 90])
   ],
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
 def(1, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x397 (97) test/test-data/example_2004.dxf:"),
+  println("ACDBASSOCDEPENDENCY: 0x107F (96) test/test-old/2018/from_cadforum.cz/DUVAR_ASKI.dxf:"),
   Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/example_2004.dxf",
-  Version=2004,
-  Offsets=[47, 0, 61, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="0100000010101111100010000001011000001000001100100001000000011011111100100000001000000001100001111",
+  Dxf="test/test-old/2018/from_cadforum.cz/DUVAR_ASKI.dxf",
+  Version=2018,
+  Offsets=[40, 0, 30, 7, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="010000001010011110001000000010110000010000010001000010000100000110111001000000010000000011000011",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
-     new_struct('H330', ["1100000100000110", 'c.1.6', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    %new_struct('_BE330', ["0000000100000100", '12.1.4', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
     ,new_struct('BL90', ["10", '0', [], "status", 90])
-    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
     ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
     ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
     ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
     ,new_struct('BL90', ["10", '0', [], "order", 90])
-    ,new_struct('H330', ["010000100000001101111110", '4.2.37E', [], "", 330])
+    ,new_struct('H330', ["010000100001000001101110", '4.2.106E', [], "", 330])
     ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
     ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
     ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
     ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000010", '2', [], "depbodyid", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "depbodyid", 90])
   ],
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
 def(2, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x397 (97) test/test-data/example_2007.dxf:"),
+  println("ACDBASSOCDEPENDENCY: 0x1080 (96) test/test-old/2018/from_cadforum.cz/DUVAR_ASKI.dxf:"),
   Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/example_2007.dxf",
-  Version=2007,
-  Offsets=[48, 0, 61, 10, 67], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="0100000010101111100010000001001100000100000110010000100000001101111110010000000100000000110000111",
+  Dxf="test/test-old/2018/from_cadforum.cz/DUVAR_ASKI.dxf",
+  Version=2018,
+  Offsets=[40, 0, 30, 7, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="010000001010101110001000000100110000010000010101000010000100000110101101000000010000000011000011",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
-     new_struct('H330', ["1100000100000110", 'c.1.6', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    %new_struct('_BE330', ["0000000100000101", '12.1.5', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
     ,new_struct('BL90', ["10", '0', [], "status", 90])
     ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
     ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
     ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
     ,new_struct('BL90', ["10", '0', [], "order", 90])
-    ,new_struct('H330', ["010000100000001101111110", '4.2.37E', [], "", 330])
+    ,new_struct('H330', ["010000100001000001101011", '4.2.106B', [], "", 330])
     ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
     ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
     ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
@@ -86,43 +86,97 @@ def(2, Data) =>
   go(Data).
 
 def(3, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x397 (97) test/test-data/example_2010.dxf:"),
+  println("ACDBASSOCDEPENDENCY: 0x1081 (128) test/test-old/2018/from_cadforum.cz/DUVAR_ASKI.dxf:"),
   Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/example_2010.dxf",
-  Version=2010,
-  Offsets=[40, 0, 29, 6, 67], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="0100000010101111100010000001001100000100000110010000100000001101111110010000000100000000110000111",
+  Dxf="test/test-old/2018/from_cadforum.cz/DUVAR_ASKI.dxf",
+  Version=2018,
+  Offsets=[72, 0, 30, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="01000000101011110000000000000000000000000010000000001000000110110000010000011001000010000100000111000101000000010000000011000011",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
-     new_struct('H330', ["1100000100000110", 'c.1.6', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    %new_struct('_BE330', ["0000000100000110", '12.1.6', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
     ,new_struct('BL90', ["10", '0', [], "status", 90])
     ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
     ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
     ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
     ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
-    ,new_struct('BL90', ["10", '0', [], "order", 90])
-    ,new_struct('H330', ["010000100000001101111110", '4.2.37E', [], "", 330])
+    ,new_struct('BL90', ["0000000000000000000000000010000000", '-2147483648', [], "order", 90])
+    ,new_struct('H330', ["010000100001000001110001", '4.2.1071', [], "", 330])
     ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
     ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
     ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
     ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000010", '2', [], "depbodyid", 90])
+    ,new_struct('BL90', ["0100000011", '3', [], "depbodyid", 90])
   ],
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
 def(4, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x397 (96) test/test-data/example_2013.dxf:"),
+  println("ACDBASSOCDEPENDENCY: 0xBB1F (112) test/test-data/2018/Dynblocks.dxf:"),
   Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/example_2013.dxf",
-  Version=2013,
-  Offsets=[40, 0, 30, 7, 66], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="010000001010111110001000000100110000010000011001000010000000110111111001000000010000000011000011",
+  Dxf="test/test-data/2018/Dynblocks.dxf",
+  Version=2018,
+  Offsets=[40, 0, 30, 7, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="0100000010100111100010001110101100000100000100010000101011101101100110010000000100000000110010101110110010000011",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
-     new_struct('H330', ["1100000100000110", 'c.1.6', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    %new_struct('_BE330', ["0000000100000100", '12.1.4', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["10", '0', [], "order", 90])
+    ,new_struct('H330', ["010000101011101101100110", '4.2.BB66', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["001100101011101100100000", '3.2.BB20', [], "writedep", 360])
+    ,new_struct('BL90', ["0100011101", '29', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(5, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0xBB27 (112) test/test-data/2018/Dynblocks.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/2018/Dynblocks.dxf",
+  Version=2018,
+  Offsets=[40, 0, 30, 7, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="0100000010100111100010010011101100000100001100010000101011101101101000010000000100000000110010101110110010100011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100001100", '12.1.C', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["10", '0', [], "order", 90])
+    ,new_struct('H330', ["010000101011101101101000", '4.2.BB68', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["001100101011101100101000", '3.2.BB28', [], "writedep", 360])
+    ,new_struct('BL90', ["0100100111", '39', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(6, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x397 (106) test/test-data/example_2000.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/example_2000.dxf",
+  Version=2000,
+  Offsets=[47, 0, 60, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="0100000010101111100010000001011000001000001100011000001000010000000110111111001000000010000000011000011100",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000110", '12.1.6', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
     ,new_struct('BL90', ["10", '0', [], "status", 90])
     ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
     ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
@@ -139,17 +193,125 @@ def(4, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(5, Data) =>
+def(7, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x397 (97) test/test-data/example_2004.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/example_2004.dxf",
+  Version=2004,
+  Offsets=[47, 0, 61, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="0100000010101111100010000001011000001000001100100001000000011011111100100000001000000001100001110",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000110", '12.1.6', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["10", '0', [], "order", 90])
+    ,new_struct('H330', ["010000100000001101111110", '4.2.37E', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000010", '2', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(8, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x397 (97) test/test-data/example_2007.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/example_2007.dxf",
+  Version=2007,
+  Offsets=[48, 0, 61, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="0100000010101111100010000001001100000100000110010000100000001101111110010000000100000000110000110",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000110", '12.1.6', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["10", '0', [], "order", 90])
+    ,new_struct('H330', ["010000100000001101111110", '4.2.37E', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000010", '2', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(9, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x397 (96) test/test-data/example_2013.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/example_2013.dxf",
+  Version=2013,
+  Offsets=[40, 0, 30, 7, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="010000001010111110001000000100110000010000011001000010000000110111111001000000010000000011000011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000110", '12.1.6', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["10", '0', [], "order", 90])
+    ,new_struct('H330', ["010000100000001101111110", '4.2.37E', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000010", '2', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(10, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x49A (113) test/test-data/2010/mechanical_example-imperial.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/2010/mechanical_example-imperial.dxf",
+  Version=2010,
+  Offsets=[40, 0, 29, 6, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="01000000011001111000100010000011000001011011110100001000000100100101110100000001000000001100100000010010011011110",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000101101111", '12.1.6F', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["10", '0', [], "order", 90])
+    ,new_struct('H330', ["010000100000010010010111", '4.2.497', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["001100100000010010011011", '3.2.49B', [], "writedep", 360])
+    ,new_struct('BL90', ["0100010000", '16', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(11, Data) =>
   println("ACDBASSOCDEPENDENCY: 0x2E1 (137) test/test-data/2004/Surface.dxf:"),
   Class="ACDBASSOCDEPENDENCY",
   Dxf="test/test-data/2004/Surface.dxf",
   Version=2004,
   Offsets=[87, 0, 61, 14, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="01000000100100000001011100000000000000000000000000100000000010000000111000001000000100100001000000010110110000100000001000000001100001111",
+  S="01000000100100000001011100000000000000000000000000100000000010000000111000001000000100100001000000010110110000100000001000000001100001110",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
-     new_struct('H330', ["1100000100000010", 'c.1.2', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    %new_struct('_BE330', ["0000000100000010", '12.1.2', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
     ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
     ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
     ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
@@ -166,179 +328,17 @@ def(5, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(6, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x350 (137) test/test-data/2004/Surface.dxf:"),
-  Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/2004/Surface.dxf",
-  Version=2004,
-  Offsets=[87, 0, 61, 14, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="01000000100100000001011100000000000000000000000000100000000010000000111000001000000100100001000000011010011010100000001000000001100001111",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["1100000100000010", 'c.1.2', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
-    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
-    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
-    ,new_struct('BL90', ["0000000000000000000000000010000000", '-2147483648', [], "order", 90])
-    ,new_struct('H330', ["010000100000001101001101", '4.2.34D', [], "", 330])
-    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000001", '1', [], "depbodyid", 90])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(7, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x369 (137) test/test-data/2004/Surface.dxf:"),
-  Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/2004/Surface.dxf",
-  Version=2004,
-  Offsets=[87, 0, 61, 14, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="01000000100100000001011100000000000000000000000000100000000010000000111000001000000100100001000000011011001100100000001000000001100001111",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["1100000100000010", 'c.1.2', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
-    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
-    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
-    ,new_struct('BL90', ["0000000000000000000000000010000000", '-2147483648', [], "order", 90])
-    ,new_struct('H330', ["010000100000001101100110", '4.2.366', [], "", 330])
-    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000001", '1', [], "depbodyid", 90])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(8, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x414 (137) test/test-data/2004/Surface.dxf:"),
-  Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/2004/Surface.dxf",
-  Version=2004,
-  Offsets=[87, 0, 61, 14, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="01000000100100000001011100000000000000000000000000100000000010000000111000001000000100100001000000100000100010100000001000000001100001111",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["1100000100000010", 'c.1.2', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
-    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
-    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
-    ,new_struct('BL90', ["0000000000000000000000000010000000", '-2147483648', [], "order", 90])
-    ,new_struct('H330', ["010000100000010000010001", '4.2.411', [], "", 330])
-    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000001", '1', [], "depbodyid", 90])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(9, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x50D (137) test/test-data/2004/Surface.dxf:"),
-  Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/2004/Surface.dxf",
-  Version=2004,
-  Offsets=[87, 0, 61, 14, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="01000000100100000001011100000000000000000000000000100000000010000000111000001000000100100001000000101000010100100000001000000001100001111",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["1100000100000010", 'c.1.2', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
-    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
-    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
-    ,new_struct('BL90', ["0000000000000000000000000010000000", '-2147483648', [], "order", 90])
-    ,new_struct('H330', ["010000100000010100001010", '4.2.50A', [], "", 330])
-    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000001", '1', [], "depbodyid", 90])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(10, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x417 (97) test/test-data/2004/Surface.dxf:"),
-  Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/2004/Surface.dxf",
-  Version=2004,
-  Offsets=[47, 0, 61, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="0100000010101011100010000001011000001000001010100001000000010110001100100000001000000001100001111",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["1100000100000101", 'c.1.5', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
-    ,new_struct('BL90', ["10", '0', [], "status", 90])
-    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
-    ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
-    ,new_struct('BL90', ["10", '0', [], "order", 90])
-    ,new_struct('H330', ["010000100000001011000110", '4.2.2C6', [], "", 330])
-    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000010", '2', [], "depbodyid", 90])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(11, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x36C (97) test/test-data/2004/Surface.dxf:"),
-  Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/2004/Surface.dxf",
-  Version=2004,
-  Offsets=[47, 0, 61, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="0100000010101011100010000001011000001000001010100001000000010110011100100000001000000001100001111",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["1100000100000101", 'c.1.5', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
-    ,new_struct('BL90', ["10", '0', [], "status", 90])
-    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
-    ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
-    ,new_struct('BL90', ["10", '0', [], "order", 90])
-    ,new_struct('H330', ["010000100000001011001110", '4.2.2CE', [], "", 330])
-    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000010", '2', [], "depbodyid", 90])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
 def(12, Data) =>
   println("ACDBASSOCDEPENDENCY: 0x2E4 (97) test/test-data/2004/Surface.dxf:"),
   Class="ACDBASSOCDEPENDENCY",
   Dxf="test/test-data/2004/Surface.dxf",
   Version=2004,
   Offsets=[47, 0, 61, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="0100000010101011100010000001011000001000001010100001000000010110101110100000001000000001100001111",
+  S="0100000010101011100010000001011000001000001010100001000000010110101110100000001000000001100001110",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
-     new_struct('H330', ["1100000100000101", 'c.1.5', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    %new_struct('_BE330', ["0000000100000101", '12.1.5', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
     ,new_struct('BL90', ["10", '0', [], "status", 90])
     ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
     ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
@@ -356,16 +356,43 @@ def(12, Data) =>
   go(Data).
 
 def(13, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x350 (137) test/test-data/2004/Surface.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/2004/Surface.dxf",
+  Version=2004,
+  Offsets=[87, 0, 61, 14, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="01000000100100000001011100000000000000000000000000100000000010000000111000001000000100100001000000011010011010100000001000000001100001110",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000010", '12.1.2', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
+    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["0000000000000000000000000010000000", '-2147483648', [], "order", 90])
+    ,new_struct('H330', ["010000100000001101001101", '4.2.34D', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000001", '1', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(14, Data) =>
   println("ACDBASSOCDEPENDENCY: 0x353 (97) test/test-data/2004/Surface.dxf:"),
   Class="ACDBASSOCDEPENDENCY",
   Dxf="test/test-data/2004/Surface.dxf",
   Version=2004,
   Offsets=[47, 0, 61, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="0100000010101011100010000001011000001000001010100001000000011001110000100000001000000001100001111",
+  S="0100000010101011100010000001011000001000001010100001000000011001110000100000001000000001100001110",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
-     new_struct('H330', ["1100000100000101", 'c.1.5', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    %new_struct('_BE330', ["0000000100000101", '12.1.5', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
     ,new_struct('BL90', ["10", '0', [], "status", 90])
     ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
     ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
@@ -382,71 +409,17 @@ def(13, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(14, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x510 (97) test/test-data/2004/Surface.dxf:"),
-  Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/2004/Surface.dxf",
-  Version=2004,
-  Offsets=[47, 0, 61, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="0100000010101011100010000001011000001000001010100001000000101000010010100000001000000001100001111",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["1100000100000101", 'c.1.5', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
-    ,new_struct('BL90', ["10", '0', [], "status", 90])
-    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
-    ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
-    ,new_struct('BL90', ["10", '0', [], "order", 90])
-    ,new_struct('H330', ["010000100000010100001001", '4.2.509', [], "", 330])
-    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000010", '2', [], "depbodyid", 90])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
 def(15, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x41A (97) test/test-data/2004/Surface.dxf:"),
-  Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/2004/Surface.dxf",
-  Version=2004,
-  Offsets=[47, 0, 61, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="0100000010101011100010000001111000001000010000100001000000010110100010100000001000000001100001111",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["1100000100001000", 'c.1.8', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
-    ,new_struct('BL90', ["10", '0', [], "status", 90])
-    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
-    ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
-    ,new_struct('BL90', ["10", '0', [], "order", 90])
-    ,new_struct('H330', ["010000100000001011010001", '4.2.2D1', [], "", 330])
-    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000011", '3', [], "depbodyid", 90])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(16, Data) =>
   println("ACDBASSOCDEPENDENCY: 0x356 (97) test/test-data/2004/Surface.dxf:"),
   Class="ACDBASSOCDEPENDENCY",
   Dxf="test/test-data/2004/Surface.dxf",
   Version=2004,
   Offsets=[47, 0, 61, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="0100000010101011100010000001111000001000010000100001000000011001110100100000001000000001100001111",
+  S="0100000010101011100010000001111000001000010000100001000000011001110100100000001000000001100001110",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
-     new_struct('H330', ["1100000100001000", 'c.1.8', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    %new_struct('_BE330', ["0000000100001000", '12.1.8', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
     ,new_struct('BL90', ["10", '0', [], "status", 90])
     ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
     ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
@@ -463,72 +436,18 @@ def(16, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(17, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x2E1 (128) test/test-data/2018/Surface.dxf:"),
+def(16, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x369 (137) test/test-data/2004/Surface.dxf:"),
   Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/2018/Surface.dxf",
-  Version=2018,
-  Offsets=[72, 0, 30, 10, 66], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="01000000101001110000000000000000000000000010000000001000000010110000010000001001000010000000101101100001000000010000000011000011",
+  Dxf="test/test-data/2004/Surface.dxf",
+  Version=2004,
+  Offsets=[87, 0, 61, 14, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="01000000100100000001011100000000000000000000000000100000000010000000111000001000000100100001000000011011001100100000001000000001100001110",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
-     new_struct('H330', ["1100000100000010", 'c.1.2', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
-    ,new_struct('BL90', ["10", '0', [], "status", 90])
-    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
-    ,new_struct('BL90', ["0000000000000000000000000010000000", '-2147483648', [], "order", 90])
-    ,new_struct('H330', ["010000100000001011011000", '4.2.2D8', [], "", 330])
-    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000001", '1', [], "depbodyid", 90])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(18, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x350 (128) test/test-data/2018/Surface.dxf:"),
-  Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/2018/Surface.dxf",
-  Version=2018,
-  Offsets=[72, 0, 30, 10, 66], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="01000000101001110000000000000000000000000010000000001000000010110000010000001001000010000000110100110101000000010000000011000011",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["1100000100000010", 'c.1.2', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
-    ,new_struct('BL90', ["10", '0', [], "status", 90])
-    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
-    ,new_struct('BL90', ["0000000000000000000000000010000000", '-2147483648', [], "order", 90])
-    ,new_struct('H330', ["010000100000001101001101", '4.2.34D', [], "", 330])
-    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000001", '1', [], "depbodyid", 90])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(19, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x369 (128) test/test-data/2018/Surface.dxf:"),
-  Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/2018/Surface.dxf",
-  Version=2018,
-  Offsets=[72, 0, 30, 10, 66], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="01000000101001110000000000000000000000000010000000001000000010110000010000001001000010000000110110011001000000010000000011000011",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["1100000100000010", 'c.1.2', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
-    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    %new_struct('_BE330', ["0000000100000010", '12.1.2', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
     ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
     ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
     ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
@@ -544,71 +463,17 @@ def(19, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(20, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x414 (128) test/test-data/2018/Surface.dxf:"),
+def(17, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x36C (97) test/test-data/2004/Surface.dxf:"),
   Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/2018/Surface.dxf",
-  Version=2018,
-  Offsets=[72, 0, 30, 10, 66], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="01000000101001110000000000000000000000000010000000001000000010110000010000001001000010000001000001000101000000010000000011000011",
+  Dxf="test/test-data/2004/Surface.dxf",
+  Version=2004,
+  Offsets=[47, 0, 61, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="0100000010101011100010000001011000001000001010100001000000010110011100100000001000000001100001110",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
-     new_struct('H330', ["1100000100000010", 'c.1.2', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
-    ,new_struct('BL90', ["10", '0', [], "status", 90])
-    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
-    ,new_struct('BL90', ["0000000000000000000000000010000000", '-2147483648', [], "order", 90])
-    ,new_struct('H330', ["010000100000010000010001", '4.2.411', [], "", 330])
-    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000001", '1', [], "depbodyid", 90])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(21, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x417 (96) test/test-data/2018/Surface.dxf:"),
-  Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/2018/Surface.dxf",
-  Version=2018,
-  Offsets=[40, 0, 30, 7, 66], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="010000001010101110001000000100110000010000010101000010000000101100011001000000010000000011000011",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["1100000100000101", 'c.1.5', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
-    ,new_struct('BL90', ["10", '0', [], "status", 90])
-    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
-    ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
-    ,new_struct('BL90', ["10", '0', [], "order", 90])
-    ,new_struct('H330', ["010000100000001011000110", '4.2.2C6', [], "", 330])
-    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000010", '2', [], "depbodyid", 90])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(22, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x36C (96) test/test-data/2018/Surface.dxf:"),
-  Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/2018/Surface.dxf",
-  Version=2018,
-  Offsets=[40, 0, 30, 7, 66], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="010000001010101110001000000100110000010000010101000010000000101100111001000000010000000011000011",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["1100000100000101", 'c.1.5', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    %new_struct('_BE330', ["0000000100000101", '12.1.5', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
     ,new_struct('BL90', ["10", '0', [], "status", 90])
     ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
     ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
@@ -625,24 +490,51 @@ def(22, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(23, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x2E4 (96) test/test-data/2018/Surface.dxf:"),
+def(18, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x414 (137) test/test-data/2004/Surface.dxf:"),
   Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/2018/Surface.dxf",
-  Version=2018,
-  Offsets=[40, 0, 30, 7, 66], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="010000001010101110001000000100110000010000010101000010000000101101011101000000010000000011000011",
+  Dxf="test/test-data/2004/Surface.dxf",
+  Version=2004,
+  Offsets=[87, 0, 61, 14, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="01000000100100000001011100000000000000000000000000100000000010000000111000001000000100100001000000100000100010100000001000000001100001110",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
-     new_struct('H330', ["1100000100000101", 'c.1.5', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    %new_struct('_BE330', ["0000000100000010", '12.1.2', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
+    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["0000000000000000000000000010000000", '-2147483648', [], "order", 90])
+    ,new_struct('H330', ["010000100000010000010001", '4.2.411', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000001", '1', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(19, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x417 (97) test/test-data/2004/Surface.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/2004/Surface.dxf",
+  Version=2004,
+  Offsets=[47, 0, 61, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="0100000010101011100010000001011000001000001010100001000000010110001100100000001000000001100001110",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000101", '12.1.5', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
     ,new_struct('BL90', ["10", '0', [], "status", 90])
     ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
     ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
     ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
     ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
     ,new_struct('BL90', ["10", '0', [], "order", 90])
-    ,new_struct('H330', ["010000100000001011010111", '4.2.2D7', [], "", 330])
+    ,new_struct('H330', ["010000100000001011000110", '4.2.2C6', [], "", 330])
     ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
     ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
     ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
@@ -652,44 +544,17 @@ def(23, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
-def(24, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x353 (96) test/test-data/2018/Surface.dxf:"),
+def(20, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x41A (97) test/test-data/2004/Surface.dxf:"),
   Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/2018/Surface.dxf",
-  Version=2018,
-  Offsets=[40, 0, 30, 7, 66], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="010000001010101110001000000100110000010000010101000010000000110011100001000000010000000011000011",
+  Dxf="test/test-data/2004/Surface.dxf",
+  Version=2004,
+  Offsets=[47, 0, 61, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="0100000010101011100010000001111000001000010000100001000000010110100010100000001000000001100001110",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
-     new_struct('H330', ["1100000100000101", 'c.1.5', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
-    ,new_struct('BL90', ["10", '0', [], "status", 90])
-    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
-    ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
-    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
-    ,new_struct('BL90', ["10", '0', [], "order", 90])
-    ,new_struct('H330', ["010000100000001100111000", '4.2.338', [], "", 330])
-    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
-    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
-    ,new_struct('BL90', ["0100000010", '2', [], "depbodyid", 90])
-  ],
-  Data = [S,Fields,Class,Dxf,Version,Offsets],
-  go(Data).
-
-def(25, Data) =>
-  println("ACDBASSOCDEPENDENCY: 0x41A (96) test/test-data/2018/Surface.dxf:"),
-  Class="ACDBASSOCDEPENDENCY",
-  Dxf="test/test-data/2018/Surface.dxf",
-  Version=2018,
-  Offsets=[40, 0, 30, 7, 66], % hdloff, strsize, commonsize, bitsize, hdlsize
-  S="010000001010101110001000000110110000010000100001000010000000101101000101000000010000000011000011",
-  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
-  Fields = [
-     new_struct('H330', ["1100000100001000", 'c.1.8', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    %new_struct('_BE330', ["0000000100001000", '12.1.8', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
     ,new_struct('BL90', ["10", '0', [], "status", 90])
     ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
     ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
@@ -706,17 +571,179 @@ def(25, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
+def(21, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x50D (137) test/test-data/2004/Surface.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/2004/Surface.dxf",
+  Version=2004,
+  Offsets=[87, 0, 61, 14, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="01000000100100000001011100000000000000000000000000100000000010000000111000001000000100100001000000101000010100100000001000000001100001110",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000010", '12.1.2', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["0100000001", '1', [], "status", 90])
+    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["0000000000000000000000000010000000", '-2147483648', [], "order", 90])
+    ,new_struct('H330', ["010000100000010100001010", '4.2.50A', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000001", '1', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(22, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x510 (97) test/test-data/2004/Surface.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/2004/Surface.dxf",
+  Version=2004,
+  Offsets=[47, 0, 61, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="0100000010101011100010000001011000001000001010100001000000101000010010100000001000000001100001110",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000101", '12.1.5', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["10", '0', [], "order", 90])
+    ,new_struct('H330', ["010000100000010100001001", '4.2.509', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000010", '2', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(23, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x2E1 (128) test/test-data/2018/Surface.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/2018/Surface.dxf",
+  Version=2018,
+  Offsets=[72, 0, 30, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="01000000101001110000000000000000000000000010000000001000000010110000010000001001000010000000101101100001000000010000000011000011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000010", '12.1.2', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["0000000000000000000000000010000000", '-2147483648', [], "order", 90])
+    ,new_struct('H330', ["010000100000001011011000", '4.2.2D8', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000001", '1', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(24, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x2E4 (96) test/test-data/2018/Surface.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/2018/Surface.dxf",
+  Version=2018,
+  Offsets=[40, 0, 30, 7, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="010000001010101110001000000100110000010000010101000010000000101101011101000000010000000011000011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000101", '12.1.5', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["10", '0', [], "order", 90])
+    ,new_struct('H330', ["010000100000001011010111", '4.2.2D7', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000010", '2', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(25, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x350 (128) test/test-data/2018/Surface.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/2018/Surface.dxf",
+  Version=2018,
+  Offsets=[72, 0, 30, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="01000000101001110000000000000000000000000010000000001000000010110000010000001001000010000000110100110101000000010000000011000011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000010", '12.1.2', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["0000000000000000000000000010000000", '-2147483648', [], "order", 90])
+    ,new_struct('H330', ["010000100000001101001101", '4.2.34D', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000001", '1', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
 def(26, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x353 (96) test/test-data/2018/Surface.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/2018/Surface.dxf",
+  Version=2018,
+  Offsets=[40, 0, 30, 7, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="010000001010101110001000000100110000010000010101000010000000110011100001000000010000000011000011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000101", '12.1.5', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["10", '0', [], "order", 90])
+    ,new_struct('H330', ["010000100000001100111000", '4.2.338', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000010", '2', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(27, Data) =>
   println("ACDBASSOCDEPENDENCY: 0x356 (96) test/test-data/2018/Surface.dxf:"),
   Class="ACDBASSOCDEPENDENCY",
   Dxf="test/test-data/2018/Surface.dxf",
   Version=2018,
-  Offsets=[40, 0, 30, 7, 66], % hdloff, strsize, commonsize, bitsize, hdlsize
+  Offsets=[40, 0, 30, 7, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
   S="010000001010101110001000000110110000010000100001000010000000110011101001000000010000000011000011",
   % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
   Fields = [
-     new_struct('H330', ["1100000100001000", 'c.1.8', [], "ownerhandle", 330])
-    ,new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    %new_struct('_BE330', ["0000000100001000", '12.1.8', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
     ,new_struct('BL90', ["10", '0', [], "status", 90])
     ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
     ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
@@ -733,8 +760,224 @@ def(26, Data) =>
   Data = [S,Fields,Class,Dxf,Version,Offsets],
   go(Data).
 
+def(28, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x369 (128) test/test-data/2018/Surface.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/2018/Surface.dxf",
+  Version=2018,
+  Offsets=[72, 0, 30, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="01000000101001110000000000000000000000000010000000001000000010110000010000001001000010000000110110011001000000010000000011000011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000010", '12.1.2', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["0000000000000000000000000010000000", '-2147483648', [], "order", 90])
+    ,new_struct('H330', ["010000100000001101100110", '4.2.366', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000001", '1', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
 
-% summary: 1726/2945=58.6%
+def(29, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x36C (96) test/test-data/2018/Surface.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/2018/Surface.dxf",
+  Version=2018,
+  Offsets=[40, 0, 30, 7, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="010000001010101110001000000100110000010000010101000010000000101100111001000000010000000011000011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000101", '12.1.5', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["10", '0', [], "order", 90])
+    ,new_struct('H330', ["010000100000001011001110", '4.2.2CE', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000010", '2', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(30, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x414 (128) test/test-data/2018/Surface.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/2018/Surface.dxf",
+  Version=2018,
+  Offsets=[72, 0, 30, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="01000000101001110000000000000000000000000010000000001000000010110000010000001001000010000001000001000101000000010000000011000011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000010", '12.1.2', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["0000000000000000000000000010000000", '-2147483648', [], "order", 90])
+    ,new_struct('H330', ["010000100000010000010001", '4.2.411', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000001", '1', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(31, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x417 (96) test/test-data/2018/Surface.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/2018/Surface.dxf",
+  Version=2018,
+  Offsets=[40, 0, 30, 7, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="010000001010101110001000000100110000010000010101000010000000101100011001000000010000000011000011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000101", '12.1.5', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["10", '0', [], "order", 90])
+    ,new_struct('H330', ["010000100000001011000110", '4.2.2C6', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000010", '2', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(32, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x41A (96) test/test-data/2018/Surface.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-data/2018/Surface.dxf",
+  Version=2018,
+  Offsets=[40, 0, 30, 7, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="010000001010101110001000000110110000010000100001000010000000101101000101000000010000000011000011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100001000", '12.1.8', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["10", '0', [], "order", 90])
+    ,new_struct('H330', ["010000100000001011010001", '4.2.2D1', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000011", '3', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(33, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x41D (96) test/test-old/2018/from_cadforum.cz/YARMA_REDÜKTÖR_SACI_-_15022021_R2_CS.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-old/2018/from_cadforum.cz/YARMA_REDÜKTÖR_SACI_-_15022021_R2_CS.dxf",
+  Version=2018,
+  Offsets=[40, 0, 30, 7, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="010000001010011110001000000010110000010000001001000010000001000010011101000000010000000011000011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000010", '12.1.2', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '0', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["10", '0', [], "order", 90])
+    ,new_struct('H330', ["010000100000010000100111", '4.2.427', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000001", '1', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(34, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x41E (96) test/test-old/2018/from_cadforum.cz/YARMA_REDÜKTÖR_SACI_-_15022021_R2_CS.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-old/2018/from_cadforum.cz/YARMA_REDÜKTÖR_SACI_-_15022021_R2_CS.dxf",
+  Version=2018,
+  Offsets=[40, 0, 30, 7, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="010000001010101110001000000100110000010000001101000010000001000010001101000000010000000011000011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000011", '12.1.3', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '0', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["10", '0', [], "order", 90])
+    ,new_struct('H330', ["010000100000010000100011", '4.2.423', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000010", '2', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+def(35, Data) =>
+  println("ACDBASSOCDEPENDENCY: 0x41F (128) test/test-old/2018/from_cadforum.cz/YARMA_REDÜKTÖR_SACI_-_15022021_R2_CS.dxf:"),
+  Class="ACDBASSOCDEPENDENCY",
+  Dxf="test/test-old/2018/from_cadforum.cz/YARMA_REDÜKTÖR_SACI_-_15022021_R2_CS.dxf",
+  Version=2018,
+  Offsets=[72, 0, 30, 10, 0], % hdloff, strsize, commonsize, bitsize, hdlsize
+  S="01000000101011110000000000000000000000000010000000001000000110110000010000010001000010000000111001001101000000010000000011000011",
+  % name: [1] bits, [2] value, [3] poslist, [4] fieldname, [5] dxfcode
+  Fields = [
+    %new_struct('_BE330', ["0000000100000100", '12.1.4', [], "ownerhandle", 330])
+     new_struct('BL90', ["0100000010", '2', [], "class_version", 90])
+    ,new_struct('BL90', ["10", '0', [], "status", 90])
+    ,new_struct('B290', ["0", '1', [], "isread_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "iswrite_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "isobjectstate_dep", 290])
+    ,new_struct('B290', ["0", '1', [], "unknown_b4", 290])
+    ,new_struct('BL90', ["0000000000000000000000000010000000", '-2147483648', [], "order", 90])
+    ,new_struct('H330', ["010000100000001110010011", '4.2.393', [], "", 330])
+    ,new_struct('B290', ["0", '0', [], "unknown_b5", 290])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H330', ["01000000", '4.0.0', [], "", 330])
+    ,new_struct('H360', ["00110000", '3.0.0', [], "writedep", 360])
+    ,new_struct('BL90', ["0100000011", '3', [], "depbodyid", 90])
+  ],
+  Data = [S,Fields,Class,Dxf,Version,Offsets],
+  go(Data).
+
+
+% summary: 1808/3954=45.7%
 
 go0 ?=> def(0,Data).
 go1 ?=> def(1,Data).
@@ -763,6 +1006,15 @@ go23 ?=> def(23,Data).
 go24 ?=> def(24,Data).
 go25 ?=> def(25,Data).
 go26 ?=> def(26,Data).
+go27 ?=> def(27,Data).
+go28 ?=> def(28,Data).
+go29 ?=> def(29,Data).
+go30 ?=> def(30,Data).
+go31 ?=> def(31,Data).
+go32 ?=> def(32,Data).
+go33 ?=> def(33,Data).
+go34 ?=> def(34,Data).
+go35 ?=> def(35,Data).
 
 main => go0,
         go1,
@@ -790,4 +1042,13 @@ main => go0,
         go23,
         go24,
         go25,
-        go26.
+        go26,
+        go27,
+        go28,
+        go29,
+        go30,
+        go31,
+        go32,
+        go33,
+        go34,
+        go35.
