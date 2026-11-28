@@ -109,6 +109,7 @@ endif
 UNKNOWN_LOG = unknown-`git describe --long --tags --dirty --always`.log
 UNKNOWN_SKIP = alldwg.skip
 TIMEOUT_30 = @TIMEOUT_30@
+TIMEOUT_60 = @TIMEOUT_60@
 
 unknown:
 	-mv examples/alldwg.skip examples/alldwg.skip~
@@ -123,16 +124,16 @@ if !HAVE_INSRCDIR
 endif
 if HAVE_PARALLEL
 	-rm examples/*.pi.tmplog 2>/dev/null
-	echo $(PARALLEL) $(TIMEOUT_30) $(PICAT) "{} \\>{}.tmplog ::: examples/[A-Z]*.pi"
-	-$(PARALLEL) $(TIMEOUT_30) $(PICAT) {} \>{}.tmplog ::: examples/[A-Z]*.pi
+	echo $(PARALLEL) $(TIMEOUT_60) $(PICAT) "{} \\>{}.tmplog ::: examples/[A-Z]*.pi"
+	-$(PARALLEL) $(TIMEOUT_60) $(PICAT) {} \>{}.tmplog ::: examples/[A-Z]*.pi
 	-for f in examples/*.pi.tmplog; do \
 	   if test -n "`grep 'Most probable result:' $$f`"; then \
 	     mv $$f examples/`basename $$f .tmplog`.log; fi; done
 	-rm examples/*.pi.tmplog 2>/dev/null
 else
 	-for f in examples/[A-Z]*.pi; do \
-	  echo $(TIMEOUT_30) picat $$f; \
-	  $(TIMEOUT_30) $(PICAT) $$f >$$f.tmplog; \
+	  echo $(TIMEOUT_60) picat $$f; \
+	  $(TIMEOUT_60) $(PICAT) $$f >$$f.tmplog; \
 	  if test -n "`grep 'Most probable result:' $$f.tmplog`"; then \
 	    mv $$f.tmplog $$f.log; fi; done
 	-rm examples/[A-Z]*.pi.tmplog 2>/dev/null

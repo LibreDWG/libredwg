@@ -1,5 +1,5 @@
 import util.
-%import cp.
+import cp.
 %module unknown.
 
 /* DWG field packing problem, the solver in picat-lang.org
@@ -11,8 +11,8 @@ import util.
    Then check for all multiple finds if the number of finds is the same as the
    number of equal values: BL90,BL96,BL97. Distribute it then.
 
-   TODO Then pack the possible others optimally: smallest amount of
-   missing holes, and keep the original order, with backtracking.
+   Then pack the possible others optimally with the cp solver: no overlaps,
+   the original order of the fields, and the smallest gaps between them.
 
    Print the final layout of fixed and open ranges in dwg.spec syntax.
 
@@ -35,9 +35,25 @@ go(Data) =>
   print("[hdloff, strsize, commonsize, bitsize, hdlsize]="),println(Offsets),
   S := S.delete_all(" "),
   S := S.delete_all("\n"),
+  [HdlOff,StrSize,_CommonSize,_BitSize,HdlSize] = Offsets,
+  % The three streams: the main data, the strings (only r2007+, at the end of
+  % the data) and the handles (r13+, behind). Fields are searched only in
+  % their own stream, else a match could span two streams.
+  Len = S.length,
+  HdlStart = cond(HdlSize > 0, Len - HdlSize + 1,
+                  cond(HdlOff > 0, HdlOff + 1, Len + 1)),
+  StrStart = cond(Version >= 2007, cond(StrSize > 0, HdlStart - StrSize,
+                                        HdlStart), HdlStart),
+  MainR = [1, StrStart - 1],
+  StrR = [StrStart, HdlStart - 1],
+  HdlR = [HdlStart, Len],
+  print("streams: main="), print(MainR), print(" strings="), print(StrR),
+  print(" handles="), println(HdlR),
   foreach(Sub in Fields)
     print(Sub.name), print(" "), print(Sub[2]), print(": "++Sub[1]),
-    PosList = findall([Start,End], find(S,Sub[1],Start,End)),
+    Range = stream_range(Sub, MainR, StrR, HdlR, Version, StrSize),
+    PosList = findall([Start,End], (find(S,Sub[1],Start,End),
+                                    Start >= Range[1], End <= Range[2])),
     Sub[3] := PosList,
     if PosList.length = 1 then
       Found := add_found(PosList[1],Found,[Sub],Fields), % checks overlap
@@ -134,11 +150,108 @@ go(Data) =>
     print_field(F,true)
   end,
   nl,
-  println("Most probable result: (TODO)"),
+  [Msg,Packed] = pack(Fields),
+  % only now, when the solver is done
+  println("Most probable result:"),
+  println(Msg),
+  foreach (F in field_sort(Packed))
+    print_field(F, false)
+  end,
   % TODO: fill holes by probable types (cp or sat?)
   % e.g. if the Hole length is 66 it is most likely a BD, 64 RD, ...
   % check for the nan range then.
   nl.
+
+% The range of the stream of this field: handles (H*) in the handle stream,
+% strings (T*) in the string stream of r2007+, all others in the main stream.
+stream_range(Sub, MainR, StrR, HdlR, Version, StrSize) = R =>
+  N = Sub.name.atom_chars,
+  if N[1] == 'H' ; (N[1] == '_', N[2] == 'H') then
+    R = HdlR
+  elseif N[1] == 'T', Version >= 2007, StrSize > 0 then
+    R = StrR
+  else
+    R = MainR
+  end.
+
+% The field packing problem: choose one of the found positions for every
+% field with more than one, so that
+%  1. no fields overlap, (hard)
+%  2. the fields keep their order of the DXF (spec), (first hard, then
+%     soft with 1000 per inversion)
+%  3. the gaps between consecutive fields are small. (1 per bit)
+% Fields with a single position are already fixed and removed from the
+% candidates of the others. Sets the poslist of the packed fields.
+pack(Fields) = R =>
+  Open = [F : F in Fields, F[3].length > 1],
+  N = Open.length,
+  if N == 0 then
+    R = ["Packed: nothing to pack", []]
+  else
+    Lens = [F[1].length : F in Open],
+    if pack_try(Open, Lens, true, Starts, Cost) then
+      pack_set(Open, Lens, Starts),
+      R = ["Packed: in order, cost="++Cost.to_string(), Open]
+    elseif pack_try(Open, Lens, false, Starts, Cost) then
+      pack_set(Open, Lens, Starts),
+      R = ["Packed: not in order, cost="++Cost.to_string(), Open]
+    else
+      R = ["Packed: no solution", []]
+    end
+  end.
+
+pack_set(Open, Lens, Starts) =>
+  foreach (I in 1 .. Open.length)
+    OI = Open[I],
+    OI[3] := [[Starts[I], Starts[I] + Lens[I] - 1]]
+  end.
+
+% The solver, with 2s for any solution and 3s to optimize it. Ordered: the fields must be in order.
+pack_try(Open, Lens, Ordered, Starts, Cost) =>
+  N = Open.length,
+  Starts = new_list(N),
+  foreach (I in 1 .. N)
+    OI = Open[I],
+    Cands = [P[1] : P in OI[3]],
+    Starts[I] :: Cands
+  end,
+  Gaps = new_list(N-1),
+  foreach (I in 1 .. N-1)
+    if Ordered then
+      Starts[I] + Lens[I] #=< Starts[I+1],
+      Gaps[I] #= Starts[I+1] - Starts[I] - Lens[I]
+    else
+      Gaps[I] :: 0..100000,
+      Gaps[I] #= abs(Starts[I+1] - Starts[I] - Lens[I])
+    end
+  end,
+  Inv = [],
+  if not Ordered then
+    % no overlaps, and B = 1 if the fields I < J are in the wrong order
+    Pairs = [[I,J] : I in 1 .. N-1, J in I+1 .. N],
+    Inv := new_list(Pairs.length),
+    foreach (K in 1 .. Pairs.length)
+      [I,J] = Pairs[K],
+      Starts[I] + Lens[I] #=< Starts[J] #\/ Starts[J] + Lens[J] #=< Starts[I],
+      Inv[K] :: 0..1,
+      Inv[K] #<=> (Starts[J] #< Starts[I])
+    end
+  end,
+  Cost #= 1000 * sum(Inv) + sum(Gaps),
+  % any solution first, quick. Then try to optimize it in the remaining time.
+  Feas = findall(V, (time_out(once(solve($[ff], Starts)), 2000, R1),
+                     R1 == success, V = [X : X in Starts])),
+  if Feas == [] then
+    fail
+  else
+    time_out(solve($[min(Cost), ff], Starts), 3000, Res),
+    if Res == success then
+      true
+    else % the best found: the first solution
+      Starts = Feas[1],
+      Cost #= 1000 * sum(Inv) + sum(Gaps)
+    end
+  end.
 
 % H330(01100000,2E4,[[192,199]],reactors,330) =>
 % FIELD_H (reactors, 330); // 2E4 01100000 191-198
