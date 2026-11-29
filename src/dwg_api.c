@@ -25792,7 +25792,16 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
       return NULL;                                                            \
     }
 
+/* An add between API_ADD_PREP and here (dwg_add_VX, dwg_add_DIMSTYLE, ...)
+   may have realloced dwg->object[], so blkobj is stale. Resolve it again.
+   GHSA-4cc5-r3qr-m9w3 */
 #define API_ADD_ENTITY2(token)                                                \
+  blkobj = dwg_obj_generic_to_object (blkhdr, &error);                        \
+  if (!blkobj || error)                                                       \
+    {                                                                         \
+      LOG_ERROR ("Entity %s: lost the block", #token);                        \
+      return NULL;                                                            \
+    }                                                                         \
   NEW_ENTITY (dwg, obj);                                                      \
   ADD_ENTITY (token);                                                         \
   obj->tio.entity->ownerhandle                                                \
@@ -26070,7 +26079,11 @@ add_attrib_links (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   Dwg_Object *lastobj = dwg_ref_object (insobj->parent, insert->last_attrib);
   if (!insert->has_attribs || !seqend || !lastobj) // no ATTRIB and SEQEND yet
     {
+      // adding the SEQEND might realloc dwg->object[]: GHSA-4cc5-r3qr-m9w3
+      const BITCODE_BL ins_idx = insobj->index, att_idx = attobj->index;
       API_ADD_ENTITY (SEQEND);
+      insobj = &dwg->object[ins_idx];
+      attobj = &dwg->object[att_idx];
       if (dwg->header.version <= R_12)
         obj->type = DWG_TYPE_SEQEND_r11;
       insert->has_attribs = 1;
@@ -26161,6 +26174,13 @@ dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert, const double height,
       LOG_ERROR ("No ATTRIB %s added", tag);
       return NULL;
     }
+  // the adds might have realloced dwg->object[]: GHSA-4cc5-r3qr-m9w3
+  insobj = dwg_obj_generic_to_object (insert, &err);
+  if (!insobj || err)
+    {
+      LOG_ERROR ("add_Attribute: INSERT lost");
+      return NULL;
+    }
   // dwg->header_vars.AFLAGS = flags; FIXME
   add_attrib_links (blkhdr, insert, insobj, attobj);
   return attrib;
@@ -26173,10 +26193,12 @@ dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert, const double height,
 {
   int err;
   Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner (insert);
-  Dwg_Object *restrict insobj = dwg_obj_generic_to_object (insert, &err);
+  Dwg_Object *restrict insobj;
   API_ADD_ENTITY (ATTRIB);
   ADD_CHECK_3DPOINT (ins_pt);
   ADD_CHECK_DOUBLE (height);
+  // after the add, which might have realloced dwg->object[]
+  insobj = dwg_obj_generic_to_object (insert, &err);
   if (!insobj || err)
     {
       LOG_ERROR ("add_ATTRIB: No INSERT found");
@@ -27986,6 +28008,7 @@ dwg_add_LEADER (
   BITCODE_H annotative = NULL;
   Dwg_Object_DIMSTYLE *annot_style = NULL;
   Dwg_Object *annot_o = NULL;
+  BITCODE_BL annot_idx = 0;
   API_ADD_PREP (LEADER);
   if (!num_points)
     {
@@ -28006,6 +28029,7 @@ dwg_add_LEADER (
           LOG_ERROR ("Invalid associated_annotation object");
           return NULL;
         }
+      annot_idx = annot_o->index; // dwg->object[] might move
       // use DIMSTYLE "Annotative"
       annotative = dwg_find_tablehandle (dwg, "Annotative", "DIMSTYLE");
       if (!annotative)
@@ -28044,6 +28068,7 @@ dwg_add_LEADER (
   _obj->arrowhead_type = 8;
   if (associated_annotation)
     {
+      annot_o = &dwg->object[annot_idx];
       _obj->annot_type = 1;
       _obj->associated_annotation = dwg_add_handleref (
           dwg, 5, dwg_obj_generic_handlevalue ((void *)associated_annotation),
