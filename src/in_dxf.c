@@ -3250,7 +3250,7 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         return NULL;
       for (i = 0; i < total; i++)
         {
-          if (o->encr_sat_data[0][i] == '^' && i <= total
+          if (o->encr_sat_data[0][i] == '^' && i + 1 < total
               && o->encr_sat_data[0][i + 1] == ' ')
             {
               o->acis_data[idx++] = 'A';
@@ -3268,7 +3268,12 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       {
         char *sp = strchr ((char *)o->acis_data, ' ');
         long sat_version = strtol ((char *)o->acis_data, NULL, 10);
-        if (sat_version > 400 && sp && sp - (char *)o->acis_data <= 6)
+        // strtol skips leading white space: a blank at the start makes sp
+        // shorter than 3, and the memmove would then grow the string past the
+        // buffer. GHSA-6c66-qgw3-83w8
+        if (sat_version > 400 && sp && sp - (char *)o->acis_data >= 3
+            && sp - (char *)o->acis_data <= 6 && o->acis_data[0] >= '0'
+            && o->acis_data[0] <= '9')
           {
             memmove (o->acis_data + 3, sp, strlen (sp) + 1);
             memcpy (o->acis_data, "400", 3);
