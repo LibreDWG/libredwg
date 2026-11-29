@@ -9201,6 +9201,14 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       const size_t blen = pair->value.s.len;
       BITCODE_TF s;
 
+      // an empty chunk (invalid hex) would be realloc (p, 0), which frees p
+      // and returns NULL: a double free later. GHSA-jqp7-x35p-3wvx
+      if (!blen)
+        {
+          dxf_free_pair (pair);
+          pair = dxf_read_pair (dat);
+          continue;
+        }
       if (!ent->preview_size)
         {
           BITCODE_TF preview;
