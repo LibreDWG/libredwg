@@ -1267,7 +1267,7 @@ bit_write_DD (Bit_Chain *dat, double value, double default_value)
               bits = 1;
               bit_write_BB (dat, 1);
               for (int i = 0; i < 4; i++)
-                bit_write_RC (dat, (BITCODE_RC) (uv >> (8 * i)));
+                bit_write_RC (dat, (BITCODE_RC)(uv >> (8 * i)));
             }
           else
             {
@@ -1275,7 +1275,7 @@ bit_write_DD (Bit_Chain *dat, double value, double default_value)
               bits = 2;
               bit_write_BB (dat, 2);
               for (int i = 0; i < 6; i++)
-                bit_write_RC (dat, (BITCODE_RC) (uv >> (8 * order[i])));
+                bit_write_RC (dat, (BITCODE_RC)(uv >> (8 * order[i])));
             }
         }
       else
@@ -1439,7 +1439,7 @@ bit_H_to_dat (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   else if (handle->size < 8)
     {
       for (int i = handle->size - 1; i >= 0; i--)
-        bit_write_RC (dat, (BITCODE_RC) (handle->value >> (8 * i)));
+        bit_write_RC (dat, (BITCODE_RC)(handle->value >> (8 * i)));
     }
   else
     {
@@ -3024,6 +3024,24 @@ bit_convert_TU (const BITCODE_TU restrict wstr)
   return str;
 }
 
+/* If wstr points into the area, the wide NUL must be inside of it: the
+   decoded LTYPE dash texts point into the strings_area of 512 bytes, which is
+   only guaranteed to have a NUL in its last 2 bytes. Else the text is owned
+   elsewhere and not our concern. GHSA-37w4-c8mv-7m8f */
+bool
+bit_TU_terminated_in_area (const void *restrict area, const size_t size,
+                           const BITCODE_TU restrict wstr)
+{
+  const unsigned char *a = (const unsigned char *)area;
+  const unsigned char *t = (const unsigned char *)wstr;
+  if (!t || !a || t < a || t >= a + size)
+    return true;
+  for (; t + 2 <= a + size; t += 2)
+    if (!t[0] && !t[1])
+      return true;
+  return false;
+}
+
 /* Bounded variant: returns NULL if not null-terminated within max_wchars. */
 char *
 bit_convert_TU_len (const BITCODE_TU restrict wstr, const size_t max_wchars)
@@ -4324,10 +4342,9 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
       // uncapped doubling would bloat the file to MAX_MEM_ALLOC.
       if (old_size)
         {
-          size_t max_headroom
-              = (dat->byte > (MAX_MEM_ALLOC - 4096) / 2)
-                    ? MAX_MEM_ALLOC
-                    : dat->byte * 2 + 4096;
+          size_t max_headroom = (dat->byte > (MAX_MEM_ALLOC - 4096) / 2)
+                                    ? MAX_MEM_ALLOC
+                                    : dat->byte * 2 + 4096;
           if (new_size < old_size * 2 && old_size * 2 <= max_headroom
               && old_size * 2 <= MAX_MEM_ALLOC)
             new_size = old_size * 2;
@@ -4370,7 +4387,7 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
           dat->mapped = 0;
         }
       chain = (unsigned char *)mmap (NULL, new_size, PROT_READ | PROT_WRITE,
-                                    MAP_SHARED, fd, 0L);
+                                     MAP_SHARED, fd, 0L);
       if (!chain || chain == MAP_FAILED)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;

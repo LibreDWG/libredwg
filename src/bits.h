@@ -249,6 +249,11 @@ EXPORT char *bit_embed_TU (BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
 EXPORT char *bit_embed_TU_size (BITCODE_TU restrict wstr,
                                 const int len) ATTRIBUTE_MALLOC;
 
+/* A TU in a buffer of size bytes is terminated within it, or not in it. */
+EXPORT bool bit_TU_terminated_in_area (const void *restrict area,
+                                       const size_t size,
+                                       const BITCODE_TU restrict wstr);
+
 #ifdef HAVE_NATIVE_WCHAR2
 #  define bit_wcs2len(wstr) wcslen (wstr)
 #  ifdef HAVE_WCSNLEN

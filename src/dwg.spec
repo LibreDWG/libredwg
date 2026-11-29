@@ -3612,7 +3612,18 @@ DWG_TABLE (LTYPE)
             SUB_FIELD_RD (dashes[rcount1],y_offset, 45);
             if (_obj->dashes[rcount1].shape_flag & 2) // 10
               {
-                SUB_FIELD_T (dashes[rcount1],text, 9);
+                // the text of a decoded r2007+ LTYPE points into the
+                // strings_area, it must end in it. GHSA-37w4-c8mv-7m8f
+                if (!IS_FROM_TU (dat)
+                    || bit_TU_terminated_in_area (
+                        _obj->strings_area, 512,
+                        (BITCODE_TU)_obj->dashes[rcount1].text))
+                  {
+                    SUB_FIELD_T (dashes[rcount1],text, 9);
+                  }
+                else
+                  LOG_ERROR ("LTYPE.dashes[%u].text not terminated",
+                             rcount1);
               }
           }
       } else {
