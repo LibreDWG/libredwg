@@ -1438,8 +1438,8 @@ add_section (Dwg_Data *dwg)
           /* Section-info pages borrow pointers into the section map. Rebase
              them while the old allocation is still alive. */
           BITCODE_BL i, j;
-          sections = (Dwg_Section *)malloc (
-              sizeof (Dwg_Section) * (dwg->header.num_sections + 1));
+          sections = (Dwg_Section *)malloc (sizeof (Dwg_Section)
+                                            * (dwg->header.num_sections + 1));
           if (!sections)
             return DWG_ERR_OUTOFMEM;
           memcpy (sections, dwg->header.section,
@@ -2122,7 +2122,8 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
           if (add_section (dwg) != 0)
             return DWG_ERR_OUTOFMEM;
           info->sections[0] = &dwg->header.section[sec_idx];
-          /* Publish the page only after its borrowed pointer is initialized. */
+          /* Publish the page only after its borrowed pointer is initialized.
+           */
           info->num_sections = 1;
         }
       /*
@@ -2758,6 +2759,17 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         error |= DWG_ERR_WRONGCRC;
       //LOG_WARN("Handles section CRC mismatch at offset %zx", startpos);
 #else
+      // A malformed object map can advance the cursor past the section. The
+      // CRC covers the page and the 2 bytes after it must exist.
+      // GHSA-w67w-f2fw-prvj
+      if (hdl_dat.byte < secpos || hdl_dat.byte + 2 > hdl_dat.size)
+        {
+          LOG_ERROR ("Handles page overflows the section: %" PRIuSIZE
+                     " + 2 > %" PRIuSIZE,
+                     hdl_dat.byte, hdl_dat.size);
+          error |= DWG_ERR_VALUEOUTOFBOUNDS;
+          break;
+        }
       crc1 = bit_calc_CRC (0xC0C1, &(hdl_dat.chain[secpos]),
                            hdl_dat.byte - secpos);
       crc2 = bit_read_RS_BE (&hdl_dat);

@@ -1899,6 +1899,17 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
       if (!bit_check_CRC(&hdl_dat, secpos, 0xC0C1))
         LOG_WARN("Handles section CRC mismatch at offset %lx", secpos);
 #else
+      // A malformed object map can advance the cursor past the section. The
+      // CRC covers the page and the 2 bytes after it must exist.
+      // GHSA-w67w-f2fw-prvj
+      if (hdl_dat.byte < secpos || hdl_dat.byte + 2 > hdl_dat.size)
+        {
+          LOG_ERROR ("Handles page overflows the section: %" PRIuSIZE
+                     " + 2 > %" PRIuSIZE,
+                     hdl_dat.byte, hdl_dat.size);
+          error |= DWG_ERR_VALUEOUTOFBOUNDS;
+          break;
+        }
       crc1 = bit_calc_CRC (0xC0C1, &(hdl_dat.chain[secpos]),
                            hdl_dat.byte - secpos);
       crc2 = bit_read_RS_BE (&hdl_dat);
